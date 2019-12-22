@@ -46,14 +46,8 @@
           }
         },
         usernameRules: [
-          async value => {
-            let poruka = ''
-            await axios.post('localhost:8081/Bioskop/UniqueUsername', value).then(response => {
-              console.log(response)
-              if(response)  poruka = true
-              else return 'Username je zauzet'
-            }).catch( ()=> poruka = 'Druga Greska' )
-            return poruka
+          value => {
+            return this.checkIfUsernameAvailable(value)
           } 
         ]
       };
@@ -65,6 +59,16 @@
       },
       register: function(){
 
+      },
+      checkIfUsernameAvailable: async function(username){
+        let poruka = ''
+        await axios.post('http://localhost:8081/Bioskop/UniqueUsername', {username: username}).then((res) => {
+          console.log(res)
+          if(res.data.available) poruka = res.data.available
+          else poruka = "Username je zauzet"
+        }).catch(()=>poruka = "serverski problem")
+        
+        return poruka
       }
     },
     
