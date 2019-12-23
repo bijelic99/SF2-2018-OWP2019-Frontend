@@ -1,5 +1,5 @@
 <template>
-    <v-app-bar app dark color="primary">
+    <v-app-bar app dark color="primary" class="pr-12">
         <v-app-bar-nav-icon/>
         <v-toolbar-title>Bioskop</v-toolbar-title>
         <v-spacer></v-spacer>
@@ -7,6 +7,7 @@
         <template v-slot:activator="{ on }">
           <v-btn icon v-on="on">
             <v-icon>mdi-dots-vertical</v-icon>
+            Registruj se
           </v-btn>
         </template>
         <v-card>
