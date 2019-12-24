@@ -4,6 +4,9 @@ import router from './router'
 import store from './store'
 import vuetify from './plugins/vuetify'
 import AsyncComputed from 'vue-async-computed'
+import VueCookies from 'vue-cookies'
+
+Vue.use(VueCookies)
 Vue.use(AsyncComputed)
 
 Vue.config.productionTip = false

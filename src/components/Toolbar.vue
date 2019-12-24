@@ -1,5 +1,5 @@
 <template>
-    <v-app-bar app dark color="primary" class="pr-12">
+    <v-app-bar app elevate-on-scroll dark color="primary" class="pr-12">
         <v-app-bar-nav-icon/>
         <v-toolbar-title>Bioskop</v-toolbar-title>
         <v-spacer></v-spacer>

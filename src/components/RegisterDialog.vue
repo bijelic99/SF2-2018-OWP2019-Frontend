@@ -14,7 +14,7 @@
       <v-list>
         <v-list-item>
           <v-list-item-content>
-            <v-form ref="registerForm" :lazy-validation="false">
+            <v-form ref="registerForm" v-model="form.valid">
               <v-text-field
                 ref="registerUsername"
                 v-model="form.data.username"
@@ -22,7 +22,7 @@
                 label="Username"
               />
               <v-text-field v-model="form.data.password" :rules="rules.passwordRules" label="Password" type="password" />
-              <v-btn :disabled="!form.valid" color="success" class="mr-4" @click="submit">Register</v-btn>
+              <v-btn :disabled="!form.valid" color="secondary" class="mr-4" @click="submit">Register</v-btn>
             </v-form>
             <v-snackbar :timeout="componentData.snackbarGeneral.timeout" color="error" dark v-model="form.usernameTaken">
                 Username je zauzet pokusajte sa nekim drugim
@@ -64,7 +64,7 @@
           ],
           passwordRules: [
             value => value+"".trim() === "" ? "Polje ne sme biti prazno" : true,
-            value => value+"".trim().length<8? "Sifra mora da ima vise od 8 karaktera":true
+            value => (value+"").trim().length<8? "Sifra mora da ima vise od 8 karaktera":true
           ]
         },
         componentData:{
@@ -92,13 +92,16 @@
         }
         else{
           //trebalo bi dodati dialog koji potvrdjuje registraciju
-          if(await this.register() === true) {
-            this.componentData.successSnackbar.open = true
-            this.visible = false
-            this.$refs.registerForm.reset()
-          }
-          else{
-            this.componentData.failSnackbar.open = true
+          if(this.$refs.registerForm.validate())
+          {
+            if(await this.register() === true) {
+              this.componentData.successSnackbar.open = true
+              this.visible = false
+              this.$refs.registerForm.reset()
+            }
+            else{
+              this.componentData.failSnackbar.open = true
+            }
           }
         }
       },
@@ -120,6 +123,14 @@
           .catch(() => (poruka = "serverski problem"));
         //console.log(poruka)
         return poruka;
+      }
+    },
+    watch:{
+      visible: function(){
+        if(!this.visible){
+          this.$refs.registerForm.reset()
+          this.form.valid = false
+        }
       }
     }
   };
