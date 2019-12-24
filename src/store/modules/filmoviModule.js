@@ -1,45 +1,15 @@
 import axios from 'axios'
 
 const state={
-    filmovi: [
-        {
-            id: 0,
-            naziv: 'test',
-            zanrovi: [
-                {
-                    id: 0,
-                    naziv: 'testZanr'
-                },
-                {
-                    id: 1,
-                    naziv: 'testZanr'
-                }
-            ],
-            reziser: {
-                id: 0,
-                naziv: 'testZanr'
-            },
-            glumci: [
-                {
-                    id: 0,
-                    naziv: 'testZanr'
-                }
-            ],
-            trajanje: 55,
-            distributer: "TestDistributer",
-            zemljaPorekla: "TestZemljaPorekla",
-            godinaProizvodnje: 2019,
-            opis: "opis",
-            obrisan: false
-        }
-    ]
+    filmovi: []
 }
 
 const getters={
     allFilmovi: state => state.filmovi,
     filteredFilmovi: state => filterFunction => {
         return state.filmovi.filter(filterFunction)
-    }
+    },
+    getFilm: state=> id => state.filmovi.filter(film => film.id === id)[0]
 }
 
 const actions={
