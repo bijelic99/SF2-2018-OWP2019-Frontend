@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <Toolbar/>
-    <router-view class="mt-12 pt-6"/>
+    <v-content><router-view/></v-content>
   </v-app>
 </template>
 
@@ -16,7 +16,4 @@
   }
 </script>
 <style>
-  .padding-top{
-    padding-top: 6vw;
-  }
 </style>

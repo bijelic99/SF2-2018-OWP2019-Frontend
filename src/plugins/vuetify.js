@@ -3,7 +3,7 @@ import Vuetify from 'vuetify/lib'
 
 Vue.use(Vuetify)
 
-export default new Vuetify({
+let vuetify = new Vuetify({
   theme: {
     themes: {
       light: {
@@ -18,3 +18,5 @@ export default new Vuetify({
     }
   }
 })
+
+export default vuetify
