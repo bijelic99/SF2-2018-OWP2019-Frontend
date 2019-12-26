@@ -33,8 +33,8 @@ const actions={
         commit('SET_CURRENT_THEME', theme)
     },
     setCurrentThemeToBase({commit}){
-        commit('SET_CURRENT_THEME', state.baseTheme)
         vuetify.framework.theme.themes.light = state.baseTheme
+        commit('SET_CURRENT_THEME', state.baseTheme)
     }
 }
 

@@ -1,73 +1,106 @@
 <template>
-  <div><v-card>
-    <v-card-title>
-      Filmovi
-      <v-spacer></v-spacer>
-      <v-text-field
-        v-model="tableData.search"
-        append-icon="md-search"
-        label="Pretraga"
-        single-line
-        hide-details
-      ></v-text-field>
-    </v-card-title>
-    <v-data-table :headers="tableData.zaglavljaTabele" :items="allFilmovi" :items-per-page="20"
-      :loading="tableData.doneLoading" loading-text="Loading... Please wait" :search="tableData.search" :custom-filter="customFilterFunction" >
+  <v-container>
+    <v-card>
+      <v-card-title>
+        Filmovi
+        <v-spacer></v-spacer>
+        <v-tooltip top>
+          <template v-slot:activator="{ on }">
+            <v-text-field
+              v-model="tableData.search"
+              append-icon="md-search"
+              label="Pretraga"
+              single-line
+              hide-details
+              v-on="on"
+            ></v-text-field>
+          </template>
+          <span>Za pretragu trajanja u opsegu: [pocetak-kraj], za pretragu godina proizvodnje u opsegu: {pocetak-kraj},</span>
+        </v-tooltip>
+      </v-card-title>
+      <v-data-table
+        :headers="tableData.zaglavljaTabele"
+        :items="allFilmovi"
+        :items-per-page="20"
+        :loading="tableData.doneLoading"
+        loading-text="Loading... Please wait"
+        :search="tableData.search"
+        :custom-filter="customFilterFunction"
+      >
         <template v-slot:item.zanrovi="{ item }">
           <v-chip v-for="zanr in item.zanrovi" v-bind:key="zanr.id">{{zanr.naziv}}</v-chip>
         </template>
-        <template v-slot:item.trajanje="{ item }">
-          {{(item.trajanje-(item.trajanje%60))/60}} min. {{item.trajanje%60}} sek.
-        </template>
+        <template
+          v-slot:item.trajanje="{ item }"
+        >{{(item.trajanje-(item.trajanje%60))/60}} min. {{item.trajanje%60}} sek.</template>
         <template v-slot:item.detaljnije="{item}">
           <router-link :to="`/Film/${item.id}`">Detaljnije</router-link>
         </template>
       </v-data-table>
     </v-card>
-  </div>
+    <v-btn color="secondary" dark bottom right fab fixed>
+      <v-icon>mdi-plus</v-icon>
+    </v-btn>
+    
+  </v-container>
 </template>
 
 <script>
-  import { mapActions, mapGetters } from 'vuex'
+  import { mapActions, mapGetters } from "vuex";
   export default {
-    name: 'Filmovi',
+    name: "Filmovi",
     data: () => {
       return {
         tableData: {
           doneLoading: false,
-          search: '',
+          search: "",
           zaglavljaTabele: [
             {
-              text: 'Naziv',
-              value: 'naziv'
+              text: "Naziv",
+              value: "naziv"
             },
             {
-              text: 'Zanrovi',
-              value: 'zanrovi'
+              text: "Zanrovi",
+              value: "zanrovi"
             },
             {
-              text: 'Trajanje',
-              value: 'trajanje'
+              text: "Trajanje",
+              value: "trajanje"
             },
             {
-              text: 'Detaljnije',
-              value: 'detaljnije',
-              sortable: false,
+              text: "Distributer",
+              value: "distributer"
+            },
+            {
+              text: "Zemlja Porekla",
+              value: "zemljaPorekla"
+            },
+            {
+              text: "Godina Proizvodnje",
+              value: "godinaProizvodnje"
+            },
+            {
+              text: "Detaljnije",
+              value: "detaljnije",
+              sortable: false
             }
           ]
-
         },
-        
-      }
+      };
     },
-    methods:{
-      ...mapActions(['fetchFilmovi']),
+    methods: {
+      ...mapActions(["fetchFilmovi"]),
       customFilterFunction: function(value, search, item) {
-        let string = `${item.naziv} ${ item.zanrovi.reduce((zanroviStr, value)=> zanroviStr+" "+value.naziv, '') } ${item.trajanje}`.toUpperCase()
-        
-        return string.includes(search.toUpperCase())
-      },
-      /*customSortFunction: function(items, sortBy, sortDesc){
+        //treba doraditi za opsege oblika [br-br] i {br-br}
+        let string = `${item.naziv} ${item.zanrovi.reduce(
+          (zanroviStr, value) => zanroviStr + " " + value.naziv,
+          ""
+        )} ${item.trajanje} ${item.distributer} ${item.zemljaPorekla} ${
+          item.godinaProizvodnje
+        }`.toUpperCase();
+        return string.includes(search.toUpperCase());
+      }
+    /*customSortFunction: function(items, sortBy, sortDesc){
         console.log(sortBy)
         console.log(sortDesc)
         if(sortBy === 'zanrovi') {
@@ -82,17 +115,13 @@
         return items
       }*/
     },
-    computed: mapGetters(['allFilmovi']),
+    computed: mapGetters(["allFilmovi"]),
     async created() {
-      await this.fetchFilmovi()
-      this.tableData.doneLoading = false
-
-    },
-    
-
-  }
+      await this.fetchFilmovi();
+      this.tableData.doneLoading = false;
+    }
+  };
 </script>
 
 <style>
-
 </style>

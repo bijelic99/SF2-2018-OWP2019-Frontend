@@ -1,5 +1,8 @@
 <template>
-  <div :style="{backgroundColor: componentData.backgroundColor, color: componentData.textColor}" class="fill-height">
+  <v-container fluid
+    :style="{backgroundColor: componentData.backgroundColor, color: componentData.textColor}"
+    class="fill-height"
+  >
     <v-img
       ref="coverImage"
       lazy-src="../../public/film-poster-placeholder.png"
@@ -8,9 +11,15 @@
       aspect-ratio="3.2"
     />
     <v-container>
-      <v-row><v-col cols="md-8"><h1 class="filmTitle">{{film.naziv}}</h1></v-col><v-col cols="md-4" align-self="end" align="end"><v-btn class="secondary">Kupi Kartu</v-btn></v-col></v-row>
       <v-row>
-        
+        <v-col cols="md-8">
+          <h1 class="filmTitle">{{film.naziv}}</h1>
+        </v-col>
+        <v-col cols="md-4" align-self="end" align="end">
+          <v-btn class="secondary">Kupi Kartu</v-btn>
+        </v-col>
+      </v-row>
+      <v-row>
         <v-col cols="md-15">
           <p>{{film.opis}}</p>
         </v-col>
@@ -18,9 +27,7 @@
       <v-row>
         <v-col cols="md-2">Zanrovi:</v-col>
         <v-col cols="md-10">
-          <v-chip color="secondary" v-for="zanr in film.zanrovi" :key="zanr.id">
-            {{zanr.naziv}}
-          </v-chip>
+          <v-chip color="secondary" v-for="zanr in film.zanrovi" :key="zanr.id">{{zanr.naziv}}</v-chip>
         </v-col>
       </v-row>
       <v-row>
@@ -32,7 +39,12 @@
       <v-row>
         <v-col cols="md-2">Glumci:</v-col>
         <v-col cols="md-10">
-          <p><span v-for="glumac in film.glumci" :key="glumac.id">{{`${glumac.id !== film.glumci[0].id ? ', ' : ''}${glumac.naziv}`}}</span> </p>
+          <p>
+            <span
+              v-for="glumac in film.glumci"
+              :key="glumac.id"
+            >{{`${glumac.id !== film.glumci[0].id ? ', ' : ''}${glumac.naziv}`}}</span>
+          </p>
         </v-col>
       </v-row>
       <v-row>
@@ -59,18 +71,31 @@
           <p>{{film.godinaProizvodnje}}</p>
         </v-col>
       </v-row>
-      
     </v-container>
     <v-snackbar v-model="componentData.errorSnackbarVisible">
       {{ componentData.errorMassage }}
       <v-btn color="error" text @click="componentData.errorSnackbarVisible = false">Close</v-btn>
     </v-snackbar>
-  </div>
+    <v-speed-dial v-model="speedDialData.speedDialOpen" direction="top" :right="true" :bottom="true" :open-on-hover="false" :left="false" :top="false" fixed>
+      <template v-slot:activator>
+        <v-btn v-model="speedDialData.speedDialOpen" color="secondary" bottom right fab>
+          <v-icon v-if="speedDialData.speedDialOpen">mdi-close</v-icon>
+          <v-icon v-else>mdi-dots-vertical</v-icon>
+        </v-btn>
+      </template>
+      <v-btn fab dark small color="secondary">
+        <v-icon>mdi-pencil</v-icon>
+      </v-btn>
+      <v-btn fab dark small color="secondary">
+        <v-icon>mdi-delete</v-icon>
+      </v-btn>
+    </v-speed-dial>
+  </v-container>
 </template>
 
 <script>
   import { mapActions, mapGetters } from "vuex";
-  import Vibrant from 'node-vibrant'
+  import Vibrant from "node-vibrant";
   export default {
     name: "Film",
     props: {
@@ -84,43 +109,49 @@
           errorSnackbarVisible: false,
           backgroundColor: "#ffffff",
           textColor: "#000000"
+        },
+        speedDialData: {
+          speedDialOpen: false
         }
       };
     },
-    computed: mapGetters(["getFilm", "allFilmovi", 'getCurrentTheme', 'getBaseTheme']),
+    computed: mapGetters([
+      "getFilm",
+      "allFilmovi",
+      "getCurrentTheme",
+      "getBaseTheme"
+    ]),
     methods: {
-      ...mapActions(['fetchFilmovi', 'setCurrentTheme', 'setCurrentThemeToBase']),
+      ...mapActions(["fetchFilmovi", "setCurrentTheme", "setCurrentThemeToBase"]),
       filmLoad: async function() {
         if ((await this.allFilmovi.length) === 0) await this.fetchFilmovi();
-        if (/^\d+$/.test(this.id)){
+        if (/^\d+$/.test(this.id)) {
           this.film = await this.getFilm(parseInt(this.id, 10));
-          await this.setColors()
-        }
-        else {
+          await this.setColors();
+        } else {
           this.componentData.errorMassage =
             "Id nije pravilno unet, nije moguce prikazati film";
           this.componentData.errorSnackbarVisible = true;
-          
         }
       },
       setColors: async function() {
         try {
-          var palette = await Vibrant.from(this.film.pathDoSlike).getPalette().then(r=>r)
+          var palette = await Vibrant.from(this.film.pathDoSlike)
+            .getPalette()
+            .then(r => r);
           //console.log(palette)
-          this.componentData.backgroundColor = palette.DarkVibrant.hex
-          this.componentData.textColor = palette.DarkVibrant.bodyTextColor
+          this.componentData.backgroundColor = palette.DarkVibrant.hex;
+          this.componentData.textColor = palette.DarkVibrant.bodyTextColor;
           //console.log(palette)
-          var theme = this.getCurrentTheme
-          theme.primary = palette.DarkVibrant.hex
-          theme.secondary = palette.Muted.hex
-          this.setCurrentTheme(theme)
+          var theme = this.getCurrentTheme;
+          theme.primary = palette.DarkVibrant.hex;
+          theme.secondary = palette.Muted.hex;
+          this.setCurrentTheme(theme);
         } catch {
-          this.setCurrentThemeToBase()
-          this.componentData.backgroundColor = '#fff'
-          this.componentData.textColor = '#000'
+          this.setCurrentThemeToBase();
+          this.componentData.backgroundColor = "#fff";
+          this.componentData.textColor = "#000";
         }
-        
-        
       }
     },
     watch: {
@@ -135,7 +166,8 @@
 </script>
 
 <style>
-.filmTitle{
+.filmTitle {
   font-size: 1.6em;
 }
+
 </style>

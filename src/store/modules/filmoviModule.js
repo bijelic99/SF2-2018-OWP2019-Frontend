@@ -1,4 +1,5 @@
 import axios from 'axios'
+import store from '../index'
 
 const state={
     filmovi: []
@@ -14,8 +15,7 @@ const getters={
 
 const actions={
     async fetchFilmovi({commit}){
-        
-        let response = await axios.get('http://localhost:8081/Bioskop/Filmovi').then(res=>res).catch(res=>console.log(res))
+        let response = await axios.get(`${store.getters.getFullServerAddress}/Bioskop/Filmovi`).then(res=>res).catch(res=>console.log(res))
         //console.log(response.data)
         commit('setFilmovi', response.data)
     }

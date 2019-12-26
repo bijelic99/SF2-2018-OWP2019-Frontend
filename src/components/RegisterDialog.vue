@@ -45,6 +45,7 @@
 
 <script>
   import axios from "axios";
+  import { mapGetters } from 'vuex'
   export default {
     name: "RegisterDialog",
     data() {
@@ -108,13 +109,13 @@
       register: async function(){
         let user = this.form.data
         let success = false
-        await axios.post('http://localhost:8081/Bioskop/Register', user).then(res => success = res.data.successfull ).catch(()=> success = false)
+        await axios.post(`${this.getFullServerAddress}/Bioskop/Register`, user).then(res => success = res.data.successfull ).catch(()=> success = false)
         return success
       },
       checkIfUsernameAvailable: async function(username) {
         let poruka = "";
         await axios
-          .post("http://localhost:8081/Bioskop/UniqueUsername", { username: username })
+          .post(`${this.getFullServerAddress}/Bioskop/UniqueUsername`, { username: username })
           .then(res => {
             //console.log(res.data)
             if (res.data.available) poruka = res.data.available;
@@ -124,6 +125,9 @@
         //console.log(poruka)
         return poruka;
       }
+    },
+    computed:{
+      ...mapGetters(['getFullServerAddress'])
     },
     watch:{
       visible: function(){
