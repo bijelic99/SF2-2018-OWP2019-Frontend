@@ -19,4 +19,5 @@ let vuetify = new Vuetify({
   }
 })
 
+
 export default vuetify

@@ -1,13 +1,66 @@
 <template>
-  <div :style="{backgroundColor: componentData.backgroundColor, color: componentData.textColor}" class="h-100">
+  <div :style="{backgroundColor: componentData.backgroundColor, color: componentData.textColor}" class="fill-height">
     <v-img
       ref="coverImage"
       lazy-src="../../public/film-poster-placeholder.png"
       :src="film.pathDoSlike"
-      position="center top"
-      aspect-ratio="4"
+      position="center center"
+      aspect-ratio="3.2"
     />
-    sadadsdasads
+    <v-container>
+      <v-row><v-col cols="md-8"><h1 class="filmTitle">{{film.naziv}}</h1></v-col><v-col cols="md-4" align-self="end" align="end"><v-btn class="secondary">Kupi Kartu</v-btn></v-col></v-row>
+      <v-row>
+        
+        <v-col cols="md-15">
+          <p>{{film.opis}}</p>
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col cols="md-2">Zanrovi:</v-col>
+        <v-col cols="md-10">
+          <v-chip color="secondary" v-for="zanr in film.zanrovi" :key="zanr.id">
+            {{zanr.naziv}}
+          </v-chip>
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col cols="md-2">Reziser:</v-col>
+        <v-col cols="md-10">
+          <p>{{film.reziser != null ? film.reziser.naziv : ''}}</p>
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col cols="md-2">Glumci:</v-col>
+        <v-col cols="md-10">
+          <p><span v-for="glumac in film.glumci" :key="glumac.id">{{`${glumac.id !== film.glumci[0].id ? ', ' : ''}${glumac.naziv}`}}</span> </p>
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col cols="md-2">Trajanje:</v-col>
+        <v-col cols="md-10">
+          <p>{{(film.trajanje-(film.trajanje%60))/60}} min. {{film.trajanje%60}} sek.</p>
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col cols="md-2">Distributer:</v-col>
+        <v-col cols="md-10">
+          <p>{{film.distributer}}</p>
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col cols="md-2">Zemlja porekla:</v-col>
+        <v-col cols="md-10">
+          <p>{{film.zemljaPorekla}}</p>
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col cols="md-2">Godina proizvodnje:</v-col>
+        <v-col cols="md-10">
+          <p>{{film.godinaProizvodnje}}</p>
+        </v-col>
+      </v-row>
+      
+    </v-container>
     <v-snackbar v-model="componentData.errorSnackbarVisible">
       {{ componentData.errorMassage }}
       <v-btn color="error" text @click="componentData.errorSnackbarVisible = false">Close</v-btn>
@@ -18,7 +71,6 @@
 <script>
   import { mapActions, mapGetters } from "vuex";
   import Vibrant from 'node-vibrant'
-  import vuetify from '../plugins/vuetify'
   export default {
     name: "Film",
     props: {
@@ -35,9 +87,9 @@
         }
       };
     },
-    computed: mapGetters(["getFilm", "allFilmovi"]),
+    computed: mapGetters(["getFilm", "allFilmovi", 'getCurrentTheme', 'getBaseTheme']),
     methods: {
-      ...mapActions(['fetchFilmovi', 'setBackgroundColor', 'setTextColor']),
+      ...mapActions(['fetchFilmovi', 'setCurrentTheme', 'setCurrentThemeToBase']),
       filmLoad: async function() {
         if ((await this.allFilmovi.length) === 0) await this.fetchFilmovi();
         if (/^\d+$/.test(this.id)){
@@ -55,17 +107,20 @@
         try {
           var palette = await Vibrant.from(this.film.pathDoSlike).getPalette().then(r=>r)
           //console.log(palette)
-          this.componentData.backgroundColor = palette.Vibrant.hex
-          this.componentData.textColor = palette.Vibrant.bodyTextColor
-          this.setBackgroundColor(this.componentData.backgroundColor)
-          this.setTextColor(this.componentData.textColor)
-          vuetify.framework.theme.currentTheme.primary = this.componentData.backgroundColor
-          vuetify.framework.theme.currentTheme.secondary = palette.LightVibrant.hex
-        } catch (error) {
-          console.error(error)
+          this.componentData.backgroundColor = palette.DarkVibrant.hex
+          this.componentData.textColor = palette.DarkVibrant.bodyTextColor
+          //console.log(palette)
+          var theme = this.getCurrentTheme
+          theme.primary = palette.DarkVibrant.hex
+          theme.secondary = palette.Muted.hex
+          this.setCurrentTheme(theme)
+        } catch {
+          this.setCurrentThemeToBase()
+          this.componentData.backgroundColor = '#fff'
+          this.componentData.textColor = '#000'
         }
         
-        //console.log(vuetify)
+        
       }
     },
     watch: {
@@ -80,7 +135,7 @@
 </script>
 
 <style>
-.h-100{
-  height: 100%;
+.filmTitle{
+  font-size: 1.6em;
 }
 </style>

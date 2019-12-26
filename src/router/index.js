@@ -2,12 +2,18 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Filmovi from '../views/Filmovi'
 import Film from '../views/Film'
+import Home from '../views/Home'
 
 Vue.use(VueRouter)
 
 const routes = [
   {
     path: '/',
+    name: 'Home',
+    component: Home
+  },
+  {
+    path: '/Filmovi',
     name: 'Filmovi',
     component: Filmovi
   },
