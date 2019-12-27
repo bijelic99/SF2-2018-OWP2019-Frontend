@@ -15,7 +15,7 @@
               v-on="on"
             ></v-text-field>
           </template>
-          <span>Za pretragu trajanja u opsegu: [pocetak-kraj], za pretragu godina proizvodnje u opsegu: {pocetak-kraj},</span>
+          <span>Za pretragu trajanja po minutima u opsegu: [pocetak-kraj], za pretragu godina proizvodnje u opsegu: {pocetak-kraj},</span>
         </v-tooltip>
       </v-card-title>
       <v-data-table
@@ -41,7 +41,6 @@
     <v-btn color="secondary" dark bottom right fab fixed>
       <v-icon>mdi-plus</v-icon>
     </v-btn>
-    
   </v-container>
 </template>
 
@@ -85,20 +84,40 @@
               sortable: false
             }
           ]
-        },
+        }
       };
     },
     methods: {
       ...mapActions(["fetchFilmovi"]),
       customFilterFunction: function(value, search, item) {
-        //treba doraditi za opsege oblika [br-br] i {br-br}
         let string = `${item.naziv} ${item.zanrovi.reduce(
           (zanroviStr, value) => zanroviStr + " " + value.naziv,
           ""
         )} ${item.trajanje} ${item.distributer} ${item.zemljaPorekla} ${
           item.godinaProizvodnje
         }`.toUpperCase();
-        return string.includes(search.toUpperCase());
+        var searchArray = search.split(" ");
+        return searchArray.reduce((val, currVal) => {
+          if (/^{\d*-\d*}$/.test(currVal)) {
+            currVal = currVal.match(/\d+/g).map(val => parseInt(val));
+            if (currVal[0] < currVal[1])
+              return (
+                item.godinaProizvodnje >= currVal[0] &&
+                item.godinaProizvodnje <= currVal[1] &&
+                val
+              );
+            else return false;
+          } else if (/^\[\d*-\d*\]$/.test(currVal)) {
+            currVal = currVal.match(/\d+/g).map(val => parseInt(val));
+            if (currVal[0] < currVal[1])
+              return (
+                item.trajanje / 60 >= currVal[0] &&
+                item.trajanje / 60 <= currVal[1] &&
+                val
+              );
+            else return false;
+          } else return string.includes(search.toUpperCase()) && val;
+        }, true);
       }
     /*customSortFunction: function(items, sortBy, sortDesc){
         console.log(sortBy)
