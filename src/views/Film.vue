@@ -1,15 +1,19 @@
 <template>
   <v-container fluid
     :style="{backgroundColor: componentData.backgroundColor, color: componentData.textColor}"
-    class="fill-height"
-  >
+    class="fill-height px-0 pt-0"
+  ><v-row class="mx-0">
     <v-img
       ref="coverImage"
       lazy-src="../../public/film-poster-placeholder.png"
       :src="film.pathDoSlike"
       position="center center"
-      aspect-ratio="3.2"
+      :aspect-ratio="$vuetify.breakpoint.mdAndUp ? '3.2' : '1'"
+      :contain="true"
+      
     />
+    </v-row>
+    <v-row class="mx-1">
     <v-container>
       <v-row>
         <v-col cols="md-8">
@@ -72,6 +76,7 @@
         </v-col>
       </v-row>
     </v-container>
+    </v-row>
     <v-snackbar v-model="componentData.errorSnackbarVisible">
       {{ componentData.errorMassage }}
       <v-btn color="error" text @click="componentData.errorSnackbarVisible = false">Close</v-btn>
@@ -146,6 +151,7 @@
           var theme = this.getCurrentTheme;
           theme.primary = palette.DarkVibrant.hex;
           theme.secondary = palette.Muted.hex;
+          //console.log(theme.primary + " " + theme.secondary)
           this.setCurrentTheme(theme);
         } catch {
           this.setCurrentThemeToBase();
@@ -156,11 +162,13 @@
     },
     watch: {
       id: async function() {
-        this.filmLoad();
+        await this.filmLoad();
+        
       }
     },
     async mounted() {
-      this.filmLoad();
+      await this.filmLoad();
+      console.log(JSON.stringify(this.film))
     }
   };
 </script>
@@ -169,5 +177,6 @@
 .filmTitle {
   font-size: 1.6em;
 }
+
 
 </style>

@@ -2,8 +2,8 @@ import vuetify from '../../plugins/vuetify'
 
 const state={
     baseTheme: {
-        primary: '#ffc107',
-        secondary: '#ff9800',
+        primary: '#6a2109',
+        secondary: '#6c80a1',
         accent: '#ff5722',
         error: '#f44336',
         warning: '#ffeb3b',

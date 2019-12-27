@@ -41,7 +41,7 @@
       <v-divider></v-divider>
 
       <v-list dense nav>
-        <v-list-item v-for="item in navigationDrawerData.items" :key="item.title" :href="item.link" link >
+        <v-list-item v-for="item in navigationDrawerData.items" :key="item.title" :to="item.link" link >
           <v-list-item-icon>
             <v-icon class="secondary--text">{{ item.icon }}</v-icon>
           </v-list-item-icon>
@@ -50,6 +50,7 @@
             <v-list-item-title class="secondary--text">{{ item.title }}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
+        
       </v-list>
     </v-navigation-drawer>
   </div>
@@ -64,8 +65,10 @@
       return {
         navigationDrawerData: {
           open: false,
-          items: [{ title: "Pocetna", icon: "mdi-home", link: "/#/" },
-                  { title: "Filmovi", icon: "mdi-movie", link: "/#/Filmovi" }]
+          items: [{ title: "Pocetna", icon: "mdi-home", link: "/" },
+                  { title: "Filmovi", icon: "mdi-movie", link: "/Filmovi" },
+                  { title: "Projekcije", icon: "mdi-movie-roll", link: "/" },
+                  { title: "Rezervacija Karte", icon: "mdi-ticket", link: "/" },]
         }
       };
     },

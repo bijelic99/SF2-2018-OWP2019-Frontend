@@ -2,6 +2,15 @@
   <v-app>
     <Toolbar/>
     <v-content><router-view/></v-content>
+    <v-footer app absolute class="primary" :elevation="24">
+      <v-col
+        class="text-center white--text"
+        cols="12"
+        
+      >
+        {{ new Date().getFullYear() }} — <strong>Dejan Bijelic</strong>
+      </v-col>
+    </v-footer>
   </v-app>
 </template>
 
@@ -15,7 +24,7 @@
       //
     }),
     methods:{
-      ...mapActions(['setCurrentTheme','setCurrentThemeToBase']),
+      ...mapActions(['setCurrentTheme','setCurrentThemeToBase', 'fetchFilmovi']),
     },
     computed: {
       ...mapGetters(['getCurrentTheme']),
@@ -32,6 +41,9 @@
         
         
       }
+    },
+    async mounted(){
+      await this.fetchFilmovi();
     }
   }
 </script>

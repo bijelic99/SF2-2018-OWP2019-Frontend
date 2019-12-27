@@ -22,11 +22,19 @@ const routes = [
     name: 'Film',
     component: Film,
     props: true
-  }
+  },
+  {
+    path:'*',
+    name: 'Any',
+    component: Home
+  },
+  
 ]
 
 const router = new VueRouter({
-  base: process.env.BASE_URL,
+  //base: '/Bioskop/',
+  base: '/',
+  mode: 'history',
   routes
 })
 
