@@ -88,12 +88,11 @@
           <v-icon v-else>mdi-dots-vertical</v-icon>
         </v-btn>
       </template>
-      <v-btn fab dark small color="secondary">
-        <v-icon>mdi-pencil</v-icon>
-      </v-btn>
+      <EditFilmDialog :filmId="film.id"/>
       <v-btn fab dark small color="secondary">
         <v-icon>mdi-delete</v-icon>
       </v-btn>
+      <DeleteFilm :film="film"/>
     </v-speed-dial>
   </v-container>
 </template>
@@ -101,8 +100,14 @@
 <script>
   import { mapActions, mapGetters } from "vuex";
   import Vibrant from "node-vibrant";
+  import EditFilmDialog from '../components/AddItemComponents/Film/EditFilmDialog'
+  import DeleteFilm from '../components/DeleteItemComponents/DeleteFilm'
   export default {
     name: "Film",
+    components:{
+      EditFilmDialog,
+      DeleteFilm
+    },
     props: {
       id: String
     },
@@ -168,7 +173,7 @@
     },
     async mounted() {
       await this.filmLoad();
-      console.log(JSON.stringify(this.film))
+      //console.log(JSON.stringify(this.film))
     }
   };
 </script>

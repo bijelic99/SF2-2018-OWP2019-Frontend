@@ -38,16 +38,18 @@
         </template>
       </v-data-table>
     </v-card>
-    <v-btn color="secondary" dark bottom right fab fixed>
-      <v-icon>mdi-plus</v-icon>
-    </v-btn>
+    <AddFilmDialog/>
   </v-container>
 </template>
 
 <script>
   import { mapActions, mapGetters } from "vuex";
+  import AddFilmDialog from '../components/AddItemComponents/Film/AddFilmDialog'
   export default {
     name: "Filmovi",
+    components:{
+      AddFilmDialog
+    },
     data: () => {
       return {
         tableData: {

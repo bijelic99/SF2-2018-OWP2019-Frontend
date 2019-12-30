@@ -68,7 +68,9 @@
           items: [{ title: "Pocetna", icon: "mdi-home", link: "/" },
                   { title: "Filmovi", icon: "mdi-movie", link: "/Filmovi" },
                   { title: "Projekcije", icon: "mdi-movie-roll", link: "/" },
-                  { title: "Rezervacija Karte", icon: "mdi-ticket", link: "/" },]
+                  { title: "Rezervacija Karte", icon: "mdi-ticket", link: "/" },
+                  { title: "Dodaj film", icon: "mdi-plus", link: "/AddFilm" }
+          ]
         }
       };
     },

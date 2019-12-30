@@ -1,0 +1,246 @@
+<template>
+  <v-container>
+    <v-row>
+      <h1 class="ml-2">{{tipAkcije}} Filma:</h1>
+    </v-row>
+    <v-row>
+      <v-form class="col-md-12" v-model="formData.formValid">
+        <v-container fluid>
+          <v-row>
+            <v-col>
+              <v-text-field label="Naziv" v-model="film.naziv" :rules="formData.rules.nazivRules" />
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col>
+              <v-combobox
+                label="Zanrovi"
+                v-model="film.zanrovi"
+                multiple
+                chips
+                deletable-chips
+                :delimiters="[',']"
+                hide-selected
+                :items="zanrovi"
+                auto-select-first
+                :search-input.sync="formData.zanroviSearchInput"
+              />
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col>
+              <v-combobox
+                label="Reziser"
+                v-model="film.reziser"
+                chips
+                deletable-chips
+                :items="filmskiRadnici"
+              />
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col>
+              <v-combobox
+                label="Glumci"
+                v-model="film.glumci"
+                multiple
+                chips
+                deletable-chips
+                :delimiters="[',']"
+                hide-selected
+                :items="filmskiRadnici"
+                auto-select-first
+                :search-input.sync="formData.glumciSearchInput"
+              />
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col>
+              <v-text-field
+                label="Trajanje"
+                v-model="film.trajanje"
+                :rules="formData.rules.trajanjeRules"
+              />
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col>
+              <v-text-field
+                label="Distributer"
+                v-model="film.distributer"
+                :rules="formData.rules.distributerRules"
+              />
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col>
+              <v-text-field
+                label="Zemlja porekla"
+                v-model="film.zemljaPorekla"
+                :rules="formData.rules.zemljaPoreklaRules"
+              />
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col>
+              <v-text-field
+                label="Godina proizvodnje"
+                v-model="film.godinaProizvodnje"
+                :rules="formData.rules.godinaProizvodnjeRules"
+              />
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col>
+              <v-text-field label="Link do slike" v-model="film.pathDoSlike" />
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col>
+              <v-textarea label="Opis" v-model="film.opis" />
+            </v-col>
+          </v-row>
+          <v-row justify="end">
+            <v-col class="col-lg-2 col-md-12">
+              <v-btn class="secondary" width="100%" :disabled="!formData.formValid">{{tipAkcije}}</v-btn>
+            </v-col>
+          </v-row>
+        </v-container>
+      </v-form>
+    </v-row>
+  </v-container>
+</template>
+
+<script>
+  import { mapGetters } from "vuex";
+  import axios from "axios";
+  export default {
+    name: "AddFilm",
+    props: {
+      filmId: {
+        type: Number,
+        required: false
+      }
+    },
+    data: () => {
+      return {
+        tipAkcije: "",
+        film: {
+          id: 0,
+          naziv: "",
+          zanrovi: [],
+          reziser: null,
+          glumci: [],
+          trajanje: 0,
+          distributer: "",
+          zemljaPorekla: "",
+          godinaProizvodnje: 0,
+          opis: "",
+          obrisan: false,
+          pathDoSlike: ""
+        },
+        zanrovi: [],
+        filmskiRadnici: [],
+        formData: {
+          formValid: false,
+          zanroviSearchInput: null,
+          glumciSearchInput: null,
+          rulePresets: {
+            required: value => (value + "" === "" ? "Obavezno Polje" : true),
+            mustBeNumber: value =>
+              /^\d*$/.test(value) ? true : "Mora biti ne negativan broj",
+            notZero: value =>
+              parseInt(value) !== 0 ? true : "Mora biti vece od 0"
+          },
+          rules: {
+            nazivRules: [value => (value + "" === "" ? "Obavezno Polje" : true)],
+            trajanjeRules: [
+              value => (value + "" === "" ? "Obavezno Polje" : true),
+              value =>
+                /^\d*$/.test(value) ? true : "Mora biti ne negativan broj",
+              value => (parseInt(value) !== 0 ? true : "Mora biti vece od 0")
+            ],
+            distributerRules: [
+              value => (value + "" === "" ? "Obavezno Polje" : true)
+            ],
+            zemljaPoreklaRules: [
+              value => (value + "" === "" ? "Obavezno Polje" : true)
+            ],
+            godinaProizvodnjeRules: [
+              value => (value + "" === "" ? "Obavezno Polje" : true),
+              value =>
+                /^\d*$/.test(value) ? true : "Mora biti ne negativan broj",
+              value => (parseInt(value) !== 0 ? true : "Mora biti vece od 0")
+            ]
+          }
+        }
+      };
+    },
+    methods: {
+      setFilm: function () {
+        if (this.tipAkcije === "Izmena") {
+            
+          this.film = JSON.parse(JSON.stringify(this.getFilm(this.filmId)))
+          this.film.zanrovi = this.film.zanrovi.map(this.itemForCb)
+          this.film.reziser = this.itemForCb(this.film.reziser)
+          this.film.glumci = this.film.glumci.map(this.itemForCb)
+
+        }
+      
+      },
+      itemForCb: function (i){
+        var obj = new Object();
+        obj.text = i.naziv;
+        obj.value = i;
+        return obj;
+      },
+      setTipAkcije: function() {
+        if (this.filmId !== undefined) {
+          this.tipAkcije = "Izmena";
+        } else this.tipAkcije = "Dodavanje";
+      },
+      getZanrovi: async function() {
+        this.zanrovi = await axios
+          .get(`${this.getFullServerAddress}/Bioskop/Zanrovi`)
+          .then(res =>
+            res.data.map(this.itemForCb)
+          )
+          .catch(() => [])
+      //console.log(this.zanrovi)
+      },
+      getFilmskiRadnici: async function() {
+        this.filmskiRadnici = await axios
+          .get(`${this.getFullServerAddress}/Bioskop/FilmskiRadnici`)
+          .then(res =>
+            res.data.map(this.itemForCb)
+          )
+          .catch(() => []);
+      }
+    },
+    computed: {
+      ...mapGetters(["getFilm", "getFullServerAddress"])
+    },
+    watch: {
+      filmId: function() {
+        this.setTipAkcije();
+        this.setFilm()
+        
+      },
+      "film.zanrovi": function() {
+        this.formData.zanroviSearchInput = null;
+      },
+      "film.glumci": function() {
+        this.formData.glumciSearchInput = null;
+      }
+    },
+    mounted: function() {
+      this.setTipAkcije();
+      this.getZanrovi();
+      this.getFilmskiRadnici();
+      this.setFilm()
+    }
+  }
+</script>
+
+<style>
+</style>

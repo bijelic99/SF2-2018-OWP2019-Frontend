@@ -4,7 +4,7 @@ import store from '../index'
 const state = {
     //samo trenutno popunjeno sa static data
     filmovi: [
-        {
+        /*{
             id: 20,
             naziv: "Ant-Man and the Wasp",
             zanrovi: [{ "id": 4, "naziv": "Komedija" }],
@@ -45,7 +45,7 @@ const state = {
             opis:"The quiet, Cornish town of London holds a secret.\n\nCuthbert Pitt has the perfect life working as a housekeeper in the city and laughing with his sweet boyfriend, Tony Sparrow.\n\nHowever, when he finds a warped blade in his cellar, he begins to realise that things are not quite as they seem in the Pitt family.\n\nAn engagement party leaves Cuthbert with some startling questions about his past, and he sets off to sunny London to find some answers.\n\nAt first the people of London are gracious and popular. He is intrigued by the curiously helpful housekeeper, Phil Bogtrotter. However, after he introduces him to hard sugar, Cuthbert slowly finds himself drawn into a web of adultery, adultery and perhaps, even violence.\n\nCan Cuthbert resist the charms of Phil Bogtrotter and uncover the secret of the warped blade before it's too late, or will his demise become yet another London legend?",
             obrisan:false,
             pathDoSlike:"https://images-na.ssl-images-amazon.com/images/I/81b45f09rWL._SL1500_.jpg"
-        }
+        }*/
 
     ]
 }

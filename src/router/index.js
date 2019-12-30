@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import Filmovi from '../views/Filmovi'
 import Film from '../views/Film'
 import Home from '../views/Home'
+import AddFilm from '../components/AddItemComponents/Film/AddFilm'
 
 Vue.use(VueRouter)
 
@@ -21,6 +22,12 @@ const routes = [
     path:'/Film/:id',
     name: 'Film',
     component: Film,
+    props: true
+  },
+  {
+    path:'/AddFilm',
+    name: 'AddFilm',
+    component: AddFilm,
     props: true
   },
   {
