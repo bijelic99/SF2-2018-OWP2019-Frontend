@@ -1,3 +1,7 @@
+import axios from 'axios'
+import store from '../index'
+import VueCookies from 'vue-cookies'
+
 const state = {
 
     currentUser: { 
@@ -6,12 +10,15 @@ const state = {
         password: '', 
         datumRegistracije: new Date(), 
         uloga: 'Gost', 
-        obrisan: false }
+        obrisan: false },
+    isLoggedIn: false
 }
 
 const getters = {
     getCurrentUser: state => state.currentUser,
     getCurrentUserUloga: state => state.currentUser.uloga,
+    getCurrentUserUsername: state => state.currentUser.username,
+    getIsLoggedIn: state => state.isLoggedIn
     
 }
 
@@ -19,15 +26,26 @@ const actions = {
     setCurrentUser({commit}, user){
         commit('SET_CURRENT_USER', user)
     },
-    async login({commit}, username, password){
-        //treba implementovati
-        console.log(commit, username, password)
-        return true
+    async login({commit}, data){
+        var korisnik = await axios.post(`${store.getters.getFullServerAddress}/Bioskop/Login`, data, {withCredentials: true}).then(res => res.data.successful?res.data.user : false).catch(() => false)
+        if(korisnik !== false){
+            VueCookies.set('korisnik', korisnik, '2d', ["localhost:8080", store.getters.getFullServerAddress])
+            commit('SET_CURRENT_USER', korisnik)
+            commit('SET_LOGGEDIN', true)
+            return true
+        }
+        else return false
+    },
+    logout({commit}){
+        VueCookies.remove('korisnik')
+        commit('SET_CURRENT_USER', {})
+        commit('SET_LOGGEDIN', false)
     }
 }
 
 const mutations = {
     SET_CURRENT_USER: (state, user) => state.currentUser = user,
+    SET_LOGGEDIN: (state, logged) => state.isLoggedIn = logged
 }
 
 export default {

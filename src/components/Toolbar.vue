@@ -7,26 +7,27 @@
       <v-menu right>
         <template v-slot:activator="{ on }">
           <v-btn icon v-on="on">
-            <v-icon>mdi-dots-vertical</v-icon>Registruj se
+            <v-icon>mdi-dots-vertical</v-icon><span v-if="getIsLoggedIn">{{getCurrentUserUsername}}</span><span v-else>Registruj se</span>
           </v-btn>
         </template>
         <v-card>
           <v-list>
             <v-list-item>
-              <v-list-item-content>
-                <p>
+              <v-list-item-content :class="getIsLoggedIn ? 'w-25' : ''">
+                <p v-if="!getIsLoggedIn">
                   Neke funkcionalnosti aplikacije su nedostupne neulogovanim korisnicima.
                   <br />Prijavite se ili registrujte ako vec nemate nalog
                 </p>
+                <span v-else>{{getCurrentUserUsername}}</span>
               </v-list-item-content>
             </v-list-item>
           </v-list>
           <v-divider></v-divider>
           <v-card-actions>
-            <v-btn text>Login</v-btn>
-            <v-btn text>Logout</v-btn>
+            <LoginDialog v-if="!getIsLoggedIn" />
             <v-spacer></v-spacer>
-            <RegisterDialog />
+            <LogoutDialog v-if="getIsLoggedIn" />
+            <RegisterDialog v-if="!getIsLoggedIn" />
           </v-card-actions>
         </v-card>
       </v-menu>
@@ -57,10 +58,13 @@
 </template>
 
 <script>
-  import RegisterDialog from "./RegisterDialog";
+  import RegisterDialog from "./AccountControlComponents/RegisterDialog";
+  import LoginDialog from './AccountControlComponents/LoginDialog'
+  import LogoutDialog from './AccountControlComponents/LogoutDialog'
+  import { mapGetters } from 'vuex'
   export default {
     name: "Toolbar",
-    components: { RegisterDialog },
+    components: { RegisterDialog, LoginDialog, LogoutDialog },
     data() {
       return {
         navigationDrawerData: {
@@ -74,9 +78,15 @@
         }
       };
     },
+    computed:{
+      ...mapGetters(['getIsLoggedIn', 'getCurrentUserUloga', 'getCurrentUserUsername'])
+    },
     methods: {}
   };
 </script>
 
 <style>
+  .w-25{
+    width: 25vw
+  }
 </style>

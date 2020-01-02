@@ -89,9 +89,6 @@
         </v-btn>
       </template>
       <EditFilmDialog :filmId="film.id"/>
-      <v-btn fab dark small color="secondary">
-        <v-icon>mdi-delete</v-icon>
-      </v-btn>
       <DeleteFilm :film="film"/>
     </v-speed-dial>
   </v-container>

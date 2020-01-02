@@ -11,7 +11,7 @@
         <v-toolbar-title>Registracija</v-toolbar-title>
       </v-toolbar>
 
-      <v-list>
+      <v-list class="mx-12 mt-2">
         <v-list-item>
           <v-list-item-content>
             <v-form ref="registerForm" v-model="form.valid">
@@ -109,7 +109,7 @@
       register: async function(){
         let user = this.form.data
         let success = false
-        await axios.post(`${this.getFullServerAddress}/Bioskop/Register`, user).then(res => success = res.data.successfull ).catch(()=> success = false)
+        await axios.post(`${this.getFullServerAddress}/Bioskop/Register`, user).then(res => success = res.data.successful ).catch(()=> success = false)
         return success
       },
       checkIfUsernameAvailable: async function(username) {
@@ -118,7 +118,7 @@
           .post(`${this.getFullServerAddress}/Bioskop/UniqueUsername`, { username: username })
           .then(res => {
             //console.log(res.data)
-            if (res.data.available) poruka = res.data.available;
+            if (res.data.successful) poruka = res.data.successful;
             else poruka = "Username je zauzet";
           })
           .catch(() => (poruka = "serverski problem"));
