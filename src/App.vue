@@ -24,7 +24,7 @@
       //
     }),
     methods:{
-      ...mapActions(['setCurrentTheme','setCurrentThemeToBase', 'fetchFilmovi']),
+      ...mapActions(['setCurrentTheme','setCurrentThemeToBase', 'fetchFilmovi', 'fetchLoggedInUser']),
     },
     computed: {
       ...mapGetters(['getCurrentTheme']),
@@ -43,7 +43,8 @@
       }
     },
     async mounted(){
-      await this.fetchFilmovi();
+      await this.fetchFilmovi()
+      this.fetchLoggedInUser()
     }
   }
 </script>

@@ -18,7 +18,7 @@
                   Neke funkcionalnosti aplikacije su nedostupne neulogovanim korisnicima.
                   <br />Prijavite se ili registrujte ako vec nemate nalog
                 </p>
-                <span v-else>{{getCurrentUserUsername}}</span>
+                <span v-else><v-icon>mdi-account</v-icon> {{getCurrentUserUsername}}</span>
               </v-list-item-content>
             </v-list-item>
           </v-list>
@@ -42,7 +42,7 @@
       <v-divider></v-divider>
 
       <v-list dense nav>
-        <v-list-item v-for="item in navigationDrawerData.items" :key="item.title" :to="item.link" link >
+        <v-list-item v-for="item in visibleNavItems" :key="item.title" :to="item.link" link >
           <v-list-item-icon>
             <v-icon class="secondary--text">{{ item.icon }}</v-icon>
           </v-list-item-icon>
@@ -69,17 +69,22 @@
       return {
         navigationDrawerData: {
           open: false,
-          items: [{ title: "Pocetna", icon: "mdi-home", link: "/" },
-                  { title: "Filmovi", icon: "mdi-movie", link: "/Filmovi" },
-                  { title: "Projekcije", icon: "mdi-movie-roll", link: "/" },
-                  { title: "Rezervacija Karte", icon: "mdi-ticket", link: "/" },
-                  { title: "Dodaj film", icon: "mdi-plus", link: "/AddFilm" }
+          items: [{ title: "Pocetna", icon: "mdi-home", link: "/", visibleForCurrentUser: ()=>true },
+                  { title: "Filmovi", icon: "mdi-movie", link: "/Filmovi", visibleForCurrentUser: ()=>true },
+                  { title: "Projekcije", icon: "mdi-movie-roll", link: "/", visibleForCurrentUser: ()=>true },
+                  { title: "Rezervacija Karte", icon: "mdi-ticket", link: "/", visibleForCurrentUser: ()=>this.getCurrentUserUloga === 'Obican'},
+                  { title: "Dodaj film", icon: "mdi-plus", link: "/AddFilm", visibleForCurrentUser: ()=>this.getCurrentUserUloga === 'Admin'},
+                  { title: "Korisnici", icon: "mdi-account-multiple", link: "/", visibleForCurrentUser: ()=>this.getCurrentUserUloga === 'Admin' },
           ]
         }
       };
     },
     computed:{
-      ...mapGetters(['getIsLoggedIn', 'getCurrentUserUloga', 'getCurrentUserUsername'])
+      ...mapGetters(['getIsLoggedIn', 'getCurrentUserUloga', 'getCurrentUserUsername']),
+      visibleNavItems: function () {
+        //console.log(this.navigationDrawerData.items.filter(item=> item.visibleForCurrentUser()))
+        return this.navigationDrawerData.items.filter(item=> item.visibleForCurrentUser())
+      }
     },
     methods: {}
   };

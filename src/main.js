@@ -5,7 +5,9 @@ import store from './store'
 import vuetify from './plugins/vuetify'
 import AsyncComputed from 'vue-async-computed'
 import VueCookies from 'vue-cookies'
+import axios from 'axios'
 
+axios.defaults.withCredentials = true
 Vue.use(AsyncComputed)
 Vue.use(VueCookies)
 Vue.config.productionTip = false

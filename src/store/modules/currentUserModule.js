@@ -38,8 +38,16 @@ const actions = {
     },
     logout({commit}){
         VueCookies.remove('korisnik')
-        commit('SET_CURRENT_USER', {})
+        axios.get(`${store.getters.getFullServerAddress}/Bioskop/Logout`)
+        commit('SET_CURRENT_USER', {uloga:'Neprijavljen'})
         commit('SET_LOGGEDIN', false)
+    },
+    fetchLoggedInUser({commit}){
+        if(VueCookies.isKey('korisnik')){
+            var korisnik = VueCookies.get('korisnik')
+            commit('SET_CURRENT_USER', korisnik)
+            commit('SET_LOGGEDIN', true)
+        }
     }
 }
 
