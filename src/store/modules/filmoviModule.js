@@ -62,14 +62,29 @@ const getters = {
 const actions = {
     async fetchFilmovi({ commit }) {
 
-        await axios.get(`${store.getters.getFullServerAddress}/Bioskop/Filmovi`).then(res => commit('setFilmovi', res.data)).catch(res => console.log(res))
+        await axios.get(`${store.getters.getFullServerAddress}/Bioskop/Filmovi`).then(res => commit('SET_FILMS', res.data)).catch(res => console.log(res))
         //console.log(response.data)
+
+    },
+    async addFilm({ commit }, film) {
+        return await axios.post(`${store.getters.getFullServerAddress}/Bioskop/Film`, film).then(res => {
+            if (res.data.successful) {
+                film.id = res.data.id
+                commit('ADD_FILM', film)
+                return true
+            }
+            else return false
+        }).catch(err => {
+            console.log(err)
+            return false
+        })
 
     }
 }
 
 const mutations = {
-    setFilmovi: (state, filmovi) => (state.filmovi = filmovi)
+    SET_FILMS: (state, filmovi) => (state.filmovi = filmovi),
+    ADD_FILM: (state, film) => state.filmovi.push(film)
 }
 
 export default {

@@ -4,7 +4,7 @@
       <h1 class="ml-2">{{tipAkcije}} Filma:</h1>
     </v-row>
     <v-row>
-      <v-form class="col-md-12" v-model="formData.formValid">
+      <v-form class="col-md-12" v-model="formData.formValid" ref="filmForm">
         <v-container fluid>
           <v-row>
             <v-col>
@@ -102,7 +102,12 @@
           </v-row>
           <v-row justify="end">
             <v-col class="col-lg-2 col-md-12">
-              <v-btn class="secondary" width="100%" :disabled="!formData.formValid">{{tipAkcije}}</v-btn>
+              <v-btn
+                class="secondary"
+                width="100%"
+                :disabled="!formData.formValid"
+                @click="formSubmit()"
+              >{{tipAkcije}}</v-btn>
             </v-col>
           </v-row>
         </v-container>
@@ -112,7 +117,7 @@
 </template>
 
 <script>
-  import { mapGetters } from "vuex";
+  import { mapGetters, mapActions } from "vuex";
   import axios from "axios";
   export default {
     name: "AddFilm",
@@ -129,7 +134,7 @@
           id: 0,
           naziv: "",
           zanrovi: [],
-          reziser: null,
+          reziser: "",
           glumci: [],
           trajanje: 0,
           distributer: "",
@@ -177,18 +182,16 @@
       };
     },
     methods: {
-      setFilm: function () {
+      ...mapActions(["addFilm"]),
+      setFilm: function() {
         if (this.tipAkcije === "Izmena") {
-            
-          this.film = JSON.parse(JSON.stringify(this.getFilm(this.filmId)))
-          this.film.zanrovi = this.film.zanrovi.map(this.itemForCb)
-          this.film.reziser = this.itemForCb(this.film.reziser)
-          this.film.glumci = this.film.glumci.map(this.itemForCb)
-
+          this.film = JSON.parse(JSON.stringify(this.getFilm(this.filmId)));
+          this.film.zanrovi = this.film.zanrovi.map(this.itemForCb);
+          this.film.reziser = this.itemForCb(this.film.reziser);
+          this.film.glumci = this.film.glumci.map(this.itemForCb);
         }
-      
       },
-      itemForCb: function (i){
+      itemForCb: function(i) {
         var obj = new Object();
         obj.text = i.naziv;
         obj.value = i;
@@ -202,19 +205,46 @@
       getZanrovi: async function() {
         this.zanrovi = await axios
           .get(`${this.getFullServerAddress}/Bioskop/Zanrovi`)
-          .then(res =>
-            res.data.map(this.itemForCb)
-          )
-          .catch(() => [])
+          .then(res => res.data.map(this.itemForCb))
+          .catch(() => []);
       //console.log(this.zanrovi)
       },
       getFilmskiRadnici: async function() {
         this.filmskiRadnici = await axios
           .get(`${this.getFullServerAddress}/Bioskop/FilmskiRadnici`)
-          .then(res =>
-            res.data.map(this.itemForCb)
-          )
+          .then(res => res.data.map(this.itemForCb))
           .catch(() => []);
+      },
+      formSubmit: function() {
+        
+        var newFilm = JSON.parse(JSON.stringify(this.film))
+        if (newFilm.reziser !== null) {
+          if (typeof newFilm.reziser === "string"){
+            var reziser = new Object()
+            reziser.id = 0
+            reziser.naziv = newFilm.reziser
+            newFilm.reziser = reziser
+          }
+          else newFilm.reziser = newFilm.reziser.value;
+        } else newFilm.reziser = null
+        newFilm.zanrovi = newFilm.zanrovi.map(z => {
+          if (typeof z === "string") {
+            var zanr = new Object()
+            zanr.id = 0
+            zanr.naziv = z
+            return zanr;
+          } else return z.value;
+        })
+        newFilm.glumci = newFilm.glumci.map(g => {
+          if (typeof g === "string") {
+            var glumac = new Object()
+            glumac.id = 0
+            glumac.naziv = g
+            return glumac;
+          } else return g.value;
+        })
+        if(!this.addFilm(newFilm)) console.log("doslo je do greske pri dodavanju filma")
+        else this.$refs.filmForm.reset() 
       }
     },
     computed: {
@@ -223,8 +253,7 @@
     watch: {
       filmId: function() {
         this.setTipAkcije();
-        this.setFilm()
-        
+        this.setFilm();
       },
       "film.zanrovi": function() {
         this.formData.zanroviSearchInput = null;
@@ -237,9 +266,9 @@
       this.setTipAkcije();
       this.getZanrovi();
       this.getFilmskiRadnici();
-      this.setFilm()
+      this.setFilm();
     }
-  }
+  };
 </script>
 
 <style>
