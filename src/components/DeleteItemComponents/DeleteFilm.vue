@@ -9,8 +9,8 @@
         <v-card-title class="headline">Brisanje filma {{film.naziv}}</v-card-title>
         <v-card-text>Jeste li sigurni da zelite da obrisete film {{film.naziv}}</v-card-text>
         <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="green darken-1" text @click="visible = false">Da</v-btn>
+          <v-spacer/>
+          <v-btn color="green darken-1" text @click="submitButton()">Da</v-btn>
           <v-btn color="green darken-1" text @click="visible = false">Ne</v-btn>
         </v-card-actions>
       </v-card>
@@ -18,6 +18,7 @@
 </template>
 
 <script>
+  import { mapActions } from 'vuex'
   export default {
     name: 'DeleteFilm',
     props: {
@@ -32,10 +33,17 @@
       }
     },
     methods:{
+      ...mapActions(['deleteFilm']),
       openDialog: function(e) {
         e.stopPropagation();
         this.visible = true;
       },
+      submitButton: async function () {
+        if (await this.deleteFilm(this.film.id)){
+          this.visible = false
+          this.$router.push({name: 'Home'})
+        }
+      }
     }
   }
 </script>

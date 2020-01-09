@@ -63,7 +63,6 @@ const actions = {
     async fetchFilmovi({ commit }) {
 
         await axios.get(`${store.getters.getFullServerAddress}/Bioskop/Filmovi`).then(res => commit('SET_FILMS', res.data)).catch(res => console.log(res))
-        //console.log(response.data)
 
     },
     async addFilm({ commit }, film) {
@@ -79,12 +78,38 @@ const actions = {
             return false
         })
 
+    },
+    async editFilm({commit}, film){
+        return await axios.put(`${store.getters.getFullServerAddress}/Bioskop/Film`, film).then(res=>{
+            if(res.successful) {
+                commit('UPDATE_FILM', film)
+                
+            }
+            return res.successful
+        }).catch(err=> {
+            console.log(err)
+            return false
+        })
+    },
+    async deleteFilm({ commit }, filmId){
+        if (await axios.delete(`${store.getters.getFullServerAddress}/Bioskop/Film?id=${filmId}`).then(res=> res.data.successful).catch((err)=>{
+            console.log(err)
+            return false
+        })) {
+            commit('DELETE_FILM', filmId)
+            return true
+        } else return false
     }
 }
 
 const mutations = {
     SET_FILMS: (state, filmovi) => (state.filmovi = filmovi),
-    ADD_FILM: (state, film) => state.filmovi.push(film)
+    ADD_FILM: (state, film) => state.filmovi.push(film),
+    DELETE_FILM: (state, filmId) => state.filmovi = state.filmovi.filter(f=>f.id !== filmId),
+    UPDATE_FILM: (state, film) => {
+        var index = state.filmovi.findIndex(f=> f.id === film.id)
+        state.filmovi[index] = film
+    }
 }
 
 export default {

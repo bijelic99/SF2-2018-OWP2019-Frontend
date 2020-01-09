@@ -2,7 +2,7 @@
   <v-app>
     <Toolbar/>
     <v-content><router-view/></v-content>
-    <v-footer app absolute class="primary" :elevation="24">
+    <v-footer class="primary" :elevation="24">
       <v-col
         class="text-center white--text"
         cols="12"

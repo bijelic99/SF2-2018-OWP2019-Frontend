@@ -110,9 +110,24 @@
               >{{tipAkcije}}</v-btn>
             </v-col>
           </v-row>
+          <v-snackbar v-model="snackbars.successVisible" :timeout="snackbars.timeout">{{tipAkcije === "Izmena" ? "Uspesna Izmena" : "Uspesno Dodavanje"}} <v-btn
+        color="secondary"
+        text
+        @click="snackbars.successVisible = false"
+      >
+        Close
+      </v-btn></v-snackbar>
+      <v-snackbar v-model="snackbars.failureVisible" :timeout="snackbars.timeout">{{tipAkcije === "Izmena" ? "Neuspesna izmena" : "Neuspesno dodavanje"}} <v-btn
+        color="secondary"
+        text
+        @click="snackbars.failureVisible = false"
+      >
+        Close
+      </v-btn></v-snackbar>
         </v-container>
       </v-form>
     </v-row>
+    
   </v-container>
 </template>
 
@@ -178,11 +193,16 @@
               value => (parseInt(value) !== 0 ? true : "Mora biti vece od 0")
             ]
           }
+        },
+        snackbars: {
+          timeout: 4000,
+          successVisible: false, 
+          failureVisible: false 
         }
       };
     },
     methods: {
-      ...mapActions(["addFilm"]),
+      ...mapActions(["addFilm", "editFilm"]),
       setFilm: function() {
         if (this.tipAkcije === "Izmena") {
           this.film = JSON.parse(JSON.stringify(this.getFilm(this.filmId)));
@@ -243,8 +263,21 @@
             return glumac;
           } else return g.value;
         })
-        if(!this.addFilm(newFilm)) console.log("doslo je do greske pri dodavanju filma")
-        else this.$refs.filmForm.reset() 
+        if(this.tipAkcije === "Izmena") {
+          if(!this.editFilm(newFilm)) {
+            this.snackbars.failureVisible = true
+          }
+          else{
+            this.snackbars.successVisible = true
+          }
+        }
+        else if(this.tipAkcije === "Dodavanje") {
+          if(!this.addFilm(newFilm)) {
+            this.snackbars.failureVisible = true
+          }
+          else {
+            this.snackbars.successVisible = true
+            this.$refs.filmForm.reset()} }
       }
     },
     computed: {
