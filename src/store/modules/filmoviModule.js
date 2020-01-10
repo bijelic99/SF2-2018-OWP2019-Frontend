@@ -61,12 +61,11 @@ const getters = {
 
 const actions = {
     async fetchFilmovi({ commit }) {
-
-        await axios.get(`${store.getters.getFullServerAddress}/Bioskop/Filmovi`).then(res => commit('SET_FILMS', res.data)).catch(res => console.log(res))
+        await axios.get(`${store.getters.getFullServerAddress}/Filmovi`).then(res => commit('SET_FILMS', res.data)).catch(res => console.log(res))
 
     },
     async addFilm({ commit }, film) {
-        return await axios.post(`${store.getters.getFullServerAddress}/Bioskop/Film`, film).then(res => {
+        return await axios.post(`${store.getters.getFullServerAddress}/Film`, film).then(res => {
             if (res.data.successful) {
                 film.id = res.data.id
                 commit('ADD_FILM', film)
@@ -80,7 +79,7 @@ const actions = {
 
     },
     async editFilm({commit}, film){
-        return await axios.put(`${store.getters.getFullServerAddress}/Bioskop/Film`, film).then(res=>{
+        return await axios.put(`${store.getters.getFullServerAddress}/Film`, film).then(res=>{
             if(res.successful) {
                 commit('UPDATE_FILM', film)
                 
@@ -92,7 +91,7 @@ const actions = {
         })
     },
     async deleteFilm({ commit }, filmId){
-        if (await axios.delete(`${store.getters.getFullServerAddress}/Bioskop/Film?id=${filmId}`).then(res=> res.data.successful).catch((err)=>{
+        if (await axios.delete(`${store.getters.getFullServerAddress}/Film?id=${filmId}`).then(res=> res.data.successful).catch((err)=>{
             console.log(err)
             return false
         })) {

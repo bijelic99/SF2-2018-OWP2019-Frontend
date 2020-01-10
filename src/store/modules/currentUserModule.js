@@ -27,9 +27,9 @@ const actions = {
         commit('SET_CURRENT_USER', user)
     },
     async login({commit}, data){
-        var korisnik = await axios.post(`${store.getters.getFullServerAddress}/Bioskop/Login`, data, {withCredentials: true}).then(res => res.data.successful?res.data.user : false).catch(() => false)
+        var korisnik = await axios.post(`${store.getters.getFullServerAddress}/Login`, data, {withCredentials: true}).then(res => res.data.successful?res.data.user : false).catch(() => false)
         if(korisnik !== false){
-            VueCookies.set('korisnik', korisnik, '2d', ["localhost:8080", store.getters.getFullServerAddress])
+            VueCookies.set('korisnik', korisnik, '2d', [store.getters.getFrontendFullAdress, `${store.getters.getServerAddress}:${store.getters.serverPort}`])
             commit('SET_CURRENT_USER', korisnik)
             commit('SET_LOGGEDIN', true)
             return true
@@ -38,7 +38,7 @@ const actions = {
     },
     logout({commit}){
         VueCookies.remove('korisnik')
-        axios.get(`${store.getters.getFullServerAddress}/Bioskop/Logout`)
+        axios.get(`${store.getters.getFullServerAddress}/Logout`)
         commit('SET_CURRENT_USER', {uloga:'Neprijavljen'})
         commit('SET_LOGGEDIN', false)
     },

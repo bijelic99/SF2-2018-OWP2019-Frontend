@@ -224,14 +224,14 @@
       },
       getZanrovi: async function() {
         this.zanrovi = await axios
-          .get(`${this.getFullServerAddress}/Bioskop/Zanrovi`)
+          .get(`${this.getFullServerAddress}/Zanrovi`)
           .then(res => res.data.map(this.itemForCb))
           .catch(() => []);
       //console.log(this.zanrovi)
       },
       getFilmskiRadnici: async function() {
         this.filmskiRadnici = await axios
-          .get(`${this.getFullServerAddress}/Bioskop/FilmskiRadnici`)
+          .get(`${this.getFullServerAddress}/FilmskiRadnici`)
           .then(res => res.data.map(this.itemForCb))
           .catch(() => []);
       },

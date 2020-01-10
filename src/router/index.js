@@ -4,6 +4,8 @@ import Filmovi from '../views/Filmovi'
 import Film from '../views/Film'
 import Home from '../views/Home'
 import AddFilm from '../components/AddItemComponents/Film/AddFilm'
+import Korisnici from '../views/Korisnici'
+import Korisnik from '../views/Korisnik'
 
 Vue.use(VueRouter)
 
@@ -28,6 +30,17 @@ const routes = [
     path:'/AddFilm',
     name: 'AddFilm',
     component: AddFilm,
+    props: true
+  },
+  {
+    path: '/Korisnici',
+    name: 'Korisnici',
+    component: Korisnici,
+  },
+  {
+    path: '/Korisnik/:id',
+    name: 'Korisnik',
+    component: Korisnik,
     props: true
   },
   {

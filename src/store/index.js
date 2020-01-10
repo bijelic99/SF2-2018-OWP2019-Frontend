@@ -4,6 +4,7 @@ import filmoviModule from './modules/filmoviModule'
 import themeModule from './modules/themeModule'
 import serverGlobalsModule from './modules/serverGlobalsModule'
 import currentUserModule from './modules/currentUserModule'
+import usersModule from './modules/usersModule'
 
 Vue.use(Vuex)
 
@@ -15,6 +16,6 @@ export default new Vuex.Store({
   actions: {
   },
   modules: {
-    filmoviModule, themeModule, serverGlobalsModule, currentUserModule
+    filmoviModule, themeModule, serverGlobalsModule, currentUserModule, usersModule
   }
 })

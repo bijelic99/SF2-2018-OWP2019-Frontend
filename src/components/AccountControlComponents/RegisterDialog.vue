@@ -109,13 +109,13 @@
       register: async function(){
         let user = this.form.data
         let success = false
-        await axios.post(`${this.getFullServerAddress}/Bioskop/Register`, user).then(res => success = res.data.successful ).catch(()=> success = false)
+        await axios.post(`${this.getFullServerAddress}/Register`, user).then(res => success = res.data.successful ).catch(()=> success = false)
         return success
       },
       checkIfUsernameAvailable: async function(username) {
         let poruka = "";
         await axios
-          .post(`${this.getFullServerAddress}/Bioskop/UniqueUsername`, { username: username })
+          .post(`${this.getFullServerAddress}/UniqueUsername`, { username: username })
           .then(res => {
             //console.log(res.data)
             if (res.data.successful) poruka = res.data.successful;
