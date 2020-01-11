@@ -21,10 +21,19 @@ const actions = {
              commit('SET_USERS', [])
              return false
         })
+    },
+    async updateUser({commit}, user) {
+        // dodati i put zahtev na backend kad se za to steknu uslovi
+        commit('UPDATE_USER', user)
+        return true
     }
 }
 const mutations = {
-    SET_USERS: (state, users) => state.users = users
+    SET_USERS: (state, users) => state.users = users,
+    UPDATE_USER: (state, user) => {
+        var index = state.users.findIndex(u => u.id === user.id)
+        state.users[index] = user
+    }
 }
 
 export default {

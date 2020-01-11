@@ -18,7 +18,8 @@ const getters = {
     getCurrentUser: state => state.currentUser,
     getCurrentUserUloga: state => state.currentUser.uloga,
     getCurrentUserUsername: state => state.currentUser.username,
-    getIsLoggedIn: state => state.isLoggedIn
+    getIsLoggedIn: state => state.isLoggedIn,
+    getCurrentUserId: state=> state.currentUser.id
     
 }
 

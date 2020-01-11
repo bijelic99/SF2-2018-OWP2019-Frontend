@@ -18,14 +18,15 @@
                   Neke funkcionalnosti aplikacije su nedostupne neulogovanim korisnicima.
                   <br />Prijavite se ili registrujte ako vec nemate nalog
                 </p>
-                <span v-else><v-icon>mdi-account</v-icon> {{getCurrentUserUsername}}</span>
+                <span v-else class="no-underline"><v-icon>mdi-account</v-icon> <router-link :to="`/Korisnik/${getCurrentUserId}`">{{getCurrentUserUsername}}</router-link></span>
               </v-list-item-content>
             </v-list-item>
           </v-list>
           <v-divider></v-divider>
           <v-card-actions>
             <LoginDialog v-if="!getIsLoggedIn" />
-            <v-spacer></v-spacer>
+            <v-btn text color="primary--text" :to="`/Korisnik/${getCurrentUserId}`">Profil</v-btn>
+            <v-spacer/>
             <LogoutDialog v-if="getIsLoggedIn" />
             <RegisterDialog v-if="!getIsLoggedIn" />
           </v-card-actions>
@@ -80,7 +81,7 @@
       };
     },
     computed:{
-      ...mapGetters(['getIsLoggedIn', 'getCurrentUserUloga', 'getCurrentUserUsername']),
+      ...mapGetters(['getIsLoggedIn', 'getCurrentUserUloga', 'getCurrentUserUsername', 'getCurrentUserId']),
       visibleNavItems: function () {
         //console.log(this.navigationDrawerData.items.filter(item=> item.visibleForCurrentUser()))
         return this.navigationDrawerData.items.filter(item=> item.visibleForCurrentUser())
@@ -93,5 +94,8 @@
 <style>
   .w-25{
     width: 25vw
+  }
+  .no-underline>a{
+    text-decoration: none;
   }
 </style>

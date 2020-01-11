@@ -1,20 +1,51 @@
 <template>
     <v-container class="fill-height">
-        <v-card height="100%" width="100%">
+        <v-card width="100%" class="fill-height">
             <v-card-title>
                 {{user.username}}
             </v-card-title>
             <v-card-subtitle>
-                Uloga: {{user.uloga}}
+              {{user.uloga}} korisnik
             </v-card-subtitle>
-                <v-list-item>
-
+              <v-list-item v-if="getIsLoggedIn && (getCurrentUserId === user.id || getCurrentUserUloga === 'Admin')">
+                  <v-list-item-content>
+                    <v-list-item-title>Sifra:</v-list-item-title><v-list-item-content>
+                      <v-form width="100%" v-model="componentData.passwordFormValid">
+                        <v-row justify="start" align="center">
+                          <v-col fluid lg="10" md="8"><v-text-field @input="pwdChanged()" type="password" v-model="user.password" :rules="componentData.passwordTextFieldRules"/></v-col>
+                          <v-col fluid lg="1" md="4"><v-btn @click="changeSubmit()" color="secondary--text" text :disabled="!this.componentData.passwordChanged ? true : !this.componentData.passwordFormValid">Izmeni</v-btn></v-col>
+                        </v-row>
+                      </v-form>
+                    </v-list-item-content>
+                  </v-list-item-content>
                 </v-list-item>
-            <v-spacer/>
-            <v-card-actions>
-                <v-btn text>Izmeni</v-btn>
-                <v-btn text>Obrisi</v-btn>
-            </v-card-actions>
+                <v-list-item v-if="getIsLoggedIn && getCurrentUserUloga === 'Admin'">
+                  <v-list-item-content>
+                    <v-list-item-title>Uloga:</v-list-item-title><v-list-item-content>
+                      <v-form width="100%">
+                        <v-row justify="start" align="center">
+                          <v-col fluid lg="10" md="8" ><v-select :items="componentData.uloge" v-model="user.uloga" @input="componentData.roleChanged = true"/></v-col>
+                          <v-col fluid lg="1" md="4"><v-btn @click="changeSubmit()" color="secondary--text" text :disabled="!this.componentData.roleFormChanged">Izmeni</v-btn></v-col>
+                        </v-row>
+                      </v-form>
+                    </v-list-item-content>
+                  </v-list-item-content>
+                </v-list-item>
+                <v-divider/>
+                <v-list-item>
+                  <v-list-item-content><v-list-item-title>Vreme registracije:</v-list-item-title><v-list-item-content>{{user.datumRegistracije ? user.datumRegistracije.toLocaleString() : ""}}</v-list-item-content></v-list-item-content>
+                </v-list-item>
+                <v-list-item>
+                  <v-list-item-content>
+                    <v-list-item-title>Obrisan:</v-list-item-title><v-list-item-content>{{user.obrisan ? 'Da' : 'Ne'}}</v-list-item-content>
+                  </v-list-item-content>
+                </v-list-item>
+                <v-divider/>
+                <v-list-item>
+                  <v-list-item-content>
+                    <v-list-item-title>Kupljene karte:</v-list-item-title>
+                  </v-list-item-content>
+                </v-list-item>
         </v-card>
     </v-container>
 </template>
@@ -31,23 +62,52 @@
     },
     data(){
       return {
-        user: {}
+        user: {},
+        componentData: {
+          passwordFormValid: false,
+          passwordChanged: false,
+          roleChanged: false,
+          passwordTextFieldRules: [
+            value => value+"".trim() === "" ? "Polje ne sme biti prazno" : true,
+            value => (value+"").trim().length<8? "Sifra mora da ima vise od 8 karaktera":true
+          ],
+          uloge: [
+            { 
+              text: 'Admin',
+              value: 'Admin'
+            },
+            { 
+              text: 'Obican',
+              value: 'Obican'
+            },
+          ]
+        }
       }
     },
     methods:{
-      ...mapActions(['fetchUsers'])
+      ...mapActions(['fetchUsers', 'updateUser']),
+      pwdChanged() {
+        this.componentData.passwordChanged = true
+      },
+      changeSubmit(){
+        if (this.updateUser(this.user)){
+          this.componentData.passwordChanged = false
+          this.componentData.roleChanged = false
+        }
+      }
     },
     computed: {
-      ...mapGetters(['getUser', 'getAllUsers'])
+      ...mapGetters(['getUser', 'getAllUsers', 'getIsLoggedIn', 'getCurrentUserUloga', 'getCurrentUserId'])
     },
     async mounted(){
       if(this.getAllUsers.length === 0) await this.fetchUsers()
-      this.user = this.getUser(Number.parseInt(this.id))
+      this.user = JSON.parse(JSON.stringify(this.getUser(Number.parseInt(this.id))))
+      this.user.datumRegistracije = new Date(this.user.datumRegistracije)
     }
 
   }
 </script>
 
 <style>
-
+  
 </style>
