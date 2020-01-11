@@ -25,7 +25,7 @@
                       <v-form width="100%">
                         <v-row justify="start" align="center">
                           <v-col fluid lg="10" md="8" ><v-select :items="componentData.uloge" v-model="user.uloga" @input="componentData.roleChanged = true"/></v-col>
-                          <v-col fluid lg="1" md="4"><v-btn @click="changeSubmit()" color="secondary--text" text :disabled="!this.componentData.roleFormChanged">Izmeni</v-btn></v-col>
+                          <v-col fluid lg="1" md="4"><v-btn @click="changeSubmit()" color="secondary--text" text :disabled="!this.componentData.roleChanged">Izmeni</v-btn></v-col>
                         </v-row>
                       </v-form>
                     </v-list-item-content>
@@ -47,13 +47,18 @@
                   </v-list-item-content>
                 </v-list-item>
         </v-card>
+        <DeleteKorisnikDialog v-if="getIsLoggedIn && getCurrentUserUloga === 'Admin' && getCurrentUserId !== user.id" :korisnik="user"/>
     </v-container>
 </template>
 
 <script>
   import { mapActions, mapGetters } from "vuex";
+  import DeleteKorisnikDialog from '../components/DeleteItemComponents/DeleteKorisnikDialog'
   export default {
     name: 'Korisnik',
+    components:{
+      DeleteKorisnikDialog
+    },
     props: {
       id: {
         type: String,

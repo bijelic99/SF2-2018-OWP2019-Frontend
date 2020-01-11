@@ -23,9 +23,28 @@ const actions = {
         })
     },
     async updateUser({commit}, user) {
-        // dodati i put zahtev na backend kad se za to steknu uslovi
-        commit('UPDATE_USER', user)
-        return true
+        return await axios.put(`${store.getters.getFullServerAddress}/Korisnik`, user).then(res=>{
+            if(res.data.successful){
+                commit('UPDATE_USER', user)
+                return true
+            }
+            else return false
+        }).catch(err => {
+            console.log(err)
+            return false
+        })
+    },
+    async deleteUser({commit}, userId){
+        return await axios.delete(`${store.getters.getFullServerAddress}/Korisnik?id=${userId}`).then(res=>{
+            if(res.data.successful){
+                commit('DELETE_USER', userId)
+                return true
+            }
+            else return false
+        }).catch(err => {
+            console.log(err)
+            return false
+        })
     }
 }
 const mutations = {
@@ -33,7 +52,8 @@ const mutations = {
     UPDATE_USER: (state, user) => {
         var index = state.users.findIndex(u => u.id === user.id)
         state.users[index] = user
-    }
+    },
+    DELETE_USER: (state, userId) => state.users = state.users.filter(u => u.id !== userId)
 }
 
 export default {

@@ -25,7 +25,7 @@
           <v-divider></v-divider>
           <v-card-actions>
             <LoginDialog v-if="!getIsLoggedIn" />
-            <v-btn text color="primary--text" :to="`/Korisnik/${getCurrentUserId}`">Profil</v-btn>
+            <v-btn v-if="getIsLoggedIn" text color="primary--text" :to="`/Korisnik/${getCurrentUserId}`">Profil</v-btn>
             <v-spacer/>
             <LogoutDialog v-if="getIsLoggedIn" />
             <RegisterDialog v-if="!getIsLoggedIn" />
