@@ -18,6 +18,7 @@
     :items="getAllUsers"
     loading-text="Loading... Please wait"
     :search="tableData.search"
+    :custom-filter="customFilterFunction"
     >
     <template v-slot:item.datumRegistracije="{ item }">
           {{item.datumRegistracije.toLocaleString()}}
@@ -64,7 +65,11 @@
       ...mapGetters(['getAllUsers'])
     },
     methods:{
-      ...mapActions(['fetchUsers'])
+      ...mapActions(['fetchUsers']),
+      customFilterFunction: function (value, search, item) {
+        let string = `${item.username} ${item.datumRegistracije.toLocaleString()} ${item.uloga}`.toUpperCase();
+        return search.split(" ").reduce((val, currVal)=> string.includes(currVal.toUpperCase()) && val, true)
+      }
     },
     mounted(){
       this.fetchUsers()

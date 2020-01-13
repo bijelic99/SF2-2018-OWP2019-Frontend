@@ -2,7 +2,7 @@
 const state={
     serverAddress: '192.168.1.250',
     serverPort: '8081',
-    serverPath: 'Bioskop',
+    serverPath: 'Bioskop/api',
     frontendFullAdress: location.hostname
 }
 
