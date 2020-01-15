@@ -56,7 +56,8 @@ const getters = {
         return state.filmovi.filter(filterFunction)
     },
     getFilm: state => id => state.filmovi.filter(film => film.id === id)[0],
-    get5NewestFilms: state => state.filmovi.sort((f1, f2) => (f1.id < f2.id ? -1 : f1.id > f2.id ? 1 : 0)).slice(-5)
+    get5NewestFilms: state => state.filmovi.sort((f1, f2) => (f1.id < f2.id ? -1 : f1.id > f2.id ? 1 : 0)).slice(-5),
+    getFilmIdAvailableInFilmovi: state => id => state.filmovi.filter(film => film.id === id).length > 0
 }
 
 const actions = {

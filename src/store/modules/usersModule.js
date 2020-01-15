@@ -6,7 +6,8 @@ const state = {
 }
 const getters = {
     getAllUsers: state => state.users,
-    getUser: state => id => state.users.filter(u=> u.id === id)[0]  
+    getUser: state => id => state.users.filter(u=> u.id === id)[0],
+    getIfUserIdInUsers: state=> id => state.users.filter(u=> u.id === id).length > 0  
 }
 const actions = {
     async fetchUsers({ commit }) {

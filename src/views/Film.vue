@@ -99,6 +99,7 @@
   import Vibrant from "node-vibrant";
   import EditFilmDialog from '../components/AddItemComponents/Film/EditFilmDialog'
   import DeleteFilm from '../components/DeleteItemComponents/DeleteFilm'
+  import axios from 'axios'
   export default {
     name: "Film",
     components:{
@@ -126,15 +127,27 @@
       "getFilm",
       "allFilmovi",
       "getCurrentTheme",
-      "getBaseTheme"
+      "getBaseTheme", 'getFilmIdAvailableInFilmovi', 'getFullServerAddress'
     ]),
     methods: {
       ...mapActions(["fetchFilmovi", "setCurrentTheme", "setCurrentThemeToBase"]),
       filmLoad: async function() {
         if ((await this.allFilmovi.length) === 0) await this.fetchFilmovi();
         if (/^\d+$/.test(this.id)) {
-          this.film = await this.getFilm(parseInt(this.id, 10));
-          await this.setColors();
+          if(this.getFilmIdAvailableInFilmovi(Number.parseInt(this.id)))
+          {
+            this.film = await this.getFilm(parseInt(this.id, 10));
+            await this.setColors();
+          }
+          else{
+            console.log(`${this.getFullServerAddress}/Film?id=${this.id}`)
+            axios.get(`${this.getFullServerAddress}/Film?id=${this.id}`).then(res => this.film = res.data).catch((err)=>{
+              console.log(err)
+              this.componentData.errorMassage =
+                "Id nije pravilno unet, ili film ne postoji";
+              this.componentData.errorSnackbarVisible = true;
+            })
+          }
         } else {
           this.componentData.errorMassage =
             "Id nije pravilno unet, nije moguce prikazati film";

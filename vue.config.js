@@ -1,6 +1,6 @@
 module.exports = {
-  //'publicPath': '/Bioskop/',
-  'publicPath': '/',
+  'publicPath': '/Bioskop/',
+  //'publicPath': '/',
   'transpileDependencies': [
     'vuetify'
   ]

@@ -54,6 +54,7 @@
 <script>
   import { mapActions, mapGetters } from "vuex";
   import DeleteKorisnikDialog from '../components/DeleteItemComponents/DeleteKorisnikDialog'
+  import axios from 'axios'
   export default {
     name: 'Korisnik',
     components:{
@@ -102,12 +103,22 @@
       }
     },
     computed: {
-      ...mapGetters(['getUser', 'getAllUsers', 'getIsLoggedIn', 'getCurrentUserUloga', 'getCurrentUserId'])
+      ...mapGetters(['getUser', 'getAllUsers', 'getIsLoggedIn', 'getCurrentUserUloga', 'getCurrentUserId', 'getIfUserIdInUsers', 'getFullServerAddress'])
     },
     async mounted(){
       if(this.getAllUsers.length === 0) await this.fetchUsers()
-      this.user = JSON.parse(JSON.stringify(this.getUser(Number.parseInt(this.id))))
-      this.user.datumRegistracije = new Date(this.user.datumRegistracije)
+      if(this.getIfUserIdInUsers(Number.parseInt(this.id))){
+        this.user = JSON.parse(JSON.stringify(this.getUser(Number.parseInt(this.id))))
+        this.user.datumRegistracije = new Date(this.user.datumRegistracije)
+      }
+      else{
+        axios.get(`${this.getFullServerAddress}/Korisnik?id=${this.id}`).then(res=>{
+          this.user = res.data
+          this.user.datumRegistracije = new Date(this.user.datumRegistracije)
+        }).catch(()=>{
+          this.$router.push('/')
+        })
+      }
     }
 
   }

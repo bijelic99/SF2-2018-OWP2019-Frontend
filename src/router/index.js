@@ -52,8 +52,8 @@ const routes = [
 ]
 
 const router = new VueRouter({
-  //base: '/Bioskop/',
-  base: '/',
+  base: '/Bioskop/',
+  //base: '/',
   mode: 'history',
   routes
 })
