@@ -1,5 +1,5 @@
 <template>
-    <v-container fluid class="fill-height p-reset mt-4" >
+    <v-container fluid class="fill-height p-reset" >
         <v-carousel class="fill-height" hide-delimiters height="100%">
             <v-carousel-item v-for="film in get5NewestFilms" :key="film.id" :src="film.pathDoSlike" :link="true" :to="`/Film/${film.id}`" contain  lazy-src="../../public/film-poster-placeholder.png" />
         </v-carousel>
