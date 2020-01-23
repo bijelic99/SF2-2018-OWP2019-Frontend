@@ -1,0 +1,114 @@
+<template>
+  <v-container class="elevation-2 mx-auto mt-4 h-80" v-if="projekcija!== null">
+      <v-row class="elevation-2">
+          
+            <v-col>
+                <h1 class="projekcijaTitle">Projekcija u {{strVremeProjekcije}}</h1>
+            </v-col>
+      </v-row>
+      <v-row>
+        <v-col cols="md-2">Film:</v-col>
+        <v-col cols="md-10">
+        <router-link :to="`/Film/${projekcija.film.id ? projekcija.film.id : ''}`">{{projekcija.film.naziv}}</router-link> 
+        </v-col>
+      </v-row>
+      <v-row>
+          <v-col class="col-md-2">Vreme prikazivanja:</v-col>
+          <v-col class="col-md-10">{{strVremeProjekcije}}</v-col>
+      </v-row>
+      <v-row>
+          <v-col class="col-md-2">Tip projekcije:</v-col>
+          <v-col class="col-md-10">{{projekcija.tipProjekcije.naziv}}</v-col>
+      </v-row>
+      <v-row>
+          <v-col class="col-md-2">Sala:</v-col>
+          <v-col class="col-md-10">{{projekcija.sala.naziv}}</v-col>
+      </v-row>
+      <v-row>
+          <v-col class="col-md-2">Cena Karte:</v-col>
+          <v-col class="col-md-10">{{projekcija.cenaKarte}}</v-col>
+      </v-row>
+      <v-row>
+          <v-col class="col-md-2">Slobodnih mesta:</v-col>
+          <v-col class="col-md-10">{{slobodnaMesta}}</v-col>
+      </v-row>
+      <v-row>
+          <v-col class="col-12">
+              <v-progress-linear active :value="zauzetaMestaPercent" height="20px"/>
+          </v-col>
+      </v-row>
+      
+  </v-container>
+</template>
+
+<script>
+  import axios from 'axios'
+  import { mapGetters} from 'vuex'
+  import moment from 'moment'
+  export default {
+    name: 'Projekcija',
+    props:{
+      id:{
+        type: String,
+        required: true
+      }
+    },
+    data(){
+      return{
+        projekcija: null
+      }
+    },
+    computed: {
+      ...mapGetters(['getProjekcija', 'getFullServerAddress']),
+      strVremeProjekcije: function(){
+        return this.projekcija !== null ? moment(this.projekcija.datumVremePocetka).format('hh:mm D.M.YYYY') : ''
+      },
+      
+    },
+    asyncComputed:{
+      zauzetost:
+        {
+          async get(){
+            if(this.projekcija !== null){return await axios.get(`${this.getFullServerAddress}/ZauzetaSedistaZaProjekciju?projekcijaId=${this.projekcija.id}`).then(res=>res.data).catch(err=>{
+              console.log(err)
+              return 'Not Available'
+            })} else return []
+          },
+          default: []
+        },
+      slobodnaMesta:{
+        async get(){
+          var za = await this.zauzetost
+          return `${(za.filter(sediste=>!sediste.zauzeto).length)}/${za.length}`
+        },
+        default: 'Not Available'
+      },
+      zauzetaMestaPercent:{
+        default: 0,
+        async get(){
+          var sm = await this.zauzetost
+          return (sm.filter(sediste=>sediste.zauzeto).length)/Math.trunc(( sm.length)/100)
+        }
+      }
+    },
+    async mounted(){
+      try {
+        this.projekcija = await this.getProjekcija(Number.parseInt(this.id))
+      } catch (err){
+        console.log(err)
+      }
+      
+    }
+    
+
+  }
+</script>
+
+<style>
+.projekcijaTitle {
+  font-size: 1.6em;
+}
+.h-80{
+    height: 80vh;
+}
+</style>

@@ -15,7 +15,7 @@
               v-on="on"
             ></v-text-field>
           </template>
-          <span>Za pretragu trajanja po minutima u opsegu: [pocetak-kraj], za pretragu godina proizvodnje u opsegu: {pocetak-kraj},</span>
+          <span>Za pretragu trajanja po minutima u opsegu: [pocetak-kraj], za pretragu godina proizvodnje u opsegu: {pocetak-kraj}</span>
         </v-tooltip>
       </v-card-title>
       <v-data-table
@@ -118,7 +118,8 @@
                 val
               );
             else return false;
-          } else return string.includes(search.toUpperCase()) && val;
+          } else {
+            return string.includes(currVal.toUpperCase()) && val;}
         }, true);
       }
     /*customSortFunction: function(items, sortBy, sortDesc){

@@ -6,6 +6,8 @@ import Home from '../views/Home'
 import AddFilm from '../components/AddItemComponents/Film/AddFilm'
 import Korisnici from '../views/Korisnici'
 import Korisnik from '../views/Korisnik'
+import Projekcije from '../views/Projekcije'
+import Projekcija from '../views/Projekcija'
 
 Vue.use(VueRouter)
 
@@ -41,6 +43,17 @@ const routes = [
     path: '/Korisnik/:id',
     name: 'Korisnik',
     component: Korisnik,
+    props: true
+  },
+  {
+    path: '/Projekcije',
+    name: 'Projekcije',
+    component: Projekcije
+  },
+  {
+    path: '/Projekcija/:id',
+    name: 'Projekcija',
+    component: Projekcija,
     props: true
   },
   {
