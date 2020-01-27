@@ -73,7 +73,7 @@
           items: [{ title: "Pocetna", icon: "mdi-home", link: "/", visibleForCurrentUser: ()=>true },
                   { title: "Filmovi", icon: "mdi-movie", link: "/Filmovi", visibleForCurrentUser: ()=>true },
                   { title: "Projekcije", icon: "mdi-movie-roll", link: "/Projekcije", visibleForCurrentUser: ()=>true },
-                  { title: "Rezervacija Karte", icon: "mdi-ticket", link: "/", visibleForCurrentUser: ()=>this.getCurrentUserUloga === 'Obican'},
+                  { title: "Rezervacija Karte", icon: "mdi-ticket", link: "/RezervacijaKarte", visibleForCurrentUser: ()=>this.getCurrentUserUloga === 'Obican'},
                   { title: "Dodaj film", icon: "mdi-plus", link: "/AddFilm", visibleForCurrentUser: ()=>this.getCurrentUserUloga === 'Admin'},
                   { title: "Korisnici", icon: "mdi-account-multiple", link: "/Korisnici", visibleForCurrentUser: ()=>this.getCurrentUserUloga === 'Admin' },
           ]

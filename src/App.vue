@@ -24,7 +24,7 @@
       //
     }),
     methods:{
-      ...mapActions(['setCurrentTheme','setCurrentThemeToBase', 'fetchFilmovi', 'fetchLoggedInUser']),
+      ...mapActions(['setCurrentTheme','setCurrentThemeToBase', 'fetchFilmovi', 'fetchLoggedInUser', 'fetchProjekcije', 'fetchZauzetost']),
     },
     computed: {
       ...mapGetters(['getCurrentTheme']),
@@ -44,6 +44,8 @@
     },
     async mounted(){
       await this.fetchFilmovi()
+      await this.fetchProjekcije()
+      await this.fetchZauzetost()
       this.fetchLoggedInUser()
     }
   }

@@ -23,8 +23,8 @@
                         <td>{{projekcija.datumVremePrikazivanja.toLocaleString()}}</td>
                         <td>{{projekcija.tipProjekcije.naziv}}</td>
                         <td>{{projekcija.sala.naziv}}</td>
-                        <td>{{projekcija.cena}}</td>
-                        <td><router-link :to="`/`"> Detaljnije </router-link></td>
+                        <td>{{projekcija.cenaKarte}}</td>
+                        <td><router-link :to="`/Projekcija/${projekcija.id}`"> Detaljnije </router-link></td>
                     </tr>
                 </tbody>
             </template>

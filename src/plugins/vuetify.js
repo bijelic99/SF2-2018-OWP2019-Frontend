@@ -15,7 +15,10 @@ let vuetify = new Vuetify({
         info: '#cddc39',
         success: '#8bc34a'
       }
-    }
+    },
+    options: {
+      customProperties: true,
+    },
   }
 })
 

@@ -2,8 +2,11 @@
   <v-container class="elevation-2 mx-auto mt-4 h-80" v-if="projekcija!== null">
       <v-row class="elevation-2">
           
-            <v-col>
-                <h1 class="projekcijaTitle">Projekcija u {{strVremeProjekcije}}</h1>
+            <v-col cols="lg-4 md-8">
+                <h1 class="title font-weight-bold">Projekcija u {{strVremeProjekcije}}</h1>
+            </v-col>
+            <v-col class="col-lg-2 offset-lg-6 col-md-4" align="end">
+              <v-btn class="secondary" :disabled="projekcija.prosla || !getIsLoggedIn || getCurrentUserUloga !== 'Obican'">Kupi kartu</v-btn>
             </v-col>
       </v-row>
       <v-row>
@@ -59,9 +62,9 @@
       }
     },
     computed: {
-      ...mapGetters(['getProjekcija', 'getFullServerAddress']),
+      ...mapGetters(['getProjekcija', 'getFullServerAddress', 'getIsLoggedIn', 'getCurrentUserUloga']),
       strVremeProjekcije: function(){
-        return this.projekcija !== null ? moment(this.projekcija.datumVremePocetka).format('hh:mm D.M.YYYY') : ''
+        return this.projekcija !== null ? moment(this.projekcija.datumVremePrikazivanja).format('hh:mm D.M.YYYY') : ''
       },
       
     },
@@ -105,9 +108,6 @@
 </script>
 
 <style>
-.projekcijaTitle {
-  font-size: 1.6em;
-}
 .h-80{
     height: 80vh;
 }
