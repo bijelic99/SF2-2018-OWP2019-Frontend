@@ -1,5 +1,5 @@
 <template>
-    <v-container fluid class="fill-height">
+    <v-container fluid class="projekcijeTableContainer">
         <v-row>
             <v-col><h3 class="text-left">Danasnje projekcije:</h3></v-col>
         </v-row>
@@ -52,4 +52,8 @@
 </script>
 
 <style>
+.projekcijeTableContainer{
+  max-height: 40vh;
+  overflow: auto;
+}
 </style>
