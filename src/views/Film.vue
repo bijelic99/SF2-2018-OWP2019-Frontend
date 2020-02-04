@@ -20,7 +20,7 @@
           <h1 class="filmTitle">{{film.naziv}}</h1>
         </v-col>
         <v-col cols="md-4" align-self="end" align="end">
-          <v-btn class="secondary">Kupi Kartu</v-btn>
+          <RezervacijaKarteDialog :enabled="getIsLoggedIn && getCurrentUserUloga === 'Obican' && getFilmHasFreeProjekcijeInFuture(film.id)" :btnText="'Kupi kartu'" :film="film"/>
         </v-col>
       </v-row>
       <v-row>
@@ -100,11 +100,13 @@
   import EditFilmDialog from '../components/AddItemComponents/Film/EditFilmDialog'
   import DeleteFilm from '../components/DeleteItemComponents/DeleteFilm'
   import axios from 'axios'
+  import RezervacijaKarteDialog from '../components/AddItemComponents/Karta/RezervacijaKarteDialog'
   export default {
     name: "Film",
     components:{
       EditFilmDialog,
-      DeleteFilm
+      DeleteFilm,
+      RezervacijaKarteDialog
     },
     props: {
       id: String
@@ -127,7 +129,8 @@
       "getFilm",
       "allFilmovi",
       "getCurrentTheme",
-      "getBaseTheme", 'getFilmIdAvailableInFilmovi', 'getFullServerAddress'
+      "getBaseTheme", 'getFilmIdAvailableInFilmovi', 'getFullServerAddress',
+      'getIsLoggedIn', 'getCurrentUserUloga', 'getFilmHasFreeProjekcijeInFuture'
     ]),
     methods: {
       ...mapActions(["fetchFilmovi", "setCurrentTheme", "setCurrentThemeToBase"]),

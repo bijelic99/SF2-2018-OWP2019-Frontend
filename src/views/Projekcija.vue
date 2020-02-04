@@ -6,7 +6,7 @@
                 <h1 class="title font-weight-bold">Projekcija u {{strVremeProjekcije}}</h1>
             </v-col>
             <v-col class="col-lg-2 offset-lg-6 col-md-4" align="end">
-              <v-btn class="secondary" :disabled="projekcija.prosla || !getIsLoggedIn || getCurrentUserUloga !== 'Obican'">Kupi kartu</v-btn>
+              <RezervacijaKarteDialog :enabled="!projekcija.prosla && getIsLoggedIn && getCurrentUserUloga === 'Obican'" :btnText="'Kupi kartu'" :projekcija="projekcija"/>
             </v-col>
       </v-row>
       <v-row>
@@ -48,8 +48,12 @@
   import axios from 'axios'
   import { mapGetters} from 'vuex'
   import moment from 'moment'
+  import RezervacijaKarteDialog from '../components/AddItemComponents/Karta/RezervacijaKarteDialog'
   export default {
     name: 'Projekcija',
+    components:{
+      RezervacijaKarteDialog
+    },
     props:{
       id:{
         type: String,

@@ -4,7 +4,7 @@ import moment from 'moment'
 
 const state = {
     projekcije: [],
-    zauzetost: new Map()
+    zauzetost: new Map(),
 }
 
 const getters = {
@@ -69,7 +69,7 @@ const actions = {
 
 const mutations = {
     SET_PROJEKCIJE: (state, projekcije) => state.projekcije = projekcije,
-    SET_ZAUZETOST: (state, zauzetost) => state.zauzetost = zauzetost
+    SET_ZAUZETOST: (state, zauzetost) => state.zauzetost = zauzetost,
 }
 
 export default {

@@ -1,3 +1,5 @@
+import axios from "axios"
+import store from '../index'
 
 
 const state = {
@@ -12,8 +14,15 @@ const actions = {
     rezervisiKartu: ({commit}, karta) => {
         commit('REZERVISI_KARTU', karta)
     },
-    rezervisiKarte: ({commit}, karte) => {
-        commit('REZERVISI_KARTE', karte)
+    rezervisiKarte: async ({commit}, karte) => {
+        return await axios.post(`${store.getters.getFullServerAddress}/Karta`, karte).then(res=>{
+            commit('REZERVISI_KARTE', res.data.karte)
+            return true
+        }).catch(err=> {
+            console.log(err)
+            return false    
+        })
+        
     }
 }
 

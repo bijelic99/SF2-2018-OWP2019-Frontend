@@ -6,7 +6,7 @@
       </v-col>
     </v-row>
     <v-row>
-      <v-col :class="`${formData.stepperStep === 4 ? 'col-lg-12' : 'col-lg-10'} col-md-12  fill-height`">
+      <v-col :class="` col-lg-10 col-md-12  fill-height`">
         <v-form v-model="formData.formValid">
           <v-stepper v-model="formData.stepperStep" vertical>
             <v-stepper-step step="1" :complete="formData.stepperStep > 1">Izaberi film</v-stepper-step>
@@ -135,7 +135,7 @@
           </v-stepper>
         </v-form>
       </v-col>
-      <v-col :class="` col-lg-2 col-md-12 fill-height ${formData.stepperStep === 4 ? 'd-none' : ''}`">
+      <v-col :class="` col-lg-2 col-md-12 fill-height`">
         <v-card class="elevation-2">
           <v-card-title>Podaci o rezervaciji:</v-card-title>
           <v-list-item v-if="formData.izabranFilm">
@@ -163,6 +163,27 @@
         </v-card>
       </v-col>
     </v-row>
+    <v-dialog v-model="formData.dialogVisible" max-width="80vw" width="40%">
+      <v-card>
+        <v-card-title :class="`headline white--text ${formData.dialogContent.tip}`"
+        primary-title>
+          {{formData.dialogContent.naslov}}
+        </v-card-title>
+        <v-card-text class="pt-2 body-1">
+          {{formData.dialogContent.text}}
+        </v-card-text>
+        <v-divider/>
+        <v-card-actions>
+          <v-spacer/>
+          <v-btn
+            color="primary--text"
+            text
+            @click="sakrijDialog()">
+            OK
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-container>
 </template>
 
@@ -198,24 +219,63 @@
           projekcijaAutocompleteRules:[
             p=>p !== null || 'Morate izabrati projekciju'
           ],
+          dialogVisible: false,
+          dialogContent: {
+            naslov: '',
+            text: '',
+            tip: 'alert'
+          }
         }
       };
     },
     methods: {
       ...mapActions(["fetchFilmovi", "fetchProjekcije", "fetchZauzetost", "rezervisiKarte"]),
-      kupi() {
+      async loadData(){
+        await this.fetchFilmovi()
+        await this.fetchProjekcije()
+        await this.fetchZauzetost()
+      },
+      sakrijDialog(){
+        this.formData.dialogVisible = false
+        if(this.formData.dialogContent.tip === 'success')this.$router.push("/")
+      },
+      async kupi() {
         if(this.getIsLoggedIn){
           var karte = []
+          var projekcija = JSON.parse(JSON.stringify(this.formData.izabranaProjekcija))
+          delete projekcija.prosla
           this.izabranaSedista.forEach(s=>{
             var karta = {
-              projekcija: this.izabranaProjekcija,
-              sediste: s,
+              projekcija: projekcija, 
+              sediste: {
+                id: s.id,
+                redniBroj: s.redniBroj,
+                sala: s.sala
+              },
               korisnik: this.getCurrentUser,
               datumVremeProdaje: Date.now()
             }
             karte.push(karta)
           })
-          this.rezervisiKarte(karte)
+          if(await this.rezervisiKarte(karte)){
+            this.formData.dialogContent = {
+              naslov: 'Uspeh',
+              text: 'Uspesno ste rezervisali kartu.',
+              tip: 'success'
+            }
+            this.formData.dialogVisible = true
+          }
+          else{
+            
+            this.formData.dialogContent = {
+              naslov: 'Greska',
+              text: 'Doslo je do greske ili je neko u medjuvremenu zauzeo sediste!',
+              tip: 'error'
+            }
+            await this.sakrijDialog()
+            this.formData.dialogVisible = true
+            this.formData.stepperStep = 3
+          }
         }
       },
       strVreme(vreme) {
@@ -374,16 +434,29 @@
       if (this.allFilmovi.length === 0) await this.fetchFilmovi();
       if (this.allProjekcije.length === 0) await this.fetchProjekcije();
       if (this.film !== null) {
-        this.izabranFilm = this.film
+        this.formData.izabranFilm = this.film
         this.formData.stepperStep = 2
       }
       if (this.projekcija !== null) {
-        this.izabranaProjekcija = this.projekcija;
+        this.formData.izabranaProjekcija = this.projekcija;
         this.formData.stepperStep = 3
       }
+      
       if (this.getZauzetost.size === 0) await this.fetchZauzetost();
     },
     watch: {
+      film: function(){
+        if (this.film !== null) {
+          this.formData.izabranFilm = this.film
+          this.formData.stepperStep = 2
+        }
+      },
+      projekcija: function(){
+        if (this.projekcija !== null) {
+          this.formData.izabranaProjekcija = this.projekcija;
+          this.formData.stepperStep = 3
+        }
+      },
       "formData.izabranFilm": function() {
         this.formData.izabranaProjekcija = null;
       },
