@@ -6,7 +6,7 @@
                 <h1 class="title font-weight-bold">Projekcija u {{strVremeProjekcije}}</h1>
             </v-col>
             <v-col class="col-lg-2 offset-lg-6 col-md-4" align="end">
-              <RezervacijaKarteDialog :enabled="!projekcija.prosla && getIsLoggedIn && getCurrentUserUloga === 'Obican'" :btnText="'Kupi kartu'" :projekcija="projekcija"/>
+              <RezervacijaKarteDialog :enabled="!projekcija.prosla && getIsLoggedIn && getCurrentUserUloga === 'Obican' && getProjekcijaHasFreeSeats(projekcija.id)" :btnText="'Kupi kartu'" :projekcija="projekcija"/>
             </v-col>
       </v-row>
       <v-row>
@@ -66,7 +66,7 @@
       }
     },
     computed: {
-      ...mapGetters(['getProjekcija', 'getFullServerAddress', 'getIsLoggedIn', 'getCurrentUserUloga']),
+      ...mapGetters(['getProjekcija', 'getFullServerAddress', 'getIsLoggedIn', 'getCurrentUserUloga', 'getProjekcijaHasFreeSeats']),
       strVremeProjekcije: function(){
         return this.projekcija !== null ? moment(this.projekcija.datumVremePrikazivanja).format('hh:mm D.M.YYYY') : ''
       },

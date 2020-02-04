@@ -81,7 +81,7 @@
       {{ componentData.errorMassage }}
       <v-btn color="error" text @click="componentData.errorSnackbarVisible = false">Close</v-btn>
     </v-snackbar>
-    <v-speed-dial v-model="speedDialData.speedDialOpen" direction="top" :right="true" :bottom="true" :open-on-hover="false" :left="false" :top="false" fixed>
+    <v-speed-dial v-if="getIsLoggedIn && getCurrentUserUloga === 'Admin'" v-model="speedDialData.speedDialOpen" direction="top" :right="true" :bottom="true" :open-on-hover="false" :left="false" :top="false" fixed>
       <template v-slot:activator>
         <v-btn v-model="speedDialData.speedDialOpen" color="secondary" bottom right fab>
           <v-icon v-if="speedDialData.speedDialOpen">mdi-close</v-icon>
