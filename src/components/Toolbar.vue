@@ -75,6 +75,7 @@
                   { title: "Projekcije", icon: "mdi-movie-roll", link: "/Projekcije", visibleForCurrentUser: ()=>true },
                   { title: "Rezervacija Karte", icon: "mdi-ticket", link: "/RezervacijaKarte", visibleForCurrentUser: ()=>this.getCurrentUserUloga === 'Obican'},
                   { title: "Dodaj film", icon: "mdi-plus", link: "/AddFilm", visibleForCurrentUser: ()=>this.getCurrentUserUloga === 'Admin'},
+                  { title: "Dodaj projekciju", icon: "mdi-plus", link: "/AddProjekcija", visibleForCurrentUser: ()=>this.getCurrentUserUloga === 'Admin'},
                   { title: "Korisnici", icon: "mdi-account-multiple", link: "/Korisnici", visibleForCurrentUser: ()=>this.getCurrentUserUloga === 'Admin' },
           ]
         }

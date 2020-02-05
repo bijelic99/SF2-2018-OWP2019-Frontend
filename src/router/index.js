@@ -9,6 +9,7 @@ import Korisnik from '../views/Korisnik'
 import Projekcije from '../views/Projekcije'
 import Projekcija from '../views/Projekcija'
 import RezervacijaKarte from '../components/AddItemComponents/Karta/RezervacijaKarte'
+import AddProjekcija from '../components/AddItemComponents/Projekcija/AddProjekcija'
 
 Vue.use(VueRouter)
 
@@ -61,6 +62,11 @@ const routes = [
     path: '/RezervacijaKarte',
     name: 'RezervacijaKarte',
     component: RezervacijaKarte
+  },
+  {
+    path: '/AddProjekcija',
+    name: 'AddProjekcija',
+    component: AddProjekcija
   },
   {
     path:'*',

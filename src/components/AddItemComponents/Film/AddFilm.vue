@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-row>
-      <h1 class="ml-2">{{tipAkcije}} Filma:</h1>
+      <h1 class="ml-2 title">{{tipAkcije}} filma:</h1>
     </v-row>
     <v-row>
       <v-form class="col-md-12" v-model="formData.formValid" ref="filmForm">

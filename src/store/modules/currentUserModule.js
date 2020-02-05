@@ -30,7 +30,7 @@ const actions = {
     async login({commit}, data){
         var korisnik = await axios.post(`${store.getters.getFullServerAddress}/Login`, data, {withCredentials: true}).then(res => res.data.successful?res.data.user : false).catch(() => false)
         if(korisnik !== false){
-            VueCookies.set('korisnik', korisnik, '2d', [store.getters.getFrontendFullAdress, `${store.getters.getServerAddress}:${store.getters.serverPort}`])
+            VueCookies.set('korisnik', korisnik, '1d', [store.getters.getFrontendFullAdress, `${store.getters.getServerAddress}:${store.getters.serverPort}`])
             commit('SET_CURRENT_USER', korisnik)
             commit('SET_LOGGEDIN', true)
             return true

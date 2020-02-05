@@ -1,10 +1,15 @@
 import axios from 'axios'
 import store from '../index'
-import moment from 'moment'
+import Moment from 'moment'
+import { extendMoment } from 'moment-range'
+
+const moment = extendMoment(Moment)
 
 const state = {
     projekcije: [],
     zauzetost: new Map(),
+    sale: [],
+    tipoviProjekcije: [],
 }
 
 const getters = {
@@ -45,6 +50,25 @@ const getters = {
     getProjekcijaHasFreeSeats: (state) => (projekcijaId) => {
         var brZauzetih = state.zauzetost.get(projekcijaId).filter(s=> s.zauzeto).length
         return brZauzetih < state.zauzetost.get(projekcijaId).length
+    },
+    allTipoviProjekcije: (state) => state.tipoviProjekcije,
+    getSlobodneSaleForTipProjekcije: (state) => (datumVremePrikazivanja, film, tipProjekcije) => {
+        var sale = state.sale.filter(s=>s.podrzaniTipoviProjekcija.filter(tp => tp.id === tipProjekcije.id).length > 0)
+        sale = sale.filter(s=>{
+            var sadrziId = state.projekcije.filter(p=>{
+                
+                var pocetak = p.datumVremePrikazivanja
+                var kraj = moment(p.datumVremePrikazivanja).add(p.film.trajanje, 's').toDate()
+                var interval = moment.range(pocetak, kraj)
+                var pocetak1 = datumVremePrikazivanja
+                var kraj1 = moment(datumVremePrikazivanja).add(film.trajanje, 's').toDate()
+                var interval1 = moment.range(pocetak1, kraj1)
+                return interval.overlaps(interval1)
+            }).map(p=>p.sala.id).includes(s.id)
+
+            return !sadrziId
+        })
+        return sale
     }
 }
 
@@ -68,12 +92,34 @@ const actions = {
         })
         commit('SET_ZAUZETOST', zauzetostProjekcija)
 
+    },
+    async fetchSale({commit}){
+        await axios.get(`${store.getters.getFullServerAddress}/Sala`).then(res=>commit('SET_SALE', res.data)).catch(err=>console.log(err))
+    },
+    async fetchTipoviProjekcije({commit}){
+        await axios.get(`${store.getters.getFullServerAddress}/TipProjekcije`).then(res=>commit('SET_TIP_PROJEKCIJE', res.data)).catch(err=>console.log(err))
+    },
+    async addProjekcija({commit}, projekcija){
+        return await axios.post(`${store.getters.getFullServerAddress}/Projekcija`, projekcija).then(res=>{
+            if(res.data.successful){
+            projekcija.id = res.data.id
+            commit('ADD_PROJEKCIJA', projekcija)
+            return true
+        }
+            else return false
+        }).catch(err=>{
+            console.log(err)
+            return false
+        })
     }
 }
 
 const mutations = {
     SET_PROJEKCIJE: (state, projekcije) => state.projekcije = projekcije,
     SET_ZAUZETOST: (state, zauzetost) => state.zauzetost = zauzetost,
+    SET_SALE: (state,sale) => state.sale = sale,
+    SET_TIP_PROJEKCIJE: (state, tipoviProjekcije) => state.tipoviProjekcije = tipoviProjekcije,
+    ADD_PROJEKCIJA: (state, projekcija) => state.projekcije.push(projekcija)
 }
 
 export default {

@@ -8,34 +8,34 @@
             Pretraga:
           </v-card-title>
           <v-list-item>
-              <v-text-field placeholder="Naziv" v-model="searchData.naziv"/>
+              <v-text-field label="Naziv" v-model="searchData.naziv"/>
           </v-list-item>
           <v-list-item>
-              <v-text-field placeholder="Zanr" v-model="searchData.zanr"></v-text-field>
+              <v-text-field label="Zanr" v-model="searchData.zanr"></v-text-field>
           </v-list-item>
           <v-list-item>
-              <v-text-field :rules="numericOnlyRule" placeholder="Trajanje" suffix="sec" v-model="searchData.trajanje"></v-text-field>
+              <v-text-field :rules="numericOnlyRule" label="Trajanje" suffix="sec" v-model="searchData.trajanje"></v-text-field>
           </v-list-item>
           <v-list-item>
-              <v-text-field :rules="numericOnlyRule" placeholder="Trajanje od" suffix="min" v-model="searchData.trajanjeOd"></v-text-field>
+              <v-text-field :rules="numericOnlyRule" label="Trajanje od" suffix="min" v-model="searchData.trajanjeOd"></v-text-field>
           </v-list-item>
           <v-list-item>
-              <v-text-field :rules="numericOnlyRule" placeholder="Trajanje do" suffix="min" v-model="searchData.trajanjeDo"></v-text-field>
+              <v-text-field :rules="numericOnlyRule" label="Trajanje do" suffix="min" v-model="searchData.trajanjeDo"></v-text-field>
           </v-list-item>
           <v-list-item>
-              <v-text-field placeholder="Distributer" v-model="searchData.distributer"></v-text-field>
+              <v-text-field label="Distributer" v-model="searchData.distributer"></v-text-field>
           </v-list-item>
           <v-list-item>
-              <v-text-field placeholder="Zemlja porekla" v-model="searchData.zemljaPorekla"></v-text-field>
+              <v-text-field label="Zemlja porekla" v-model="searchData.zemljaPorekla"></v-text-field>
           </v-list-item>
           <v-list-item>
-              <v-text-field :rules="numericOnlyRule" placeholder="Godina proizvodnje" v-model="searchData.godinaProizvodnje"></v-text-field>
+              <v-text-field :rules="numericOnlyRule" label="Godina proizvodnje" v-model="searchData.godinaProizvodnje"></v-text-field>
           </v-list-item>
           <v-list-item>
-              <v-text-field :rules="numericOnlyRule" placeholder="Godina proizvodnje od" v-model="searchData.godinaProizvodnjeOd"></v-text-field>
+              <v-text-field :rules="numericOnlyRule" label="Godina proizvodnje od" v-model="searchData.godinaProizvodnjeOd"></v-text-field>
           </v-list-item>
           <v-list-item>
-              <v-text-field :rules="numericOnlyRule" placeholder="Godina proizvodnje do" v-model="searchData.godinaProizvodnjeDo"></v-text-field>
+              <v-text-field :rules="numericOnlyRule" label="Godina proizvodnje do" v-model="searchData.godinaProizvodnjeDo"></v-text-field>
           </v-list-item>
         </v-card>
         </v-form>
