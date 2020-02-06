@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-row>
-      <v-col class="col-xs-12 col-sm-12 col-md-12 col-lg-2 col-xl-2">
+      <v-col class="col-xs-12 col-sm-12 col-md-12 col-lg-3 col-xl-3">
         <v-form v-model="searchData.formValid">
         <v-card>
           <v-card-title>
@@ -40,7 +40,7 @@
         </v-card>
         </v-form>
       </v-col>
-    <v-col class="col-xs-12 col-sm-12 col-md-12 col-lg-10 col-xl-10">
+    <v-col class="col-xs-12 col-sm-12 col-md-12 col-lg-9 col-xl-9">
     <v-card>
       <v-card-title>
         Filmovi

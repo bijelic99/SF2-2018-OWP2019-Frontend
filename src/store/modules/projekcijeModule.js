@@ -52,6 +52,7 @@ const getters = {
         return brZauzetih < state.zauzetost.get(projekcijaId).length
     },
     allTipoviProjekcije: (state) => state.tipoviProjekcije,
+    allSale: (state) => state.sale,
     getSlobodneSaleForTipProjekcije: (state) => (datumVremePrikazivanja, film, tipProjekcije) => {
         var sale = state.sale.filter(s=>s.podrzaniTipoviProjekcija.filter(tp => tp.id === tipProjekcije.id).length > 0)
         sale = sale.filter(s=>{
@@ -76,7 +77,7 @@ const actions = {
     fetchProjekcije: async function({ commit }){
         await axios.get(`${store.getters.getFullServerAddress}/Projekcija`).then(res=> commit('SET_PROJEKCIJE', res.data.map(p=>{
             p.datumVremePrikazivanja = new Date(p.datumVremePrikazivanja)
-            p['prosla'] = moment(p.datumVremePrikazivanja).isBefore(Date.now())
+            p['prosla'] = () => moment(p.datumVremePrikazivanja).isBefore(new Date(Date.now()))
             return p
         }))).catch(err=> console.log(err))
     },
