@@ -201,124 +201,124 @@
 </template>
 
 <script>
-  import { mapGetters, mapActions } from 'vuex'
-  import moment from 'moment';
-  export default {
-    name: "AddProjekcija",
-    data() {
-      return {
-        stepperData: {
-          step: 1
-        },
-        formData: {
-          formValid: false,
-          cenaRules: [value=> /^\d{1,}$/.test(value) ? true : "Mora biti broj", value=>Number.parseInt(value)>0 ? true : 'Cena mora biti veca od 0'],
-          requieredRule: [value=> value !== null ? true : 'Obavezno polje']
-        },
-        projekcija: {
-          id: 0,
-          film: null,
-          tipProjekcije: null,
-          sala: null,
-          datumVremePrikazivanja: null,
-          cenaKarte: 0
-        },
-        componentData: {
-          time: null,
-          timeMenu: false,
-          date: null,
-          dateMenu: false,
-          modalOpen: false,
-          modalType: false, //ako treba da se odradi redirect staviti true
-          modalTitle: '',
-          modalText: ''
-        }
-      };
-    },
-    methods: {
-      ...mapActions(['fetchFilmovi', 'fetchSale', 'fetchProjekcije', 'fetchZauzetost', 'fetchTipoviProjekcije','addProjekcija']),
-      async dodaj() {
-        if(await this.addProjekcija(this.projekcija)) {
-          this.componentData.modalType = true
-          this.componentData.modalTitle = 'Uspeh'
-          this.componentData.modalText = 'Uspesno ste dodali projekciju'
-        }
-        else{
-          this.componentData.modalType = false
-          this.componentData.modalTitle = 'Greska'
-          this.componentData.modalText = 'Doslo je do greske projekcija nije dodata'
-        } 
-        this.componentData.modalOpen = true
-      },
-      zatvoriModal(){
-        this.componentData.modalOpen = false
-        if(this.componentData.modalType) this.$router.push('/')
-      }
-    },
-    computed: {
-      ...mapGetters(['allFilmovi', 'allTipoviProjekcije', 'getSlobodneSaleForTipProjekcije']),
-      allFilmoviFormated(){
-        return this.allFilmovi.map(f=>{return {text: f.naziv, value: f}})
-      },
-      allTipoviProjekcijeFormated(){
-        return this.allTipoviProjekcije.map(tp=>{return {text: tp.naziv, value: tp}})
-      },
-      datumVremeProjekcijeComputed(){
-        if(this.componentData.time !== null && this.componentData.date !== null)
-        {
-          return moment(`${this.componentData.date} ${this.componentData.time}`).toDate()
-        }
-        else return null
-      },
-      availableSaleFormated(){
-        if(this.projekcija.film !== null && this.projekcija.tipProjekcije !== null && this.projekcija.datumVremePrikazivanja !== null) {
-          var a = this.getSlobodneSaleForTipProjekcije(this.projekcija.datumVremePrikazivanja, this.projekcija.film, this.projekcija.tipProjekcije)
-          return a.map(sala=>{
-            return {
-              text: sala.naziv,
-              value: sala
-            }
-          })}
-        else return []
+import { mapGetters, mapActions } from 'vuex'
+import moment from 'moment';
+export default {
+	name: "AddProjekcija",
+	data() {
+		return {
+			stepperData: {
+				step: 1
+			},
+			formData: {
+				formValid: false,
+				cenaRules: [value=> /^\d{1,}$/.test(value) ? true : "Mora biti broj", value=>Number.parseInt(value)>0 ? true : 'Cena mora biti veca od 0'],
+				requieredRule: [value=> value !== null ? true : 'Obavezno polje']
+			},
+			projekcija: {
+				id: 0,
+				film: null,
+				tipProjekcije: null,
+				sala: null,
+				datumVremePrikazivanja: null,
+				cenaKarte: 0
+			},
+			componentData: {
+				time: null,
+				timeMenu: false,
+				date: null,
+				dateMenu: false,
+				modalOpen: false,
+				modalType: false, //ako treba da se odradi redirect staviti true
+				modalTitle: '',
+				modalText: ''
+			}
+		};
+	},
+	methods: {
+		...mapActions(['fetchFilmovi', 'fetchSale', 'fetchProjekcije', 'fetchZauzetost', 'fetchTipoviProjekcije','addProjekcija']),
+		async dodaj() {
+			if(await this.addProjekcija(this.projekcija)) {
+				this.componentData.modalType = true
+				this.componentData.modalTitle = 'Uspeh'
+				this.componentData.modalText = 'Uspesno ste dodali projekciju'
+			}
+			else{
+				this.componentData.modalType = false
+				this.componentData.modalTitle = 'Greska'
+				this.componentData.modalText = 'Doslo je do greske projekcija nije dodata'
+			} 
+			this.componentData.modalOpen = true
+		},
+		zatvoriModal(){
+			this.componentData.modalOpen = false
+			if(this.componentData.modalType) this.$router.push('/')
+		}
+	},
+	computed: {
+		...mapGetters(['allFilmovi', 'allTipoviProjekcije', 'getSlobodneSaleForTipProjekcije']),
+		allFilmoviFormated(){
+			return this.allFilmovi.map(f=>{return {text: f.naziv, value: f}})
+		},
+		allTipoviProjekcijeFormated(){
+			return this.allTipoviProjekcije.map(tp=>{return {text: tp.naziv, value: tp}})
+		},
+		datumVremeProjekcijeComputed(){
+			if(this.componentData.time !== null && this.componentData.date !== null)
+			{
+				return moment(`${this.componentData.date} ${this.componentData.time}`).toDate()
+			}
+			else return null
+		},
+		availableSaleFormated(){
+			if(this.projekcija.film !== null && this.projekcija.tipProjekcije !== null && this.projekcija.datumVremePrikazivanja !== null) {
+				var a = this.getSlobodneSaleForTipProjekcije(this.projekcija.datumVremePrikazivanja, this.projekcija.film, this.projekcija.tipProjekcije)
+				return a.map(sala=>{
+					return {
+						text: sala.naziv,
+						value: sala
+					}
+				})}
+			else return []
         
-      },
-      minDate(){
-        return moment(Date.now()).format()
-      },
-      minTime(){
-        if(this.componentData.date !== null && moment(this.componentData.date).isSameOrBefore(Date.now()))
-          return moment(new Date(Date.now())).format("HH:mm")
-        else return undefined
-      },
-      cenaValid(){
-        if(typeof this.$refs.cenaTF !== 'undefined') return this.$refs.cenaTF.valid
-        else return false
-      }
+		},
+		minDate(){
+			return moment(Date.now()).format()
+		},
+		minTime(){
+			if(this.componentData.date !== null && moment(this.componentData.date).isSameOrBefore(Date.now()))
+				return moment(new Date(Date.now())).format("HH:mm")
+			else return undefined
+		},
+		cenaValid(){
+			if(typeof this.$refs.cenaTF !== 'undefined') return this.$refs.cenaTF.valid
+			else return false
+		}
       
-    },
-    asyncComputed:{
+	},
+	asyncComputed:{
       
-    },
-    watch:{
-      datumVremeProjekcijeComputed: async function(){
-        this.projekcija.datumVremePrikazivanja = await this.datumVremeProjekcijeComputed
-      },
-      'projekcija.datumVremePrikazivanja': function(){
-        if(this.projekcija.datumVremePrikazivanja !== null) {
-          this.formData.formValid = this.formData.formValid && true
-        }
-      }
-    }
-    ,
-    async mounted(){
-      await this.fetchFilmovi()
-      await this.fetchSale()
-      await this.fetchProjekcije()
-      await this.fetchZauzetost(),
-      await this.fetchTipoviProjekcije()
+	},
+	watch:{
+		datumVremeProjekcijeComputed: async function(){
+			this.projekcija.datumVremePrikazivanja = await this.datumVremeProjekcijeComputed
+		},
+		'projekcija.datumVremePrikazivanja': function(){
+			if(this.projekcija.datumVremePrikazivanja !== null) {
+				this.formData.formValid = this.formData.formValid && true
+			}
+		}
+	}
+	,
+	async mounted(){
+		await this.fetchFilmovi()
+		await this.fetchSale()
+		await this.fetchProjekcije()
+		await this.fetchZauzetost(),
+		await this.fetchTipoviProjekcije()
       
-    }
-  };
+	}
+};
 </script>
 
 <style>

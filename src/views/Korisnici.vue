@@ -32,49 +32,49 @@
 </template>
 
 <script>
-  import { mapGetters, mapActions } from 'vuex'
-  export default {
-    name: "Korisnici",
-    data: ()=>{
-      return {
-        tableData: {
-          search: '',
-          zaglavljaTabele: [
-            {
-              text: "Username",
-              value: "username"
-            },
-            {
-              text: "Datum registracije",
-              value: "datumRegistracije"
-            },
-            {
-              text: "Uloga",
-              value: "uloga"
-            },
-            {
-              text: "Detaljnije",
-              value: "detaljnije",
-              sortable: false
-            },
-          ]
-        }
-      }
-    },
-    computed: {
-      ...mapGetters(['getAllUsers'])
-    },
-    methods:{
-      ...mapActions(['fetchUsers']),
-      customFilterFunction: function (value, search, item) {
-        let string = `${item.username} ${item.datumRegistracije.toLocaleString()} ${item.uloga}`.toUpperCase();
-        return search.split(" ").reduce((val, currVal)=> string.includes(currVal.toUpperCase()) && val, true)
-      }
-    },
-    mounted(){
-      this.fetchUsers()
-    }
-  };
+import { mapGetters, mapActions } from 'vuex'
+export default {
+	name: "Korisnici",
+	data: ()=>{
+		return {
+			tableData: {
+				search: '',
+				zaglavljaTabele: [
+					{
+						text: "Username",
+						value: "username"
+					},
+					{
+						text: "Datum registracije",
+						value: "datumRegistracije"
+					},
+					{
+						text: "Uloga",
+						value: "uloga"
+					},
+					{
+						text: "Detaljnije",
+						value: "detaljnije",
+						sortable: false
+					},
+				]
+			}
+		}
+	},
+	computed: {
+		...mapGetters(['getAllUsers'])
+	},
+	methods:{
+		...mapActions(['fetchUsers']),
+		customFilterFunction: function (value, search, item) {
+			let string = `${item.username} ${item.datumRegistracije.toLocaleString()} ${item.uloga}`.toUpperCase();
+			return search.split(" ").reduce((val, currVal)=> string.includes(currVal.toUpperCase()) && val, true)
+		}
+	},
+	mounted(){
+		this.fetchUsers()
+	}
+};
 </script>
 
 <style>

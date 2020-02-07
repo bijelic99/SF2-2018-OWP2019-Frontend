@@ -47,44 +47,44 @@
 </template>
 
 <script>
-  import moment from 'moment'
-  export default {
-    name: 'DateTimePicker',
-    props: {
-      title: {
-        type: String,
-        required: false,
-        default: ''
-      }
-    },
-    data(){
-      return {
-        date: null,
-        time: null,
-        dateMenu: false,
-        timeMenu: false
-      }
-    },
-    methods:{
-      clear(){
-        this.date = null
-        this.time = null
-      }
-    },
-    computed:{
-      dateTime(){
-        if(this.date !== null && this.time !== null){
-          return moment(`${this.date} ${this.time}`).toDate()
-        }
-        else return null
-      }
-    },
-    watch:{
-      dateTime(){
-        this.$emit('dateTimeSet', this.dateTime)
-      }
-    }
-  }
+import moment from 'moment'
+export default {
+	name: 'DateTimePicker',
+	props: {
+		title: {
+			type: String,
+			required: false,
+			default: ''
+		}
+	},
+	data(){
+		return {
+			date: null,
+			time: null,
+			dateMenu: false,
+			timeMenu: false
+		}
+	},
+	methods:{
+		clear(){
+			this.date = null
+			this.time = null
+		}
+	},
+	computed:{
+		dateTime(){
+			if(this.date !== null && this.time !== null){
+				return moment(`${this.date} ${this.time}`).toDate()
+			}
+			else return null
+		}
+	},
+	watch:{
+		dateTime(){
+			this.$emit('dateTimeSet', this.dateTime)
+		}
+	}
+}
 </script>
 
 <style>

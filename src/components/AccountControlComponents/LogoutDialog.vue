@@ -16,27 +16,27 @@
 </template>
 
 <script>
-  import { mapActions } from 'vuex'
-  export default {
-    name: 'LogoutDialog',
-    data(){
-      return{
-        visible: false
-      }
-    },
-    methods:{
-      ...mapActions(['logout']),
-      openDialog: function(e) {
-        e.stopPropagation();
-        this.visible = true;
-      },
-      doLogout: function () {
-        this.logout()
-        this.visible = false   
-      }
+import { mapActions } from 'vuex'
+export default {
+	name: 'LogoutDialog',
+	data(){
+		return{
+			visible: false
+		}
+	},
+	methods:{
+		...mapActions(['logout']),
+		openDialog: function(e) {
+			e.stopPropagation();
+			this.visible = true;
+		},
+		doLogout: function () {
+			this.logout()
+			this.visible = false   
+		}
       
-    }
-  }
+	}
+}
 </script>
 
 <style>

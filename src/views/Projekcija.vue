@@ -40,76 +40,78 @@
               <v-progress-linear active :value="zauzetaMestaPercent" height="20px"/>
           </v-col>
       </v-row>
-      
+      <DeleteProjekcijaDialog :projekcija="projekcija"/>
   </v-container>
 </template>
 
 <script>
-  import axios from 'axios'
-  import { mapGetters} from 'vuex'
-  import moment from 'moment'
-  import RezervacijaKarteDialog from '../components/AddItemComponents/Karta/RezervacijaKarteDialog'
-  export default {
-    name: 'Projekcija',
-    components:{
-      RezervacijaKarteDialog
-    },
-    props:{
-      id:{
-        type: String,
-        required: true
-      }
-    },
-    data(){
-      return{
-        projekcija: null
-      }
-    },
-    computed: {
-      ...mapGetters(['getProjekcija', 'getFullServerAddress', 'getIsLoggedIn', 'getCurrentUserUloga', 'getProjekcijaHasFreeSeats']),
-      strVremeProjekcije: function(){
-        return this.projekcija !== null ? moment(this.projekcija.datumVremePrikazivanja).format('hh:mm D.M.YYYY') : ''
-      },
+import axios from 'axios'
+import { mapGetters} from 'vuex'
+import moment from 'moment'
+import RezervacijaKarteDialog from '../components/AddItemComponents/Karta/RezervacijaKarteDialog'
+import DeleteProjekcijaDialog from '../components/DeleteItemComponents/DeleteProjekcijaDialog'
+export default {
+	name: 'Projekcija',
+	components:{
+		RezervacijaKarteDialog,
+		DeleteProjekcijaDialog
+	},
+	props:{
+		id:{
+			type: String,
+			required: true
+		}
+	},
+	data(){
+		return{
+			projekcija: null
+		}
+	},
+	computed: {
+		...mapGetters(['getProjekcija', 'getFullServerAddress', 'getIsLoggedIn', 'getCurrentUserUloga', 'getProjekcijaHasFreeSeats']),
+		strVremeProjekcije: function(){
+			return this.projekcija !== null ? moment(this.projekcija.datumVremePrikazivanja).format('hh:mm D.M.YYYY') : ''
+		},
       
-    },
-    asyncComputed:{
-      zauzetost:
-        {
-          async get(){
-            if(this.projekcija !== null){return await axios.get(`${this.getFullServerAddress}/ZauzetaSedistaZaProjekciju?projekcijaId=${this.projekcija.id}`).then(res=>res.data).catch(err=>{
-              console.log(err)
-              return 'Not Available'
-            })} else return []
-          },
-          default: []
-        },
-      slobodnaMesta:{
-        async get(){
-          var za = await this.zauzetost
-          return `${(za.filter(sediste=>!sediste.zauzeto).length)}/${za.length}`
-        },
-        default: 'Not Available'
-      },
-      zauzetaMestaPercent:{
-        default: 0,
-        async get(){
-          var sm = await this.zauzetost
-          return (sm.filter(sediste=>sediste.zauzeto).length)/Math.trunc(( sm.length)/100)
-        }
-      }
-    },
-    async mounted(){
-      try {
-        this.projekcija = await this.getProjekcija(Number.parseInt(this.id))
+	},
+	asyncComputed:{
+		zauzetost:
+			{
+				async get(){
+					if(this.projekcija !== null){return await axios.get(`${this.getFullServerAddress}/ZauzetaSedistaZaProjekciju?projekcijaId=${this.projekcija.id}`).then(res=>res.data).catch(err=>{
+						console.log(err)
+						return 'Not Available'
+					})} else return []
+				},
+				default: []
+			},
+		slobodnaMesta:{
+			async get(){
+				var za = await this.zauzetost
+				return `${(za.filter(sediste=>!sediste.zauzeto).length)}/${za.length}`
+			},
+			default: 'Not Available'
+		},
+		zauzetaMestaPercent:{
+			default: 0,
+			async get(){
+				var sm = await this.zauzetost
+				return (sm.filter(sediste=>sediste.zauzeto).length)/Math.trunc(( sm.length)/100)
+			}
+		}
+	},
+	async mounted(){
+		try {
+			this.projekcija = await this.getProjekcija(Number.parseInt(this.id))
         
-      } catch (err){
-        console.log(err)
-      }
+		} catch (err){
+			console.log(err)
+		}
       
-    }
+	}
     
 
-  }
+}
 </script>
 
 <style>

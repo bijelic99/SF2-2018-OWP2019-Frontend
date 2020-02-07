@@ -95,100 +95,100 @@
 </template>
 
 <script>
-  import { mapActions, mapGetters } from "vuex";
-  import Vibrant from "node-vibrant";
-  import EditFilmDialog from '../components/AddItemComponents/Film/EditFilmDialog'
-  import DeleteFilm from '../components/DeleteItemComponents/DeleteFilm'
-  import axios from 'axios'
-  import RezervacijaKarteDialog from '../components/AddItemComponents/Karta/RezervacijaKarteDialog'
-  export default {
-    name: "Film",
-    components:{
-      EditFilmDialog,
-      DeleteFilm,
-      RezervacijaKarteDialog
-    },
-    props: {
-      id: String
-    },
-    data: () => {
-      return {
-        film: {},
-        componentData: {
-          errorMassage: "",
-          errorSnackbarVisible: false,
-          backgroundColor: "#ffffff",
-          textColor: "#000000"
-        },
-        speedDialData: {
-          speedDialOpen: false
-        }
-      };
-    },
-    computed: mapGetters([
-      "getFilm",
-      "allFilmovi",
-      "getCurrentTheme",
-      "getBaseTheme", 'getFilmIdAvailableInFilmovi', 'getFullServerAddress',
-      'getIsLoggedIn', 'getCurrentUserUloga', 'getFilmHasFreeProjekcijeInFuture'
-    ]),
-    methods: {
-      ...mapActions(["fetchFilmovi", "setCurrentTheme", "setCurrentThemeToBase"]),
-      filmLoad: async function() {
-        if ((await this.allFilmovi.length) === 0) await this.fetchFilmovi();
-        if (/^\d+$/.test(this.id)) {
-          if(this.getFilmIdAvailableInFilmovi(Number.parseInt(this.id)))
-          {
-            this.film = await this.getFilm(parseInt(this.id, 10));
-            await this.setColors();
-          }
-          else{
-            console.log(`${this.getFullServerAddress}/Film?id=${this.id}`)
-            axios.get(`${this.getFullServerAddress}/Film?id=${this.id}`).then(res => this.film = res.data).catch((err)=>{
-              console.log(err)
-              this.componentData.errorMassage =
-                "Id nije pravilno unet, ili film ne postoji";
-              this.componentData.errorSnackbarVisible = true;
-            })
-          }
-        } else {
-          this.componentData.errorMassage =
-            "Id nije pravilno unet, nije moguce prikazati film";
-          this.componentData.errorSnackbarVisible = true;
-        }
-      },
-      setColors: async function() {
-        try {
-          var palette = await Vibrant.from(this.film.pathDoSlike)
-            .getPalette()
-            .then(r => r);
-          //console.log(palette)
-          this.componentData.backgroundColor = palette.DarkVibrant.hex;
-          this.componentData.textColor = palette.DarkVibrant.bodyTextColor;
-          //console.log(palette)
-          var theme = this.getCurrentTheme;
-          theme.primary = palette.DarkVibrant.hex;
-          theme.secondary = palette.Muted.hex;
-          //console.log(theme.primary + " " + theme.secondary)
-          this.setCurrentTheme(theme);
-        } catch {
-          this.setCurrentThemeToBase();
-          this.componentData.backgroundColor = "#fff";
-          this.componentData.textColor = "#000";
-        }
-      }
-    },
-    watch: {
-      id: async function() {
-        await this.filmLoad();
+import { mapActions, mapGetters } from "vuex";
+import Vibrant from "node-vibrant";
+import EditFilmDialog from '../components/AddItemComponents/Film/EditFilmDialog'
+import DeleteFilm from '../components/DeleteItemComponents/DeleteFilm'
+import axios from 'axios'
+import RezervacijaKarteDialog from '../components/AddItemComponents/Karta/RezervacijaKarteDialog'
+export default {
+	name: "Film",
+	components:{
+		EditFilmDialog,
+		DeleteFilm,
+		RezervacijaKarteDialog
+	},
+	props: {
+		id: String
+	},
+	data: () => {
+		return {
+			film: {},
+			componentData: {
+				errorMassage: "",
+				errorSnackbarVisible: false,
+				backgroundColor: "#ffffff",
+				textColor: "#000000"
+			},
+			speedDialData: {
+				speedDialOpen: false
+			}
+		};
+	},
+	computed: mapGetters([
+		"getFilm",
+		"allFilmovi",
+		"getCurrentTheme",
+		"getBaseTheme", 'getFilmIdAvailableInFilmovi', 'getFullServerAddress',
+		'getIsLoggedIn', 'getCurrentUserUloga', 'getFilmHasFreeProjekcijeInFuture'
+	]),
+	methods: {
+		...mapActions(["fetchFilmovi", "setCurrentTheme", "setCurrentThemeToBase"]),
+		filmLoad: async function() {
+			if ((await this.allFilmovi.length) === 0) await this.fetchFilmovi();
+			if (/^\d+$/.test(this.id)) {
+				if(this.getFilmIdAvailableInFilmovi(Number.parseInt(this.id)))
+				{
+					this.film = await this.getFilm(parseInt(this.id, 10));
+					await this.setColors();
+				}
+				else{
+					console.log(`${this.getFullServerAddress}/Film?id=${this.id}`)
+					axios.get(`${this.getFullServerAddress}/Film?id=${this.id}`).then(res => this.film = res.data).catch((err)=>{
+						console.log(err)
+						this.componentData.errorMassage =
+							"Id nije pravilno unet, ili film ne postoji";
+						this.componentData.errorSnackbarVisible = true;
+					})
+				}
+			} else {
+				this.componentData.errorMassage =
+					"Id nije pravilno unet, nije moguce prikazati film";
+				this.componentData.errorSnackbarVisible = true;
+			}
+		},
+		setColors: async function() {
+			try {
+				var palette = await Vibrant.from(this.film.pathDoSlike)
+					.getPalette()
+					.then(r => r);
+				//console.log(palette)
+				this.componentData.backgroundColor = palette.DarkVibrant.hex;
+				this.componentData.textColor = palette.DarkVibrant.bodyTextColor;
+				//console.log(palette)
+				var theme = this.getCurrentTheme;
+				theme.primary = palette.DarkVibrant.hex;
+				theme.secondary = palette.Muted.hex;
+				//console.log(theme.primary + " " + theme.secondary)
+				this.setCurrentTheme(theme);
+			} catch {
+				this.setCurrentThemeToBase();
+				this.componentData.backgroundColor = "#fff";
+				this.componentData.textColor = "#000";
+			}
+		}
+	},
+	watch: {
+		id: async function() {
+			await this.filmLoad();
         
-      }
-    },
-    async mounted() {
-      await this.filmLoad();
-      //console.log(JSON.stringify(this.film))
-    }
-  };
+		}
+	},
+	async mounted() {
+		await this.filmLoad();
+		//console.log(JSON.stringify(this.film))
+	}
+};
 </script>
 
 <style>

@@ -19,30 +19,30 @@
 </template>
 
 <script>
-  import AddFilm from './AddFilm'
-  export default {
-    name: 'EditFilmDialog',
-    components: {
-      AddFilm
-    },
-    props: {
-      filmId: {
-        type: Number,
-        required: true
-      }
-    },
-    data(){
-      return {
-        visible: false
-      }
-    },
-    methods:{
-      openDialog: function(e) {
-        e.stopPropagation();
-        this.visible = true;
-      },
-    }
-  }
+import AddFilm from './AddFilm'
+export default {
+	name: 'EditFilmDialog',
+	components: {
+		AddFilm
+	},
+	props: {
+		filmId: {
+			type: Number,
+			required: true
+		}
+	},
+	data(){
+		return {
+			visible: false
+		}
+	},
+	methods:{
+		openDialog: function(e) {
+			e.stopPropagation();
+			this.visible = true;
+		},
+	}
+}
 </script>
 
 <style>

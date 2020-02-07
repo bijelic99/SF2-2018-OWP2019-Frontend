@@ -52,76 +52,76 @@
 </template>
 
 <script>
-  import { mapActions, mapGetters } from "vuex";
-  import DeleteKorisnikDialog from '../components/DeleteItemComponents/DeleteKorisnikDialog'
-  import axios from 'axios'
-  export default {
-    name: 'Korisnik',
-    components:{
-      DeleteKorisnikDialog
-    },
-    props: {
-      id: {
-        type: String,
-        required: true
-      }
-    },
-    data(){
-      return {
-        user: {},
-        componentData: {
-          passwordFormValid: false,
-          passwordChanged: false,
-          roleChanged: false,
-          passwordTextFieldRules: [
-            value => value+"".trim() === "" ? "Polje ne sme biti prazno" : true,
-            value => (value+"").trim().length<8? "Sifra mora da ima vise od 8 karaktera":true
-          ],
-          uloge: [
-            { 
-              text: 'Admin',
-              value: 'Admin'
-            },
-            { 
-              text: 'Obican',
-              value: 'Obican'
-            },
-          ]
-        }
-      }
-    },
-    methods:{
-      ...mapActions(['fetchUsers', 'updateUser']),
-      pwdChanged() {
-        this.componentData.passwordChanged = true
-      },
-      changeSubmit(){
-        if (this.updateUser(this.user)){
-          this.componentData.passwordChanged = false
-          this.componentData.roleChanged = false
-        }
-      }
-    },
-    computed: {
-      ...mapGetters(['getUser', 'getAllUsers', 'getIsLoggedIn', 'getCurrentUserUloga', 'getCurrentUserId', 'getIfUserIdInUsers', 'getFullServerAddress'])
-    },
-    async mounted(){
-      if(this.getAllUsers.length === 0) await this.fetchUsers()
-      if(this.getIfUserIdInUsers(Number.parseInt(this.id))){
-        this.user = JSON.parse(JSON.stringify(this.getUser(Number.parseInt(this.id))))
-        this.user.datumRegistracije = new Date(this.user.datumRegistracije)
-      }
-      else{
-        axios.get(`${this.getFullServerAddress}/Korisnik?id=${this.id}`).then(res=>{
-          this.user = res.data
-          this.user.datumRegistracije = new Date(this.user.datumRegistracije)
-        }).catch(()=>{
-          this.$router.push('/')
-        })
-      }
-    }
+import { mapActions, mapGetters } from "vuex";
+import DeleteKorisnikDialog from '../components/DeleteItemComponents/DeleteKorisnikDialog'
+import axios from 'axios'
+export default {
+	name: 'Korisnik',
+	components:{
+		DeleteKorisnikDialog
+	},
+	props: {
+		id: {
+			type: String,
+			required: true
+		}
+	},
+	data(){
+		return {
+			user: {},
+			componentData: {
+				passwordFormValid: false,
+				passwordChanged: false,
+				roleChanged: false,
+				passwordTextFieldRules: [
+					value => value+"".trim() === "" ? "Polje ne sme biti prazno" : true,
+					value => (value+"").trim().length<8? "Sifra mora da ima vise od 8 karaktera":true
+				],
+				uloge: [
+					{ 
+						text: 'Admin',
+						value: 'Admin'
+					},
+					{ 
+						text: 'Obican',
+						value: 'Obican'
+					},
+				]
+			}
+		}
+	},
+	methods:{
+		...mapActions(['fetchUsers', 'updateUser']),
+		pwdChanged() {
+			this.componentData.passwordChanged = true
+		},
+		changeSubmit(){
+			if (this.updateUser(this.user)){
+				this.componentData.passwordChanged = false
+				this.componentData.roleChanged = false
+			}
+		}
+	},
+	computed: {
+		...mapGetters(['getUser', 'getAllUsers', 'getIsLoggedIn', 'getCurrentUserUloga', 'getCurrentUserId', 'getIfUserIdInUsers', 'getFullServerAddress'])
+	},
+	async mounted(){
+		if(this.getAllUsers.length === 0) await this.fetchUsers()
+		if(this.getIfUserIdInUsers(Number.parseInt(this.id))){
+			this.user = JSON.parse(JSON.stringify(this.getUser(Number.parseInt(this.id))))
+			this.user.datumRegistracije = new Date(this.user.datumRegistracije)
+		}
+		else{
+			axios.get(`${this.getFullServerAddress}/Korisnik?id=${this.id}`).then(res=>{
+				this.user = res.data
+				this.user.datumRegistracije = new Date(this.user.datumRegistracije)
+			}).catch(()=>{
+				this.$router.push('/')
+			})
+		}
+	}
 
-  }
+}
 </script>
 
 <style>

@@ -132,176 +132,176 @@
 </template>
 
 <script>
-  import { mapGetters, mapActions } from "vuex";
-  import axios from "axios";
-  export default {
-    name: "AddFilm",
-    props: {
-      filmId: {
-        type: Number,
-        required: false
-      }
-    },
-    data: () => {
-      return {
-        tipAkcije: "",
-        film: {
-          id: 0,
-          naziv: "",
-          zanrovi: [],
-          reziser: "",
-          glumci: [],
-          trajanje: 0,
-          distributer: "",
-          zemljaPorekla: "",
-          godinaProizvodnje: 0,
-          opis: "",
-          obrisan: false,
-          pathDoSlike: ""
-        },
-        zanrovi: [],
-        filmskiRadnici: [],
-        formData: {
-          formValid: false,
-          zanroviSearchInput: null,
-          glumciSearchInput: null,
-          rulePresets: {
-            required: value => (value + "" === "" ? "Obavezno Polje" : true),
-            mustBeNumber: value =>
-              /^\d*$/.test(value) ? true : "Mora biti ne negativan broj",
-            notZero: value =>
-              parseInt(value) !== 0 ? true : "Mora biti vece od 0"
-          },
-          rules: {
-            nazivRules: [value => (value + "" === "" ? "Obavezno Polje" : true)],
-            trajanjeRules: [
-              value => (value + "" === "" ? "Obavezno Polje" : true),
-              value =>
-                /^\d*$/.test(value) ? true : "Mora biti ne negativan broj",
-              value => (parseInt(value) !== 0 ? true : "Mora biti vece od 0")
-            ],
-            distributerRules: [
-              value => (value + "" === "" ? "Obavezno Polje" : true)
-            ],
-            zemljaPoreklaRules: [
-              value => (value + "" === "" ? "Obavezno Polje" : true)
-            ],
-            godinaProizvodnjeRules: [
-              value => (value + "" === "" ? "Obavezno Polje" : true),
-              value =>
-                /^\d*$/.test(value) ? true : "Mora biti ne negativan broj",
-              value => (parseInt(value) !== 0 ? true : "Mora biti vece od 0")
-            ]
-          }
-        },
-        snackbars: {
-          timeout: 4000,
-          successVisible: false, 
-          failureVisible: false 
-        }
-      };
-    },
-    methods: {
-      ...mapActions(["addFilm", "editFilm"]),
-      setFilm: function() {
-        if (this.tipAkcije === "Izmena") {
-          this.film = JSON.parse(JSON.stringify(this.getFilm(this.filmId)));
-          this.film.zanrovi = this.film.zanrovi.map(this.itemForCb);
-          this.film.reziser = this.itemForCb(this.film.reziser);
-          this.film.glumci = this.film.glumci.map(this.itemForCb);
-        }
-      },
-      itemForCb: function(i) {
-        var obj = new Object();
-        obj.text = i.naziv;
-        obj.value = i;
-        return obj;
-      },
-      setTipAkcije: function() {
-        if (this.filmId !== undefined) {
-          this.tipAkcije = "Izmena";
-        } else this.tipAkcije = "Dodavanje";
-      },
-      getZanrovi: async function() {
-        this.zanrovi = await axios
-          .get(`${this.getFullServerAddress}/Zanrovi`)
-          .then(res => res.data.map(this.itemForCb))
-          .catch(() => []);
-      //console.log(this.zanrovi)
-      },
-      getFilmskiRadnici: async function() {
-        this.filmskiRadnici = await axios
-          .get(`${this.getFullServerAddress}/FilmskiRadnici`)
-          .then(res => res.data.map(this.itemForCb))
-          .catch(() => []);
-      },
-      formSubmit: function() {
+import { mapGetters, mapActions } from "vuex";
+import axios from "axios";
+export default {
+	name: "AddFilm",
+	props: {
+		filmId: {
+			type: Number,
+			required: false
+		}
+	},
+	data: () => {
+		return {
+			tipAkcije: "",
+			film: {
+				id: 0,
+				naziv: "",
+				zanrovi: [],
+				reziser: "",
+				glumci: [],
+				trajanje: 0,
+				distributer: "",
+				zemljaPorekla: "",
+				godinaProizvodnje: 0,
+				opis: "",
+				obrisan: false,
+				pathDoSlike: ""
+			},
+			zanrovi: [],
+			filmskiRadnici: [],
+			formData: {
+				formValid: false,
+				zanroviSearchInput: null,
+				glumciSearchInput: null,
+				rulePresets: {
+					required: value => (value + "" === "" ? "Obavezno Polje" : true),
+					mustBeNumber: value =>
+						/^\d*$/.test(value) ? true : "Mora biti ne negativan broj",
+					notZero: value =>
+						parseInt(value) !== 0 ? true : "Mora biti vece od 0"
+				},
+				rules: {
+					nazivRules: [value => (value + "" === "" ? "Obavezno Polje" : true)],
+					trajanjeRules: [
+						value => (value + "" === "" ? "Obavezno Polje" : true),
+						value =>
+							/^\d*$/.test(value) ? true : "Mora biti ne negativan broj",
+						value => (parseInt(value) !== 0 ? true : "Mora biti vece od 0")
+					],
+					distributerRules: [
+						value => (value + "" === "" ? "Obavezno Polje" : true)
+					],
+					zemljaPoreklaRules: [
+						value => (value + "" === "" ? "Obavezno Polje" : true)
+					],
+					godinaProizvodnjeRules: [
+						value => (value + "" === "" ? "Obavezno Polje" : true),
+						value =>
+							/^\d*$/.test(value) ? true : "Mora biti ne negativan broj",
+						value => (parseInt(value) !== 0 ? true : "Mora biti vece od 0")
+					]
+				}
+			},
+			snackbars: {
+				timeout: 4000,
+				successVisible: false, 
+				failureVisible: false 
+			}
+		};
+	},
+	methods: {
+		...mapActions(["addFilm", "editFilm"]),
+		setFilm: function() {
+			if (this.tipAkcije === "Izmena") {
+				this.film = JSON.parse(JSON.stringify(this.getFilm(this.filmId)));
+				this.film.zanrovi = this.film.zanrovi.map(this.itemForCb);
+				this.film.reziser = this.itemForCb(this.film.reziser);
+				this.film.glumci = this.film.glumci.map(this.itemForCb);
+			}
+		},
+		itemForCb: function(i) {
+			var obj = new Object();
+			obj.text = i.naziv;
+			obj.value = i;
+			return obj;
+		},
+		setTipAkcije: function() {
+			if (this.filmId !== undefined) {
+				this.tipAkcije = "Izmena";
+			} else this.tipAkcije = "Dodavanje";
+		},
+		getZanrovi: async function() {
+			this.zanrovi = await axios
+				.get(`${this.getFullServerAddress}/Zanrovi`)
+				.then(res => res.data.map(this.itemForCb))
+				.catch(() => []);
+			//console.log(this.zanrovi)
+		},
+		getFilmskiRadnici: async function() {
+			this.filmskiRadnici = await axios
+				.get(`${this.getFullServerAddress}/FilmskiRadnici`)
+				.then(res => res.data.map(this.itemForCb))
+				.catch(() => []);
+		},
+		formSubmit: function() {
         
-        var newFilm = JSON.parse(JSON.stringify(this.film))
-        if (newFilm.reziser !== null) {
-          if (typeof newFilm.reziser === "string"){
-            var reziser = new Object()
-            reziser.id = 0
-            reziser.naziv = newFilm.reziser
-            newFilm.reziser = reziser
-          }
-          else newFilm.reziser = newFilm.reziser.value;
-        } else newFilm.reziser = null
-        newFilm.zanrovi = newFilm.zanrovi.map(z => {
-          if (typeof z === "string") {
-            var zanr = new Object()
-            zanr.id = 0
-            zanr.naziv = z
-            return zanr;
-          } else return z.value;
-        })
-        newFilm.glumci = newFilm.glumci.map(g => {
-          if (typeof g === "string") {
-            var glumac = new Object()
-            glumac.id = 0
-            glumac.naziv = g
-            return glumac;
-          } else return g.value;
-        })
-        if(this.tipAkcije === "Izmena") {
-          if(!this.editFilm(newFilm)) {
-            this.snackbars.failureVisible = true
-          }
-          else{
-            this.snackbars.successVisible = true
-          }
-        }
-        else if(this.tipAkcije === "Dodavanje") {
-          if(!this.addFilm(newFilm)) {
-            this.snackbars.failureVisible = true
-          }
-          else {
-            this.snackbars.successVisible = true
-            this.$refs.filmForm.reset()} }
-      }
-    },
-    computed: {
-      ...mapGetters(["getFilm", "getFullServerAddress"])
-    },
-    watch: {
-      filmId: function() {
-        this.setTipAkcije();
-        this.setFilm();
-      },
-      "film.zanrovi": function() {
-        this.formData.zanroviSearchInput = null;
-      },
-      "film.glumci": function() {
-        this.formData.glumciSearchInput = null;
-      }
-    },
-    mounted: function() {
-      this.setTipAkcije();
-      this.getZanrovi();
-      this.getFilmskiRadnici();
-      this.setFilm();
-    }
-  };
+			var newFilm = JSON.parse(JSON.stringify(this.film))
+			if (newFilm.reziser !== null) {
+				if (typeof newFilm.reziser === "string"){
+					var reziser = new Object()
+					reziser.id = 0
+					reziser.naziv = newFilm.reziser
+					newFilm.reziser = reziser
+				}
+				else newFilm.reziser = newFilm.reziser.value;
+			} else newFilm.reziser = null
+			newFilm.zanrovi = newFilm.zanrovi.map(z => {
+				if (typeof z === "string") {
+					var zanr = new Object()
+					zanr.id = 0
+					zanr.naziv = z
+					return zanr;
+				} else return z.value;
+			})
+			newFilm.glumci = newFilm.glumci.map(g => {
+				if (typeof g === "string") {
+					var glumac = new Object()
+					glumac.id = 0
+					glumac.naziv = g
+					return glumac;
+				} else return g.value;
+			})
+			if(this.tipAkcije === "Izmena") {
+				if(!this.editFilm(newFilm)) {
+					this.snackbars.failureVisible = true
+				}
+				else{
+					this.snackbars.successVisible = true
+				}
+			}
+			else if(this.tipAkcije === "Dodavanje") {
+				if(!this.addFilm(newFilm)) {
+					this.snackbars.failureVisible = true
+				}
+				else {
+					this.snackbars.successVisible = true
+					this.$refs.filmForm.reset()} }
+		}
+	},
+	computed: {
+		...mapGetters(["getFilm", "getFullServerAddress"])
+	},
+	watch: {
+		filmId: function() {
+			this.setTipAkcije();
+			this.setFilm();
+		},
+		"film.zanrovi": function() {
+			this.formData.zanroviSearchInput = null;
+		},
+		"film.glumci": function() {
+			this.formData.glumciSearchInput = null;
+		}
+	},
+	mounted: function() {
+		this.setTipAkcije();
+		this.getZanrovi();
+		this.getFilmskiRadnici();
+		this.setFilm();
+	}
+};
 </script>
 
 <style>
