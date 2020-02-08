@@ -105,6 +105,7 @@ const actions = {
         return await axios.post(`${store.getters.getFullServerAddress}/Projekcija`, projekcija).then(res => {
             if (res.data.successful) {
                 projekcija.id = res.data.id
+                projekcija['prosla'] = () => moment(projekcija.datumVremePrikazivanja).isBefore(new Date(Date.now()))
                 commit('ADD_PROJEKCIJA', projekcija)
                 return true
             }
@@ -114,11 +115,9 @@ const actions = {
             return false
         })
     },
-    async deleteProjekcija({ commit }, projekcija) {
-        console.log('ishit')
+    async deleteProjekcijaAction({ commit }, projekcija) {
         return await axios.delete(`${store.getters.getFullServerAddress}/Projekcija?id=${projekcija.id}`).then((res) => {
             if (res.data.successful) {
-                console.log('akcija')
                 commit('DELETE_PROJEKCIJA', projekcija)
                 return true
             }
@@ -139,7 +138,6 @@ const mutations = {
     DELETE_PROJEKCIJA: (state, projekcija) => {
         state.zauzetost.delete(projekcija)
         var index = state.projekcije.findIndex(p => p.id === projekcija.id)
-        console.log('mutacija')
         if (index !== -1) state.projekcije.pop(index)
     }
 }

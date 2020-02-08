@@ -14,17 +14,17 @@
 </template>
 
 <script>
-import MovieCarousel from '../components/MovieCarousel'
-import IndexPageProjekcijeTable from '../components/IndexPageProjekcijeTable'
-import RandomQuote from '../components/RandomQuote'
-export default {
-	name: 'Home',
-	components:{
-		MovieCarousel,
-		IndexPageProjekcijeTable,
-		RandomQuote
-	}
-}
+    import MovieCarousel from '../components/MovieCarousel'
+    import IndexPageProjekcijeTable from '../components/IndexPageProjekcijeTable'
+    import RandomQuote from '../components/RandomQuote'
+    export default {
+        name: 'Home',
+        components:{
+            MovieCarousel,
+            IndexPageProjekcijeTable,
+            RandomQuote
+        }
+    }
 </script>
 
 <style>

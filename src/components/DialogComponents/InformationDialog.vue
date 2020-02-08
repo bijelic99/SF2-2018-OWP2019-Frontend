@@ -16,38 +16,38 @@
 </template>
 
 <script>
-export default {
-	name: 'ModalDialog',
-	props: {
-		visible:{
-			type: Boolean,
-			required: true,
-			default: false
-		},
-		color:{
-			type: String,
-			required: false,
-			default: 'primary'
-		},
-		title:{
-			type: String,
-			required: false,
-			default: ''
-		},
-		text:{
-			type: String,
-			required: false,
-			default: ''
-		},
+    export default {
+        name: 'ModalDialog',
+        props: {
+            visible:{
+                type: Boolean,
+                required: true,
+                default: false
+            },
+            color:{
+                type: String,
+                required: false,
+                default: 'primary'
+            },
+            title:{
+                type: String,
+                required: false,
+                default: ''
+            },
+            text:{
+                type: String,
+                required: false,
+                default: ''
+            },
 
         
-	},
-	methods:{
-		emitResponse(response){
-			this.$emit('response', response)
-		}
-	}
-}
+        },
+        methods:{
+            emitResponse(response){
+                this.$emit('response', response)
+            }
+        }
+    }
 </script>
 
 <style>

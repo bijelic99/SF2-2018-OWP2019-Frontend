@@ -59,37 +59,37 @@
 </template>
 
 <script>
-import RegisterDialog from "./AccountControlComponents/RegisterDialog";
-import LoginDialog from './AccountControlComponents/LoginDialog'
-import LogoutDialog from './AccountControlComponents/LogoutDialog'
-import { mapGetters } from 'vuex'
-export default {
-	name: "Toolbar",
-	components: { RegisterDialog, LoginDialog, LogoutDialog },
-	data() {
-		return {
-			navigationDrawerData: {
-				open: false,
-				items: [{ title: "Pocetna", icon: "mdi-home", link: "/", visibleForCurrentUser: ()=>true },
-					{ title: "Filmovi", icon: "mdi-movie", link: "/Filmovi", visibleForCurrentUser: ()=>true },
-					{ title: "Projekcije", icon: "mdi-movie-roll", link: "/Projekcije", visibleForCurrentUser: ()=>true },
-					{ title: "Rezervacija Karte", icon: "mdi-ticket", link: "/RezervacijaKarte", visibleForCurrentUser: ()=>this.getCurrentUserUloga === 'Obican'},
-					{ title: "Dodaj film", icon: "mdi-plus", link: "/AddFilm", visibleForCurrentUser: ()=>this.getCurrentUserUloga === 'Admin'},
-					{ title: "Dodaj projekciju", icon: "mdi-plus", link: "/AddProjekcija", visibleForCurrentUser: ()=>this.getCurrentUserUloga === 'Admin'},
-					{ title: "Korisnici", icon: "mdi-account-multiple", link: "/Korisnici", visibleForCurrentUser: ()=>this.getCurrentUserUloga === 'Admin' },
-				]
-			}
-		};
-	},
-	computed:{
-		...mapGetters(['getIsLoggedIn', 'getCurrentUserUloga', 'getCurrentUserUsername', 'getCurrentUserId']),
-		visibleNavItems: function () {
-			//console.log(this.navigationDrawerData.items.filter(item=> item.visibleForCurrentUser()))
-			return this.navigationDrawerData.items.filter(item=> item.visibleForCurrentUser())
-		}
-	},
-	methods: {}
-};
+    import RegisterDialog from "./AccountControlComponents/RegisterDialog";
+    import LoginDialog from './AccountControlComponents/LoginDialog'
+    import LogoutDialog from './AccountControlComponents/LogoutDialog'
+    import { mapGetters } from 'vuex'
+    export default {
+        name: "Toolbar",
+        components: { RegisterDialog, LoginDialog, LogoutDialog },
+        data() {
+            return {
+                navigationDrawerData: {
+                    open: false,
+                    items: [{ title: "Pocetna", icon: "mdi-home", link: "/", visibleForCurrentUser: ()=>true },
+                            { title: "Filmovi", icon: "mdi-movie", link: "/Filmovi", visibleForCurrentUser: ()=>true },
+                            { title: "Projekcije", icon: "mdi-movie-roll", link: "/Projekcije", visibleForCurrentUser: ()=>true },
+                            { title: "Rezervacija Karte", icon: "mdi-ticket", link: "/RezervacijaKarte", visibleForCurrentUser: ()=>this.getCurrentUserUloga === 'Obican'},
+                            { title: "Dodaj film", icon: "mdi-plus", link: "/AddFilm", visibleForCurrentUser: ()=>this.getCurrentUserUloga === 'Admin'},
+                            { title: "Dodaj projekciju", icon: "mdi-plus", link: "/AddProjekcija", visibleForCurrentUser: ()=>this.getCurrentUserUloga === 'Admin'},
+                            { title: "Korisnici", icon: "mdi-account-multiple", link: "/Korisnici", visibleForCurrentUser: ()=>this.getCurrentUserUloga === 'Admin' },
+                    ]
+                }
+            };
+        },
+        computed:{
+            ...mapGetters(['getIsLoggedIn', 'getCurrentUserUloga', 'getCurrentUserUsername', 'getCurrentUserId']),
+            visibleNavItems: function () {
+                //console.log(this.navigationDrawerData.items.filter(item=> item.visibleForCurrentUser()))
+                return this.navigationDrawerData.items.filter(item=> item.visibleForCurrentUser())
+            }
+        },
+        methods: {}
+    };
 </script>
 
 <style>

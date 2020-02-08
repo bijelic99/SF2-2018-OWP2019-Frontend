@@ -38,53 +38,53 @@
     </v-dialog>
 </template>
 <script>
-import { mapActions } from 'vuex'
-export default {
-	name: 'LoginDialog',
-	data() {
-		return {
-			visible: false,
-			form: {
-				username: "",
-				password: "",
-				valid: false
-			},
-			formRules: [
-				value => value+"".trim() === "" ? "Polje ne sme biti prazno" : true
-			],
-			componentData:{
-				snackbarGeneral: {
-					timeout: 2000
-				},
-				successSnackbar: {
-					open: false
-				},
-				failSnackbar: {
-					open: false
-				}
-			}
+    import { mapActions } from 'vuex'
+    export default {
+        name: 'LoginDialog',
+        data() {
+            return {
+                visible: false,
+                form: {
+                    username: "",
+                    password: "",
+                    valid: false
+                },
+                formRules: [
+                    value => value+"".trim() === "" ? "Polje ne sme biti prazno" : true
+                ],
+                componentData:{
+                    snackbarGeneral: {
+                        timeout: 2000
+                    },
+                    successSnackbar: {
+                        open: false
+                    },
+                    failSnackbar: {
+                        open: false
+                    }
+                }
         
-		}
-	},
-	methods: {
-		...mapActions(['login']),
-		openDialog: function(e) {
-			e.stopPropagation();
-			this.visible = true;
-		},
-		submit: async function () {
-			if(await this.login({'username': this.form.username, 'password': this.form.password})) {
-				this.form.username = ''
-				this.form.password = ''
-				this.componentData.successSnackbar.open = true
-				this.visible = false
-			}
-			else {
-				this.form.password = ''
-				this.componentData.failSnackbar.open = true}
-		}
-	}    
-}
+            }
+        },
+        methods: {
+            ...mapActions(['login']),
+            openDialog: function(e) {
+                e.stopPropagation();
+                this.visible = true;
+            },
+            submit: async function () {
+                if(await this.login({'username': this.form.username, 'password': this.form.password})) {
+                    this.form.username = ''
+                    this.form.password = ''
+                    this.componentData.successSnackbar.open = true
+                    this.visible = false
+                }
+                else {
+                    this.form.password = ''
+                    this.componentData.failSnackbar.open = true}
+            }
+        }    
+    }
 </script>
 <style>
 

@@ -7,65 +7,65 @@
 </template>
 
 <script>
-import ModalDialog from '../DialogComponents/ModalDialog'
-import InformationDialog from '../DialogComponents/InformationDialog'
-import { mapActions } from 'vuex'
-export default {
-	name: 'DeleteProjekcijaDialog',
-	props:{
-		projekcija:{
-			type: Object,
-			required: true,
-			default: null
-		}
-	},
-	components:{
-		ModalDialog,
-		InformationDialog
-	},
-	data(){
-		return{
-			modalDialogVisible: false,
-			informationDialogVisible: false,
-			informationDialogText: '',
-			informationDialogTitle: '',
-			informationDialogColor: 'primary',
-			deleted: false
-		}
-	},
-	methods:{
-		...mapActions(['deleteProjekcija']),
-		async deleteProjekcija(response){
-			if(response === true && !this.deleted) {
-				this.modalDialogVisible = false
-				var res = this.deleteProjekcija(this.projekcija)
-				console.log(res)
-				if(res) {
-					this.informationDialogTitle='Uspeh'
-					this.informationDialogText='Uspesno ste obrisali'
-					this.informationDialogColor= 'success'
-					this.deleted = true
-                    
-				}
-				else{
-					this.informationDialogTitle='Greska'
-					this.informationDialogText='Doslo je do greske'
-					this.informationDialogColor= 'error'
-				}
-				this.informationDialogVisible = true
-			}
-			else this.modalDialogVisible = false
+    import ModalDialog from '../DialogComponents/ModalDialog'
+    import InformationDialog from '../DialogComponents/InformationDialog'
+    import { mapActions } from 'vuex'
+    export default {
+        name: 'DeleteProjekcijaDialog',
+        props:{
+            projekcija:{
+                type: Object,
+                required: true,
+                default: null
+            }
+        },
+        components:{
+            ModalDialog,
+            InformationDialog
+        },
+        data(){
+            return{
+                modalDialogVisible: false,
+                informationDialogVisible: false,
+                informationDialogText: '',
+                informationDialogTitle: '',
+                informationDialogColor: 'primary',
+                deleteSuccessful: false
+            }
+        },
+        methods:{
+            ...mapActions(['deleteProjekcijaAction']),
+            async deleteProjekcija(response){
+                if(response) {
+                    this.modalDialogVisible = false
+                    var res = await this.deleteProjekcijaAction(this.projekcija)
+                    if(res === true) {
+                        this.informationDialogTitle='Uspeh'
+                        this.informationDialogText='Uspesno ste obrisali'
+                        this.informationDialogColor= 'success'
+                        this.deleteSuccessful = true
+                    }
+                    else{
+                        this.informationDialogTitle='Greska'
+                        this.informationDialogText='Doslo je do greske'
+                        this.informationDialogColor= 'error'
+                        this.deleteSuccessful = false
+                    }
+                    this.informationDialogVisible = true
+                }
+                else this.modalDialogVisible = false
 			
-		},
-		closeInfoDialog(){
-			this.informationDialogVisible = false
-			this.informationDialogTitle=''
-			this.informationDialogText=''
-			this.informationDialogColor=''
+            },
+            closeInfoDialog(){
+                this.informationDialogVisible = false
+                this.informationDialogTitle=''
+                this.informationDialogText=''
+                this.informationDialogColor=''
+                if(this.deleteSuccessful) this.$router.push('/')
         
-		}
-	}
-}
+            }
+        }
+    }
 </script>
 
 <style>

@@ -15,40 +15,40 @@
 </template>
 
 <script>
-import Toolbar from './components/Toolbar'
-import { mapActions, mapGetters } from "vuex"; 
-export default {
-	name: 'App',
-	components: { Toolbar },
-	data: () => ({
-		//
-	}),
-	methods:{
-		...mapActions(['setCurrentTheme','setCurrentThemeToBase', 'fetchFilmovi', 'fetchLoggedInUser', 'fetchProjekcije', 'fetchZauzetost']),
-	},
-	computed: {
-		...mapGetters(['getCurrentTheme']),
-		currentPath: function() {
-			return this.$route.path
-		}
-	},
-	watch:{
-		currentPath: async function () {
-			if(!this.currentPath.includes('/Film/')){
+    import Toolbar from './components/Toolbar'
+    import { mapActions, mapGetters } from "vuex"; 
+    export default {
+        name: 'App',
+        components: { Toolbar },
+        data: () => ({
+            //
+        }),
+        methods:{
+            ...mapActions(['setCurrentTheme','setCurrentThemeToBase', 'fetchFilmovi', 'fetchLoggedInUser', 'fetchProjekcije', 'fetchZauzetost']),
+        },
+        computed: {
+            ...mapGetters(['getCurrentTheme']),
+            currentPath: function() {
+                return this.$route.path
+            }
+        },
+        watch:{
+            currentPath: async function () {
+                if(!this.currentPath.includes('/Film/')){
           
-				await this.setCurrentThemeToBase()
-			}
+                    await this.setCurrentThemeToBase()
+                }
         
         
-		}
-	},
-	async mounted(){
-		await this.fetchFilmovi()
-		await this.fetchProjekcije()
-		await this.fetchZauzetost()
-		this.fetchLoggedInUser()
-	}
-}
+            }
+        },
+        async mounted(){
+            await this.fetchFilmovi()
+            await this.fetchProjekcije()
+            await this.fetchZauzetost()
+            this.fetchLoggedInUser()
+        }
+    }
 </script>
 <style>
 </style>

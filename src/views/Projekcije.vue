@@ -84,116 +84,116 @@
 </template>
 
 <script>
-import DateTimePicker from '../components/DateTimePicker'
-import { mapGetters, mapActions } from 'vuex'
-import moment from 'moment';
-export default {
-	name: 'Projekcije',
-	components:{
-		DateTimePicker
-	},
-	data: () => {
-		return {
-			searchData: {
-				film: null,
-				datumVremeOd: null,
-				datumVremeDo: null,
-				tipProjekcije: null,
-				sala: null,
-				cenaOd: null,
-				cenaDo: null,
-				prosla: 0,
-				cenaRules: [value => value === '' || /^\d{1,}$/.test(value) ? true : "Mora biti broj", value => value === '' || Number.parseInt(value) >= 0 ? true : 'Nije vece od 0']
-			},
-			tableData: {
-				search: "a",
-				loading: false,
-				zaglavljaTabele: [
-					{
-						text: "Film",
-						value: "film"
-					},
-					{
-						text: "Datum i Vreme Prikazivanja",
-						value: "datumVremePrikazivanja"
-					},
-					{
-						text: "Tip projekcije",
-						value: "tipProjekcije"
-					},
-					{
-						text: "Sala",
-						value: "sala"
-					},
-					{
-						text: "Cena Karte",
-						value: "cenaKarte"
-					},
-					{
-						text: "Projekcija prosla",
-						value: "prosla"
-					},
-					{
-						text: "Detaljnije",
-						value: "detaljnije",
-						sortable: false
-					}
-				]
-			}
-		};
-	},
-	methods: {
-		...mapActions(['fetchProjekcije', 'fetchTipoviProjekcije', 'fetchSale']),
-		customFilterFunction: function(value, search, item) {
+    import DateTimePicker from '../components/DateTimePicker'
+    import { mapGetters, mapActions } from 'vuex'
+    import moment from 'moment';
+    export default {
+        name: 'Projekcije',
+        components:{
+            DateTimePicker
+        },
+        data: () => {
+            return {
+                searchData: {
+                    film: null,
+                    datumVremeOd: null,
+                    datumVremeDo: null,
+                    tipProjekcije: null,
+                    sala: null,
+                    cenaOd: null,
+                    cenaDo: null,
+                    prosla: 0,
+                    cenaRules: [value => value === '' || /^\d{1,}$/.test(value) ? true : "Mora biti broj", value => value === '' || Number.parseInt(value) >= 0 ? true : 'Nije vece od 0']
+                },
+                tableData: {
+                    search: "a",
+                    loading: false,
+                    zaglavljaTabele: [
+                        {
+                            text: "Film",
+                            value: "film"
+                        },
+                        {
+                            text: "Datum i Vreme Prikazivanja",
+                            value: "datumVremePrikazivanja"
+                        },
+                        {
+                            text: "Tip projekcije",
+                            value: "tipProjekcije"
+                        },
+                        {
+                            text: "Sala",
+                            value: "sala"
+                        },
+                        {
+                            text: "Cena Karte",
+                            value: "cenaKarte"
+                        },
+                        {
+                            text: "Projekcija prosla",
+                            value: "prosla"
+                        },
+                        {
+                            text: "Detaljnije",
+                            value: "detaljnije",
+                            sortable: false
+                        }
+                    ]
+                }
+            };
+        },
+        methods: {
+            ...mapActions(['fetchProjekcije', 'fetchTipoviProjekcije', 'fetchSale']),
+            customFilterFunction: function(value, search, item) {
 			
-			var isGood = true
-			if(this.searchData.film !== null) isGood = isGood && item.film.naziv.toLowerCase().includes(this.searchData.film.toLowerCase())
-			if(!isGood) return isGood
-			if(this.searchData.datumVremeOd !== null ) isGood = isGood && moment(item.datumVremePrikazivanja).isSameOrAfter(this.searchData.datumVremeOd)
-			if(!isGood) return isGood
-			if(this.searchData.datumVremeDo !== null ) isGood = isGood && moment(item.datumVremePrikazivanja).isSameOrBefore(this.searchData.datumVremeDo)
-			if(!isGood) return isGood
-			if(typeof(this.searchData.tipProjekcije) !== 'undefined' && this.searchData.tipProjekcije !== null) isGood = isGood && item.tipProjekcije.id === this.searchData.tipProjekcije.id
-			if(!isGood) return isGood
-			if(typeof(this.searchData.sala) !== 'undefined' && this.searchData.sala !== null) isGood = isGood && item.sala.id === this.searchData.sala.id
-			if(!isGood) return isGood
-			if(this.$refs.cenaOdTF.valid && this.searchData.cenaOd !== null && this.searchData.cenaOd !== '') isGood = isGood && item.cenaKarte >= this.searchData.cenaOd
-			if(!isGood) return isGood
-			if(this.$refs.cenaDoTF.valid && this.searchData.cenaDo !== null && this.searchData.cenaDo !== '') isGood = isGood && item.cenaKarte <= this.searchData.cenaDo
-			if(!isGood) return isGood
-			if(this.searchData.prosla !== 0) isGood = isGood && (this.searchData.prosla === 2 ? item.prosla() : !item.prosla())
-			if(!isGood) return isGood
-			return isGood
-		},
-		async refresh(){
-			this.tableData.loading = true
-			await this.fetchProjekcije()
-			await this.fetchTipoviProjekcije()
-			await this.fetchSale()
-			this.tableData.loading = false
-		}
+                var isGood = true
+                if(this.searchData.film !== null) isGood = isGood && item.film.naziv.toLowerCase().includes(this.searchData.film.toLowerCase())
+                if(!isGood) return isGood
+                if(this.searchData.datumVremeOd !== null ) isGood = isGood && moment(item.datumVremePrikazivanja).isSameOrAfter(this.searchData.datumVremeOd)
+                if(!isGood) return isGood
+                if(this.searchData.datumVremeDo !== null ) isGood = isGood && moment(item.datumVremePrikazivanja).isSameOrBefore(this.searchData.datumVremeDo)
+                if(!isGood) return isGood
+                if(typeof(this.searchData.tipProjekcije) !== 'undefined' && this.searchData.tipProjekcije !== null) isGood = isGood && item.tipProjekcije.id === this.searchData.tipProjekcije.id
+                if(!isGood) return isGood
+                if(typeof(this.searchData.sala) !== 'undefined' && this.searchData.sala !== null) isGood = isGood && item.sala.id === this.searchData.sala.id
+                if(!isGood) return isGood
+                if(this.$refs.cenaOdTF.valid && this.searchData.cenaOd !== null && this.searchData.cenaOd !== '') isGood = isGood && item.cenaKarte >= this.searchData.cenaOd
+                if(!isGood) return isGood
+                if(this.$refs.cenaDoTF.valid && this.searchData.cenaDo !== null && this.searchData.cenaDo !== '') isGood = isGood && item.cenaKarte <= this.searchData.cenaDo
+                if(!isGood) return isGood
+                if(this.searchData.prosla !== 0) isGood = isGood && (this.searchData.prosla === 2 ? item.prosla() : !item.prosla())
+                if(!isGood) return isGood
+                return isGood
+            },
+            async refresh(){
+                this.tableData.loading = true
+                await this.fetchProjekcije()
+                await this.fetchTipoviProjekcije()
+                await this.fetchSale()
+                this.tableData.loading = false
+            }
     
-	},
-	computed:{
-		...mapGetters(['allProjekcije', 'allTipoviProjekcije', 'allSale']),
-		allProjekcijeFormatted(){
-			return this.allTipoviProjekcije.map(tp=>{
-				return {text: tp.naziv, value: tp}
-			})
-		},
-		allSaleFormatted(){
-			return this.allSale.map(s=>{
-				return {
-					text: s.naziv,
-					value: s
-				}
-			})
-		}
-	},
-	async mounted(){
-		this.refresh()
-	}
-}
+        },
+        computed:{
+            ...mapGetters(['allProjekcije', 'allTipoviProjekcije', 'allSale']),
+            allProjekcijeFormatted(){
+                return this.allTipoviProjekcije.map(tp=>{
+                    return {text: tp.naziv, value: tp}
+                })
+            },
+            allSaleFormatted(){
+                return this.allSale.map(s=>{
+                    return {
+                        text: s.naziv,
+                        value: s
+                    }
+                })
+            }
+        },
+        async mounted(){
+            this.refresh()
+        }
+    }
 </script>
 
 <style>

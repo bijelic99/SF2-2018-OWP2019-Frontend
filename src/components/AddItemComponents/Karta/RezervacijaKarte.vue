@@ -188,289 +188,289 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from "vuex";
-import moment from "moment";
-export default {
-	name: "RezervacijaKarte",
-	props: {
-		film: {
-			type: Object,
-			required: false,
-			default: null
-		},
-		projekcija: {
-			type: Object,
-			required: false,
-			default: null
-		}
-	},
-	data() {
-		return {
-			karte: [],
-			formData: {
-				izabranFilm: null,
-				izabranaProjekcija: null,
-				stepperStep: 1,
-				formValid: false,
-				sedista: [],
-				filmAutocompleteRules: [
-					f=> f !== null || 'Morate izabrati film'
-				],
-				projekcijaAutocompleteRules:[
-					p=>p !== null || 'Morate izabrati projekciju'
-				],
-				dialogVisible: false,
-				dialogContent: {
-					naslov: '',
-					text: '',
-					tip: 'alert'
-				}
-			}
-		};
-	},
-	methods: {
-		...mapActions(["fetchFilmovi", "fetchProjekcije", "fetchZauzetost", "rezervisiKarte"]),
-		async loadData(){
-			await this.fetchFilmovi()
-			await this.fetchProjekcije()
-			await this.fetchZauzetost()
-		},
-		sakrijDialog(){
-			this.formData.dialogVisible = false
-			if(this.formData.dialogContent.tip === 'success')this.$router.push("/")
-		},
-		async kupi() {
-			if(this.getIsLoggedIn){
-				var karte = []
-				var projekcija = JSON.parse(JSON.stringify(this.formData.izabranaProjekcija))
-				delete projekcija.prosla
-				this.izabranaSedista.forEach(s=>{
-					var karta = {
-						projekcija: projekcija, 
-						sediste: {
-							id: s.id,
-							redniBroj: s.redniBroj,
-							sala: s.sala
-						},
-						korisnik: this.getCurrentUser,
-						datumVremeProdaje: Date.now()
-					}
-					karte.push(karta)
-				})
-				if(await this.rezervisiKarte(karte)){
-					this.formData.dialogContent = {
-						naslov: 'Uspeh',
-						text: 'Uspesno ste rezervisali kartu.',
-						tip: 'success'
-					}
-					this.formData.dialogVisible = true
-				}
-				else{
+    import { mapGetters, mapActions } from "vuex";
+    import moment from "moment";
+    export default {
+        name: "RezervacijaKarte",
+        props: {
+            film: {
+                type: Object,
+                required: false,
+                default: null
+            },
+            projekcija: {
+                type: Object,
+                required: false,
+                default: null
+            }
+        },
+        data() {
+            return {
+                karte: [],
+                formData: {
+                    izabranFilm: null,
+                    izabranaProjekcija: null,
+                    stepperStep: 1,
+                    formValid: false,
+                    sedista: [],
+                    filmAutocompleteRules: [
+                        f=> f !== null || 'Morate izabrati film'
+                    ],
+                    projekcijaAutocompleteRules:[
+                        p=>p !== null || 'Morate izabrati projekciju'
+                    ],
+                    dialogVisible: false,
+                    dialogContent: {
+                        naslov: '',
+                        text: '',
+                        tip: 'alert'
+                    }
+                }
+            };
+        },
+        methods: {
+            ...mapActions(["fetchFilmovi", "fetchProjekcije", "fetchZauzetost", "rezervisiKarte"]),
+            async loadData(){
+                await this.fetchFilmovi()
+                await this.fetchProjekcije()
+                await this.fetchZauzetost()
+            },
+            sakrijDialog(){
+                this.formData.dialogVisible = false
+                if(this.formData.dialogContent.tip === 'success')this.$router.push("/")
+            },
+            async kupi() {
+                if(this.getIsLoggedIn){
+                    var karte = []
+                    var projekcija = JSON.parse(JSON.stringify(this.formData.izabranaProjekcija))
+                    delete projekcija.prosla
+                    this.izabranaSedista.forEach(s=>{
+                        var karta = {
+                            projekcija: projekcija, 
+                            sediste: {
+                                id: s.id,
+                                redniBroj: s.redniBroj,
+                                sala: s.sala
+                            },
+                            korisnik: this.getCurrentUser,
+                            datumVremeProdaje: Date.now()
+                        }
+                        karte.push(karta)
+                    })
+                    if(await this.rezervisiKarte(karte)){
+                        this.formData.dialogContent = {
+                            naslov: 'Uspeh',
+                            text: 'Uspesno ste rezervisali kartu.',
+                            tip: 'success'
+                        }
+                        this.formData.dialogVisible = true
+                    }
+                    else{
             
-					this.formData.dialogContent = {
-						naslov: 'Greska',
-						text: 'Doslo je do greske ili je neko u medjuvremenu zauzeo sediste!',
-						tip: 'error'
-					}
-					await this.sakrijDialog()
-					this.formData.dialogVisible = true
-					this.formData.stepperStep = 3
-				}
-			}
-		},
-		strVreme(vreme) {
-			return moment(vreme).format("H:mm");
-		},
-		strDatum(vreme) {
-			return moment(vreme).format("D-M-YYYY");
-		},
-		izaberiSediste(sedisteId) {
-			var index = this.formData.sedista.findIndex(s => s.id === sedisteId);
-			var sediste = this.formData.sedista[index];
-			if (this.formData.sedista.filter(s => s.izabrano).length === 0) {
-				if (!sediste.zauzeto) {
-					sediste.izabrano = true;
-					sediste.dostupno = false;
-					this.oznaciDostupna();
-				}
-			} else if (!sediste.izabrano && sediste.dostupno) {
-				sediste.izabrano = true;
-				sediste.dostupno = false;
-				this.oznaciDostupna();
-			}
-		},
-		oznaciDostupna() {
-			var hasLessThan20 = this.formData.sedista.length < 20;
-			for (var i = 0; i < this.formData.sedista.length; i++) {
-				var endOfRow = !hasLessThan20;
-				var startOfRow = !hasLessThan20;
-				if (!hasLessThan20) {
-					if (i > 0) {
-						startOfRow =
-							startOfRow && this.formData.sedista[i - 1].redniBroj % 20 === 0;
-					}
+                        this.formData.dialogContent = {
+                            naslov: 'Greska',
+                            text: 'Doslo je do greske ili je neko u medjuvremenu zauzeo sediste!',
+                            tip: 'error'
+                        }
+                        await this.sakrijDialog()
+                        this.formData.dialogVisible = true
+                        this.formData.stepperStep = 3
+                    }
+                }
+            },
+            strVreme(vreme) {
+                return moment(vreme).format("H:mm");
+            },
+            strDatum(vreme) {
+                return moment(vreme).format("D-M-YYYY");
+            },
+            izaberiSediste(sedisteId) {
+                var index = this.formData.sedista.findIndex(s => s.id === sedisteId);
+                var sediste = this.formData.sedista[index];
+                if (this.formData.sedista.filter(s => s.izabrano).length === 0) {
+                    if (!sediste.zauzeto) {
+                        sediste.izabrano = true;
+                        sediste.dostupno = false;
+                        this.oznaciDostupna();
+                    }
+                } else if (!sediste.izabrano && sediste.dostupno) {
+                    sediste.izabrano = true;
+                    sediste.dostupno = false;
+                    this.oznaciDostupna();
+                }
+            },
+            oznaciDostupna() {
+                var hasLessThan20 = this.formData.sedista.length < 20;
+                for (var i = 0; i < this.formData.sedista.length; i++) {
+                    var endOfRow = !hasLessThan20;
+                    var startOfRow = !hasLessThan20;
+                    if (!hasLessThan20) {
+                        if (i > 0) {
+                            startOfRow =
+                                startOfRow && this.formData.sedista[i - 1].redniBroj % 20 === 0;
+                        }
 
-					if (i < this.formData.sedista.length - 1)
-						endOfRow =
-							endOfRow && this.formData.sedista[i + 1].redniBroj % 20 === 1;
-					if (this.formData.sedista[i].izabrano) {
-						if (i > 0) {
-							if (
-								!this.formData.sedista[i - 1].izabrano &&
-								!this.formData.sedista[i - 1].zauzeto &&
-								!startOfRow
-							)
-								this.formData.sedista[i - 1].dostupno = true;
-						}
-						if (i < this.formData.sedista.length - 1) {
-							if (
-								!this.formData.sedista[i + 1].izabrano &&
-								!this.formData.sedista[i + 1].zauzeto &&
-								!endOfRow
-							)
-								this.formData.sedista[i + 1].dostupno = true;
-						}
-					}
-				} else {
-					if (this.formData.sedista[i].izabrano) {
-						if (i > 0) {
-							if (
-								!this.formData.sedista[i - 1].izabrano &&
-								!this.formData.sedista[i - 1].zauzeto
-							)
-								this.formData.sedista[i - 1].dostupno = true;
-						}
-						if (i < this.formData.sedista.length - 1) {
-							if (
-								!this.formData.sedista[i + 1].izabrano &&
-								!this.formData.sedista[i + 1].zauzeto
-							)
-								this.formData.sedista[i + 1].dostupno = true;
-						}
-					}
-				}
-			}
-		},
-		resetujSelekciju() {
-			this.formData.sedista.map(s => {
-				s.izabrano = false;
-				s.dostupno = false;
-			});
-		}
-	},
-	computed: {
-		...mapGetters([
-			"allFilmovi",
-			"allProjekcije",
-			"getFilmHasProjekcijaInFuture",
-			"getProjekcijeForFilmInFuture",
-			"getZauzetost",
-			"getZauzetostForProjekcija",
-			"getFilmHasFreeProjekcijeInFuture",
-			"getCurrentUser",
-			"getIsLoggedIn"
-		]),
-		filmovi: function() {
-			return this.allFilmovi
-				.filter(f => this.getFilmHasProjekcijaInFuture(f.id))
-				.filter(f => this.getFilmHasFreeProjekcijeInFuture(f.id))
-				.map(f => {
-					var item = new Object();
-					item["text"] = f.naziv;
-					item["value"] = f;
-					return item;
-				});
-		},
-		projekcije: function() {
-			return this.formData.izabranFilm
-				? this.getProjekcijeForFilmInFuture(this.formData.izabranFilm.id)
-					.filter(
-						p =>
-							this.getZauzetostForProjekcija(p.id).filter(z => !z.zauzeto)
-								.length > 0
-					).sort((t1, t2)=>{
-						return moment(t1.datumVremePrikazivanja).isBefore(t2.datumVremePrikazivanja) ? -1 : moment(t1.datumVremePrikazivanja).isAfter(t2.datumVremePrikazivanja) ? 1 : 0
-					})
-					.map(p => {
-						var item = new Object();
-						item["text"] = `${p.tipProjekcije.naziv} ${moment(
-							p.datumVremePrikazivanja
-						).format("H:mm")}`;
-						item["value"] = p;
-						return item;
-					})
-				: [];
-		},
-		vremePrikazivanja() {
-			return this.formData.izabranaProjekcija !== null
-				? moment(
-					this.formData.izabranaProjekcija.datumVremePrikazivanja
-				).format("H:mm")
-				: "";
-		},
-		datumPrikazivanja() {
-			return this.formData.izabranaProjekcija !== null
-				? moment(
-					this.formData.izabranaProjekcija.datumVremePrikazivanja
-				).format("D-M-YYYY")
-				: "";
-		},
-		numberOfColumns: function() {
-			var brojSedista = 10;
-			if (this.formData.izabranaProjekcija)
-				brojSedista = this.getZauzetostForProjekcija(
-					this.formData.izabranaProjekcija.id
-				).length;
-			var br = 20;
-			if (brojSedista < 20) br = brojSedista;
+                        if (i < this.formData.sedista.length - 1)
+                            endOfRow =
+                                endOfRow && this.formData.sedista[i + 1].redniBroj % 20 === 1;
+                        if (this.formData.sedista[i].izabrano) {
+                            if (i > 0) {
+                                if (
+                                    !this.formData.sedista[i - 1].izabrano &&
+                                    !this.formData.sedista[i - 1].zauzeto &&
+                                    !startOfRow
+                                )
+                                    this.formData.sedista[i - 1].dostupno = true;
+                            }
+                            if (i < this.formData.sedista.length - 1) {
+                                if (
+                                    !this.formData.sedista[i + 1].izabrano &&
+                                    !this.formData.sedista[i + 1].zauzeto &&
+                                    !endOfRow
+                                )
+                                    this.formData.sedista[i + 1].dostupno = true;
+                            }
+                        }
+                    } else {
+                        if (this.formData.sedista[i].izabrano) {
+                            if (i > 0) {
+                                if (
+                                    !this.formData.sedista[i - 1].izabrano &&
+                                    !this.formData.sedista[i - 1].zauzeto
+                                )
+                                    this.formData.sedista[i - 1].dostupno = true;
+                            }
+                            if (i < this.formData.sedista.length - 1) {
+                                if (
+                                    !this.formData.sedista[i + 1].izabrano &&
+                                    !this.formData.sedista[i + 1].zauzeto
+                                )
+                                    this.formData.sedista[i + 1].dostupno = true;
+                            }
+                        }
+                    }
+                }
+            },
+            resetujSelekciju() {
+                this.formData.sedista.map(s => {
+                    s.izabrano = false;
+                    s.dostupno = false;
+                });
+            }
+        },
+        computed: {
+            ...mapGetters([
+                "allFilmovi",
+                "allProjekcije",
+                "getFilmHasProjekcijaInFuture",
+                "getProjekcijeForFilmInFuture",
+                "getZauzetost",
+                "getZauzetostForProjekcija",
+                "getFilmHasFreeProjekcijeInFuture",
+                "getCurrentUser",
+                "getIsLoggedIn"
+            ]),
+            filmovi: function() {
+                return this.allFilmovi
+                    .filter(f => this.getFilmHasProjekcijaInFuture(f.id))
+                    .filter(f => this.getFilmHasFreeProjekcijeInFuture(f.id))
+                    .map(f => {
+                        var item = new Object();
+                        item["text"] = f.naziv;
+                        item["value"] = f;
+                        return item;
+                    });
+            },
+            projekcije: function() {
+                return this.formData.izabranFilm
+                    ? this.getProjekcijeForFilmInFuture(this.formData.izabranFilm.id)
+                        .filter(
+                            p =>
+                                this.getZauzetostForProjekcija(p.id).filter(z => !z.zauzeto)
+                                    .length > 0
+                        ).sort((t1, t2)=>{
+                            return moment(t1.datumVremePrikazivanja).isBefore(t2.datumVremePrikazivanja) ? -1 : moment(t1.datumVremePrikazivanja).isAfter(t2.datumVremePrikazivanja) ? 1 : 0
+                        })
+                        .map(p => {
+                            var item = new Object();
+                            item["text"] = `${p.tipProjekcije.naziv} ${moment(
+                                p.datumVremePrikazivanja
+                            ).format("H:mm")}`;
+                            item["value"] = p;
+                            return item;
+                        })
+                    : [];
+            },
+            vremePrikazivanja() {
+                return this.formData.izabranaProjekcija !== null
+                    ? moment(
+                        this.formData.izabranaProjekcija.datumVremePrikazivanja
+                    ).format("H:mm")
+                    : "";
+            },
+            datumPrikazivanja() {
+                return this.formData.izabranaProjekcija !== null
+                    ? moment(
+                        this.formData.izabranaProjekcija.datumVremePrikazivanja
+                    ).format("D-M-YYYY")
+                    : "";
+            },
+            numberOfColumns: function() {
+                var brojSedista = 10;
+                if (this.formData.izabranaProjekcija)
+                    brojSedista = this.getZauzetostForProjekcija(
+                        this.formData.izabranaProjekcija.id
+                    ).length;
+                var br = 20;
+                if (brojSedista < 20) br = brojSedista;
 
-			return br;
-		},
-		izabranaSedista() {
-			return this.formData.sedista.filter(s => s.izabrano);
-		}
-	},
-	async mounted() {
-		if (this.allFilmovi.length === 0) await this.fetchFilmovi();
-		if (this.allProjekcije.length === 0) await this.fetchProjekcije();
-		if (this.film !== null) {
-			this.formData.izabranFilm = this.film
-			this.formData.stepperStep = 2
-		}
-		if (this.projekcija !== null) {
-			this.formData.izabranaProjekcija = this.projekcija;
-			this.formData.stepperStep = 3
-		}
+                return br;
+            },
+            izabranaSedista() {
+                return this.formData.sedista.filter(s => s.izabrano);
+            }
+        },
+        async mounted() {
+            if (this.allFilmovi.length === 0) await this.fetchFilmovi();
+            if (this.allProjekcije.length === 0) await this.fetchProjekcije();
+            if (this.film !== null) {
+                this.formData.izabranFilm = this.film
+                this.formData.stepperStep = 2
+            }
+            if (this.projekcija !== null) {
+                this.formData.izabranaProjekcija = this.projekcija;
+                this.formData.stepperStep = 3
+            }
       
-		if (this.getZauzetost.size === 0) await this.fetchZauzetost();
-	},
-	watch: {
-		film: function(){
-			if (this.film !== null) {
-				this.formData.izabranFilm = this.film
-				this.formData.stepperStep = 2
-			}
-		},
-		projekcija: function(){
-			if (this.projekcija !== null) {
-				this.formData.izabranaProjekcija = this.projekcija;
-				this.formData.stepperStep = 3
-			}
-		},
-		"formData.izabranFilm": function() {
-			this.formData.izabranaProjekcija = null;
-		},
-		"formData.izabranaProjekcija": function() {
-			if (this.formData.izabranaProjekcija !== null)
-				this.formData.sedista = this.getZauzetostForProjekcija(
-					this.formData.izabranaProjekcija.id
-				).map(sediste => {
-					return { ...sediste, izabrano: false, dostupno: false };
-				});
-			else this.formData.sedista = [];
-		}
-	}
-};
+            if (this.getZauzetost.size === 0) await this.fetchZauzetost();
+        },
+        watch: {
+            film: function(){
+                if (this.film !== null) {
+                    this.formData.izabranFilm = this.film
+                    this.formData.stepperStep = 2
+                }
+            },
+            projekcija: function(){
+                if (this.projekcija !== null) {
+                    this.formData.izabranaProjekcija = this.projekcija;
+                    this.formData.stepperStep = 3
+                }
+            },
+            "formData.izabranFilm": function() {
+                this.formData.izabranaProjekcija = null;
+            },
+            "formData.izabranaProjekcija": function() {
+                if (this.formData.izabranaProjekcija !== null)
+                    this.formData.sedista = this.getZauzetostForProjekcija(
+                        this.formData.izabranaProjekcija.id
+                    ).map(sediste => {
+                        return { ...sediste, izabrano: false, dostupno: false };
+                    });
+                else this.formData.sedista = [];
+            }
+        }
+    };
 </script>
 
 <style>

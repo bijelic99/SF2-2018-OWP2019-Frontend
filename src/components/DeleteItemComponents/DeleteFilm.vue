@@ -18,34 +18,34 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
-export default {
-	name: 'DeleteFilm',
-	props: {
-		film: {
-			type: Object,
-			required: true
-		}
-	},
-	data(){
-		return{
-			visible: false
-		}
-	},
-	methods:{
-		...mapActions(['deleteFilm']),
-		openDialog: function(e) {
-			e.stopPropagation();
-			this.visible = true;
-		},
-		submitButton: async function () {
-			if (await this.deleteFilm(this.film.id)){
-				this.visible = false
-				this.$router.push({name: 'Home'})
-			}
-		}
-	}
-}
+    import { mapActions } from 'vuex'
+    export default {
+        name: 'DeleteFilm',
+        props: {
+            film: {
+                type: Object,
+                required: true
+            }
+        },
+        data(){
+            return{
+                visible: false
+            }
+        },
+        methods:{
+            ...mapActions(['deleteFilm']),
+            openDialog: function(e) {
+                e.stopPropagation();
+                this.visible = true;
+            },
+            submitButton: async function () {
+                if (await this.deleteFilm(this.film.id)){
+                    this.visible = false
+                    this.$router.push({name: 'Home'})
+                }
+            }
+        }
+    }
 </script>
 
 <style>

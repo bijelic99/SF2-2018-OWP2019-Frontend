@@ -7,16 +7,16 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-export default {
-	name: 'MovieCarousel',
-	computed: {
-		...mapGetters(['get5NewestFilms']),
-	},
-	methods:{
+    import { mapGetters } from 'vuex'
+    export default {
+        name: 'MovieCarousel',
+        computed: {
+            ...mapGetters(['get5NewestFilms']),
+        },
+        methods:{
 
-	}
-}
+        }
+    }
 </script>
 
 <style>

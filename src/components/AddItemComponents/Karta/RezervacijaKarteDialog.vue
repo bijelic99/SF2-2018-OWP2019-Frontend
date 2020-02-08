@@ -21,43 +21,43 @@
 </template>
 
 <script>
-import RezervacijaKarte from './RezervacijaKarte'
-export default {
-	name: 'RezervacijaKarteDialog',
-	components: { RezervacijaKarte },
-	props:{
-		film: {
-			default: null,
-			type: Object,
-			required: false
-		},
-		projekcija: {
-			default: null,
-			type: Object,
-			required: false
-		},
-		btnText:{
-			type: String,
-			required: true,
-			default: ''
-		},
-		enabled: {
-			type: Boolean,
-			requiered: false,
-			default: true,
-		}
-	},
-	data(){
-		return {
-			dialogVisible: false
-		}
-	},
-	methods:{
-		zatvoriDialog(){
-			this.dialogVisible = false
-		}
-	}
-}
+    import RezervacijaKarte from './RezervacijaKarte'
+    export default {
+        name: 'RezervacijaKarteDialog',
+        components: { RezervacijaKarte },
+        props:{
+            film: {
+                default: null,
+                type: Object,
+                required: false
+            },
+            projekcija: {
+                default: null,
+                type: Object,
+                required: false
+            },
+            btnText:{
+                type: String,
+                required: true,
+                default: ''
+            },
+            enabled: {
+                type: Boolean,
+                requiered: false,
+                default: true,
+            }
+        },
+        data(){
+            return {
+                dialogVisible: false
+            }
+        },
+        methods:{
+            zatvoriDialog(){
+                this.dialogVisible = false
+            }
+        }
+    }
 </script>
 
 <style>

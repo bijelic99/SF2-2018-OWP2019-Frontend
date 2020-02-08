@@ -76,110 +76,110 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
-import AddFilmDialog from '../components/AddItemComponents/Film/AddFilmDialog'
-export default {
-	name: "Filmovi",
-	components:{
-		AddFilmDialog
-	},
-	data: () => {
-		return {
+    import { mapActions, mapGetters } from "vuex";
+    import AddFilmDialog from '../components/AddItemComponents/Film/AddFilmDialog'
+    export default {
+        name: "Filmovi",
+        components:{
+            AddFilmDialog
+        },
+        data: () => {
+            return {
         
-			searchData:{
-				formValid: true,
-				naziv: '',
-				zanr: '',
-				trajanje: '',
-				trajanjeOd: '',
-				trajanjeDo: '',
-				distributer: '',
-				zemljaPorekla: '',
-				godinaProizvodnje: '',
-				godinaProizvodnjeOd: '',
-				godinaProizvodnjeDo: ''
+                searchData:{
+                    formValid: true,
+                    naziv: '',
+                    zanr: '',
+                    trajanje: '',
+                    trajanjeOd: '',
+                    trajanjeDo: '',
+                    distributer: '',
+                    zemljaPorekla: '',
+                    godinaProizvodnje: '',
+                    godinaProizvodnjeOd: '',
+                    godinaProizvodnjeDo: ''
 
-			},
-			numericOnlyRule: [(value) => /^\d*$/.test(value) || value === '' ? true : 'Mora biti broj'],
-			tableData: {
-				doneLoading: false,
-				search: 'a',
-				zaglavljaTabele: [
-					{
-						text: "Naziv",
-						value: "naziv"
-					},
-					{
-						text: "Zanrovi",
-						value: "zanrovi"
-					},
-					{
-						text: "Trajanje",
-						value: "trajanje"
-					},
-					{
-						text: "Distributer",
-						value: "distributer"
-					},
-					{
-						text: "Zemlja Porekla",
-						value: "zemljaPorekla"
-					},
-					{
-						text: "Godina Proizvodnje",
-						value: "godinaProizvodnje"
-					},
-					{
-						text: "Detaljnije",
-						value: "detaljnije",
-						sortable: false
-					}
-				]
-			}
-		};
-	},
-	methods: {
-		...mapActions(["fetchFilmovi"]),
-		customFilterFunction: function(value, search, item) {
-			if(this.searchData.formValid){
-				var itemIsValid = true
-				var searchArguments = this.searchData
-				if(searchArguments.naziv !== '') 
-					itemIsValid = itemIsValid && item.naziv.toLowerCase().includes(searchArguments.naziv.toLowerCase())
-				if(!itemIsValid) return itemIsValid
-				if(searchArguments.zanr !== '')
-					itemIsValid = itemIsValid && item.zanrovi.reduce(
-						(zanroviStr, value) => zanroviStr + " " + value.naziv,
-						""
-					).toLowerCase().includes(searchArguments.zanr.toLowerCase())
-				if(!itemIsValid) return itemIsValid
-				if(searchArguments.trajanje !== '')
-					itemIsValid = itemIsValid && item.trajanje === Number.parseInt(searchArguments.trajanje)
-				if(!itemIsValid) return itemIsValid
-				if(searchArguments.trajanjeOd !== '')
-					itemIsValid = itemIsValid && item.trajanje >= Number.parseInt(searchArguments.trajanjeOd)*60
-				if(!itemIsValid) return itemIsValid
-				if(searchArguments.trajanjeDo !== '')
-					itemIsValid = itemIsValid && item.trajanje <= Number.parseInt(searchArguments.trajanjeDo)*60
-				if(!itemIsValid) return itemIsValid
-				if(searchArguments.distributer !== '')
-					itemIsValid = itemIsValid && item.distributer.toLowerCase().includes(searchArguments.distributer.toLowerCase())
-				if(!itemIsValid) return itemIsValid
-				if(searchArguments.zemljaPorekla !== '')
-					itemIsValid = itemIsValid && item.zemljaPorekla.toLowerCase().includes(searchArguments.zemljaPorekla.toLowerCase())
-				if(!itemIsValid) return itemIsValid
-				if(searchArguments.godinaProizvodnje !== '')
-					itemIsValid = itemIsValid && item.godinaProizvodnje === Number.parseInt(searchArguments.godinaProizvodnje)
-				if(!itemIsValid) return itemIsValid
-				if(searchArguments.godinaProizvodnjeOd !== '')
-					itemIsValid = itemIsValid && item.godinaProizvodnje >= Number.parseInt(searchArguments.godinaProizvodnjeOd)
-				if(!itemIsValid) return itemIsValid
-				if(searchArguments.godinaProizvodnjeDo !== '')
-					itemIsValid = itemIsValid && item.godinaProizvodnje <= Number.parseInt(searchArguments.godinaProizvodnjeDo)
-				return itemIsValid  
-			}
-			else return false
-			/*
+                },
+                numericOnlyRule: [(value) => /^\d*$/.test(value) || value === '' ? true : 'Mora biti broj'],
+                tableData: {
+                    doneLoading: false,
+                    search: 'a',
+                    zaglavljaTabele: [
+                        {
+                            text: "Naziv",
+                            value: "naziv"
+                        },
+                        {
+                            text: "Zanrovi",
+                            value: "zanrovi"
+                        },
+                        {
+                            text: "Trajanje",
+                            value: "trajanje"
+                        },
+                        {
+                            text: "Distributer",
+                            value: "distributer"
+                        },
+                        {
+                            text: "Zemlja Porekla",
+                            value: "zemljaPorekla"
+                        },
+                        {
+                            text: "Godina Proizvodnje",
+                            value: "godinaProizvodnje"
+                        },
+                        {
+                            text: "Detaljnije",
+                            value: "detaljnije",
+                            sortable: false
+                        }
+                    ]
+                }
+            };
+        },
+        methods: {
+            ...mapActions(["fetchFilmovi"]),
+            customFilterFunction: function(value, search, item) {
+                if(this.searchData.formValid){
+                    var itemIsValid = true
+                    var searchArguments = this.searchData
+                    if(searchArguments.naziv !== '') 
+                        itemIsValid = itemIsValid && item.naziv.toLowerCase().includes(searchArguments.naziv.toLowerCase())
+                    if(!itemIsValid) return itemIsValid
+                    if(searchArguments.zanr !== '')
+                        itemIsValid = itemIsValid && item.zanrovi.reduce(
+                            (zanroviStr, value) => zanroviStr + " " + value.naziv,
+                            ""
+                        ).toLowerCase().includes(searchArguments.zanr.toLowerCase())
+                    if(!itemIsValid) return itemIsValid
+                    if(searchArguments.trajanje !== '')
+                        itemIsValid = itemIsValid && item.trajanje === Number.parseInt(searchArguments.trajanje)
+                    if(!itemIsValid) return itemIsValid
+                    if(searchArguments.trajanjeOd !== '')
+                        itemIsValid = itemIsValid && item.trajanje >= Number.parseInt(searchArguments.trajanjeOd)*60
+                    if(!itemIsValid) return itemIsValid
+                    if(searchArguments.trajanjeDo !== '')
+                        itemIsValid = itemIsValid && item.trajanje <= Number.parseInt(searchArguments.trajanjeDo)*60
+                    if(!itemIsValid) return itemIsValid
+                    if(searchArguments.distributer !== '')
+                        itemIsValid = itemIsValid && item.distributer.toLowerCase().includes(searchArguments.distributer.toLowerCase())
+                    if(!itemIsValid) return itemIsValid
+                    if(searchArguments.zemljaPorekla !== '')
+                        itemIsValid = itemIsValid && item.zemljaPorekla.toLowerCase().includes(searchArguments.zemljaPorekla.toLowerCase())
+                    if(!itemIsValid) return itemIsValid
+                    if(searchArguments.godinaProizvodnje !== '')
+                        itemIsValid = itemIsValid && item.godinaProizvodnje === Number.parseInt(searchArguments.godinaProizvodnje)
+                    if(!itemIsValid) return itemIsValid
+                    if(searchArguments.godinaProizvodnjeOd !== '')
+                        itemIsValid = itemIsValid && item.godinaProizvodnje >= Number.parseInt(searchArguments.godinaProizvodnjeOd)
+                    if(!itemIsValid) return itemIsValid
+                    if(searchArguments.godinaProizvodnjeDo !== '')
+                        itemIsValid = itemIsValid && item.godinaProizvodnje <= Number.parseInt(searchArguments.godinaProizvodnjeDo)
+                    return itemIsValid  
+                }
+                else return false
+                /*
         let string = `${item.naziv} ${item.zanrovi.reduce(
           (zanroviStr, value) => zanroviStr + " " + value.naziv,
           ""
@@ -209,8 +209,8 @@ export default {
           } else {
             return string.includes(currVal.toUpperCase()) && val;}
         }, true);*/
-		},
-		/*customSortFunction: function(items, sortBy, sortDesc){
+            },
+            /*customSortFunction: function(items, sortBy, sortDesc){
         console.log(sortBy)
         console.log(sortDesc)
         if(sortBy === 'zanrovi') {
@@ -224,19 +224,19 @@ export default {
         }
         return items
       }*/
-		async refresh(){
-			this.tableData.doneLoading = true
-			await this.fetchFilmovi()
-			this.tableData.doneLoading = false
-		}
-	},
-	computed: mapGetters(["allFilmovi", "getIsLoggedIn", "getCurrentUserUloga"]),
-	async mounted() {
-		this.tableData.doneLoading = true
-		await this.fetchFilmovi();
-		this.tableData.doneLoading = false;
-	}
-};
+            async refresh(){
+                this.tableData.doneLoading = true
+                await this.fetchFilmovi()
+                this.tableData.doneLoading = false
+            }
+        },
+        computed: mapGetters(["allFilmovi", "getIsLoggedIn", "getCurrentUserUloga"]),
+        async mounted() {
+            this.tableData.doneLoading = true
+            await this.fetchFilmovi();
+            this.tableData.doneLoading = false;
+        }
+    };
 </script>
 
 <style>

@@ -18,32 +18,32 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
-export default { 
-	name: 'DeleteKorisnikDialog',
-	props: {
-		korisnik: {
-			type: Object,
-			required: true
-		}
-	},
-	data () {
-		return {
-			dialog: false,
-		}
-	},
-	methods:{
-		...mapActions(['deleteUser']),
-		submit: function () {
-			if(this.deleteUser(this.korisnik.id)) {
-				this.dialog = false
-				this.$router.push('/')
+    import { mapActions } from 'vuex'
+    export default { 
+        name: 'DeleteKorisnikDialog',
+        props: {
+            korisnik: {
+                type: Object,
+                required: true
+            }
+        },
+        data () {
+            return {
+                dialog: false,
+            }
+        },
+        methods:{
+            ...mapActions(['deleteUser']),
+            submit: function () {
+                if(this.deleteUser(this.korisnik.id)) {
+                    this.dialog = false
+                    this.$router.push('/')
             
-			}
-		}
-	}
+                }
+            }
+        }
 
-}
+    }
 </script>
 
 <style>

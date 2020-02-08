@@ -36,19 +36,19 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
-export default {
-	name: 'IndexPageProjekcijeTable',
-	computed: {
-		...mapGetters(['getDanasnjeProjekcijeSortedAsPerSpecification', 'allProjekcije'])
-	},
-	methods: {
-		...mapActions(['fetchProjekcije'])
-	},
-	mounted: function () {
-		if(this.allProjekcije.length === 0) this.fetchProjekcije()
-	}
-}
+    import { mapGetters, mapActions } from 'vuex'
+    export default {
+        name: 'IndexPageProjekcijeTable',
+        computed: {
+            ...mapGetters(['getDanasnjeProjekcijeSortedAsPerSpecification', 'allProjekcije'])
+        },
+        methods: {
+            ...mapActions(['fetchProjekcije'])
+        },
+        mounted: function () {
+            if(this.allProjekcije.length === 0) this.fetchProjekcije()
+        }
+    }
 </script>
 
 <style>
