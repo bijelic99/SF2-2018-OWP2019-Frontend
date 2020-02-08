@@ -40,21 +40,28 @@
               <v-progress-linear active :value="zauzetaMestaPercent" height="20px"/>
           </v-col>
       </v-row>
+      <v-row>
+          <v-col class="col-12">
+              <KarteTable v-if="projekcija !== null && getIsLoggedIn && getCurrentUserUloga === 'Admin'" :karte="getKarteForProjekcija(projekcija.id)" :showProjekcija="false"/>
+          </v-col>
+      </v-row>
       <DeleteProjekcijaDialog v-if="getIsLoggedIn && getCurrentUserUloga === 'Admin'" :projekcija="projekcija"/>
   </v-container>
 </template>
 
 <script>
     import axios from 'axios'
-    import { mapGetters} from 'vuex'
+    import { mapGetters, mapActions} from 'vuex'
     import moment from 'moment'
     import RezervacijaKarteDialog from '../components/AddItemComponents/Karta/RezervacijaKarteDialog'
     import DeleteProjekcijaDialog from '../components/DeleteItemComponents/DeleteProjekcijaDialog'
+    import KarteTable from '../components/KarteTable'
     export default {
         name: 'Projekcija',
         components:{
             RezervacijaKarteDialog,
-            DeleteProjekcijaDialog
+            DeleteProjekcijaDialog,
+            KarteTable
         },
         props:{
             id:{
@@ -67,8 +74,11 @@
                 projekcija: null
             }
         },
+        methods:{
+            ...mapActions(['fetchKarte'])
+        },
         computed: {
-            ...mapGetters(['getProjekcija', 'getFullServerAddress', 'getIsLoggedIn', 'getCurrentUserUloga', 'getProjekcijaHasFreeSeats']),
+            ...mapGetters(['getProjekcija', 'getFullServerAddress', 'getIsLoggedIn', 'getCurrentUserUloga', 'getProjekcijaHasFreeSeats', 'getKarteForProjekcija']),
             strVremeProjekcije: function(){
                 return this.projekcija !== null ? moment(this.projekcija.datumVremePrikazivanja).format('hh:mm D.M.YYYY') : ''
             },
@@ -103,6 +113,7 @@
         async mounted(){
             try {
                 this.projekcija = await this.getProjekcija(Number.parseInt(this.id))
+                await this.fetchKarte()
         
             } catch (err){
                 console.log(err)
@@ -118,4 +129,4 @@
 .h-80{
     height: 80vh;
 }
-</style>
+</style>z

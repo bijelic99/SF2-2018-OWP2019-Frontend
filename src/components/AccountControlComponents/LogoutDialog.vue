@@ -32,6 +32,7 @@
             },
             doLogout: function () {
                 this.logout()
+                this.$router.push('/')
                 this.visible = false   
             }
       

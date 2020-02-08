@@ -1,6 +1,6 @@
 <template>
-    <v-container class="fill-height">
-        <v-card width="100%" class="fill-height">
+    <v-container class="fill-height" >
+        <v-card width="100%" class="fill-height" v-if="user !== null">
             <v-card-title>
                 {{user.username}}
             </v-card-title>
@@ -44,6 +44,7 @@
                 <v-list-item>
                   <v-list-item-content>
                     <v-list-item-title>Kupljene karte:</v-list-item-title>
+                      <KarteTable v-if="user.id !== null && ( getCurrentUserUloga === 'Admin' || getCurrentUserId === user.id)" :karte="getKarteForKorisnik(user.id)" :showUser="false" :defaultSortBy="'datumVremeProdaje'" :defaultSortDesc="true"/>
                   </v-list-item-content>
                 </v-list-item>
         </v-card>
@@ -55,10 +56,13 @@
     import { mapActions, mapGetters } from "vuex";
     import DeleteKorisnikDialog from '../components/DeleteItemComponents/DeleteKorisnikDialog'
     import axios from 'axios'
+    import KarteTable from '../components/KarteTable'
+
     export default {
         name: 'Korisnik',
         components:{
-            DeleteKorisnikDialog
+            DeleteKorisnikDialog,
+            KarteTable
         },
         props: {
             id: {
@@ -91,7 +95,7 @@
             }
         },
         methods:{
-            ...mapActions(['fetchUsers', 'updateUser']),
+            ...mapActions(['fetchUsers', 'updateUser', 'fetchKarte']),
             pwdChanged() {
                 this.componentData.passwordChanged = true
             },
@@ -103,9 +107,10 @@
             }
         },
         computed: {
-            ...mapGetters(['getUser', 'getAllUsers', 'getIsLoggedIn', 'getCurrentUserUloga', 'getCurrentUserId', 'getIfUserIdInUsers', 'getFullServerAddress'])
+            ...mapGetters(['getUser', 'getAllUsers', 'getIsLoggedIn', 'getCurrentUserUloga', 'getCurrentUserId', 'getIfUserIdInUsers', 'getFullServerAddress', 'getKarteForKorisnik'])
         },
         async mounted(){
+            
             if(this.getAllUsers.length === 0) await this.fetchUsers()
             if(this.getIfUserIdInUsers(Number.parseInt(this.id))){
                 this.user = JSON.parse(JSON.stringify(this.getUser(Number.parseInt(this.id))))
@@ -119,6 +124,7 @@
                     this.$router.push('/')
                 })
             }
+            await this.fetchKarte()
         }
 
     }

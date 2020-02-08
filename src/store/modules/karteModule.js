@@ -36,12 +36,28 @@ const actions = {
             return false
         })
     },
+    async obrisiKartu({commit}, karta){
+        return await axios.delete(`${store.getters.getFullServerAddress}/Karta?id=${karta.id}`).then(res=>{
+            if(res.data.successful) {
+                commit('DELETE_KARTA', karta)
+                return true
+            }
+            else return false
+        }).catch(err=>{
+            console.log(err)
+            return false
+        })
+    }
 }
 
 const mutations = {
    REZERVISI_KARTU: (state, karta) => state.karte.append(karta),
    REZERVISI_KARTE: (state, karte) => state.karte = [...state.karte, ...karte],
-   SET_KARTE: (state, karte) => state.karte = karte
+   SET_KARTE: (state, karte) => state.karte = karte,
+   DELETE_KARTA: (state, karta) => {
+       var index = state.karte.findIndex(k=> k.id === karta.id)
+       if(index !== -1) state.karte.pop(index)
+   }
 }
 
 export default {

@@ -33,6 +33,7 @@
 
 <script>
     import { mapGetters, mapActions } from 'vuex'
+    import moment from 'moment'
     export default {
         name: "Korisnici",
         data: ()=>{
@@ -42,15 +43,22 @@
                     zaglavljaTabele: [
                         {
                             text: "Username",
-                            value: "username"
+                            value: "username",
+                            sortable: true,
+                            sort: (i1,i2) => i1.localeCompare(i2)
                         },
                         {
                             text: "Datum registracije",
-                            value: "datumRegistracije"
+                            value: "datumRegistracije",
+                            sortable: true,
+                            sort: (i1, i2) => moment(new Date(i1)).isBefore(new Date(i2)) ? -1
+                                : moment(new Date(i1)).isAfter(new Date(i2)) ? 1 : 0
                         },
                         {
                             text: "Uloga",
-                            value: "uloga"
+                            value: "uloga",
+                            sortable: true,
+                            sort: (i1,i2) => i1.naziv.localeCompare(i2.naziv)
                         },
                         {
                             text: "Detaljnije",

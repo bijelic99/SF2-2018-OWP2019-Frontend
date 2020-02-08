@@ -111,27 +111,40 @@
                     zaglavljaTabele: [
                         {
                             text: "Film",
-                            value: "film"
+                            value: "film",
+                            sortable: true,
+                            sort: (i1, i2) => i1.naziv.localeCompare(i2.naziv)
                         },
                         {
                             text: "Datum i Vreme Prikazivanja",
-                            value: "datumVremePrikazivanja"
+                            value: "datumVremePrikazivanja",
+                            sortable: true,
+                            sort: (i1, i2) => moment(new Date(i1)).isBefore(new Date(i2)) ? -1
+                                : moment(new Date(i1)).isAfter(new Date(i2)) ? 1 : 0
                         },
                         {
                             text: "Tip projekcije",
-                            value: "tipProjekcije"
+                            value: "tipProjekcije",
+                            sortable: true,
+                            sort: (i1, i2) => i1.naziv.localeCompare(i2.naziv)
                         },
                         {
                             text: "Sala",
-                            value: "sala"
+                            value: "sala",
+                            sortable: true,
+                            sort: (i1, i2) => i1.naziv.localeCompare(i2.naziv)
                         },
                         {
                             text: "Cena Karte",
-                            value: "cenaKarte"
+                            value: "cenaKarte",
+                            sortable: true,
+                            sort: (t1, t2) => t1 > t2 ? -1 : t2 > t1 ? 1 : 0
                         },
                         {
                             text: "Projekcija prosla",
-                            value: "prosla"
+                            value: "prosla",
+                            sortable: true,
+                            sort: (p1, p2) => p1() && p2() ? 0 : p1() ? -1 : p2() ? 1 : 0
                         },
                         {
                             text: "Detaljnije",

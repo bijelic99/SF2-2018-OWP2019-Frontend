@@ -1,8 +1,8 @@
 <template>
     <v-container class="elevation-2 mx-auto mt-4" v-if="karta !== null && getIsLoggedIn && (getCurrentUserUloga === 'Admin' || getCurrentUserId === karta.korisnik.id)">
         <v-row class="elevation-2">
-            <v-col cols="12">Karta za <router-link :to="`/Film/${karta.projekcija.film.id}`">{{karta.projekcija.film.naziv}}</router-link>
-             u <router-link :to="`/Projekcija/${karta.projekcija.id}`">{{projekcijaTime}}</router-link></v-col>
+            <v-col cols="12"><h1 class="title font-weight-bold">Karta za <router-link :to="`/Film/${karta.projekcija.film.id}`">{{karta.projekcija.film.naziv}}</router-link>
+             u <router-link :to="`/Projekcija/${karta.projekcija.id}`">{{projekcijaTime}}</router-link></h1></v-col>
         </v-row>
         <v-row>
             <v-col cols="2">Datum:</v-col>
@@ -28,6 +28,7 @@
             <v-col cols="2">Korisnik:</v-col>
             <v-col cols="2">{{karta.korisnik.username}}</v-col>
         </v-row>
+        <DeleteKartaDialog v-if="karta !== null && deleteBtnVisible" :karta="karta"/>
     </v-container>
     <v-container v-else>
         Ovu kartu moze pregledati samo admin ili onaj ko je rezervisao
@@ -37,8 +38,12 @@
 <script>
     import { mapGetters, mapActions } from 'vuex'
     import moment from 'moment'
+    import DeleteKartaDialog from '../components/DeleteItemComponents/DeleteKartaDialog'
     export default {
         name: 'Karta',
+        components:{
+            DeleteKartaDialog
+        },
         props:{
             kartaId:{
                 type: String,
@@ -68,6 +73,15 @@
                 if(this.karta !== null) return moment(this.karta.projekcija.datumVremePrikazivanja).format("DD-MM-YYYY")
                 else return ''
             },
+            projekcijaHasPassed(){
+                if(this.karta !== null){
+                    return moment(new Date(this.karta.projekcija.datumVremePrikazivanja)).isBefore(new Date(Date.now()))
+                }
+                else return true
+            },
+            deleteBtnVisible(){
+                return this.karta !== null && this.getIsLoggedIn && this.getCurrentUserUloga === 'Admin' && !this.projekcijaHasPassed
+            }
 
         },
         watch:{

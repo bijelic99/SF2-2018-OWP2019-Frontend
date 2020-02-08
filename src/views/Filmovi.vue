@@ -107,27 +107,45 @@
                     zaglavljaTabele: [
                         {
                             text: "Naziv",
-                            value: "naziv"
+                            value: "naziv",
+                            sortable: true,
+                            sort: (i1, i2) => i1.localeCompare(i2)
                         },
                         {
                             text: "Zanrovi",
-                            value: "zanrovi"
+                            value: "zanrovi",
+                            sortable: true,
+                            sort: (a1, a2)=> {
+                                console.log(a1)
+                                if(a1.length > 0 && a2.length > 0) {
+                                    return a1[0].naziv.localeCompare(a2[0].naziv) < 0 ? -1 : a1[0].naziv.localeCompare(a2[0].naziv) > 0 ? 1 : a1.length > a2.length ? -1 : a2.length > a1.length ? 1 : 0
+                                }
+                                else return 0
+                            }
                         },
                         {
                             text: "Trajanje",
-                            value: "trajanje"
+                            value: "trajanje",
+                            sortable: true,
+                            sort: (t1, t2) => t1 > t2 ? -1 : t2 > t1 ? 1 : 0
                         },
                         {
                             text: "Distributer",
-                            value: "distributer"
+                            value: "distributer",
+                            sortable: true,
+                            sort: (i1, i2) => i1.localeCompare(i2)
                         },
                         {
                             text: "Zemlja Porekla",
-                            value: "zemljaPorekla"
+                            value: "zemljaPorekla",
+                            sortable: true,
+                            sort: (i1, i2) => i1.localeCompare(i2)
                         },
                         {
                             text: "Godina Proizvodnje",
-                            value: "godinaProizvodnje"
+                            value: "godinaProizvodnje",
+                            sortable: true,
+                            sort: (t1, t2) => t1 > t2 ? -1 : t2 > t1 ? 1 : 0
                         },
                         {
                             text: "Detaljnije",

@@ -46,8 +46,8 @@ const getters = {
         else return filtered[0]
 
     },
-    getFilmHasProjekcijaInFuture: (state) => (filmId) => state.projekcije.filter(p => !p.prosla).filter(p => p.film.id === filmId).length > 0,
-    getProjekcijeForFilmInFuture: (state) => (filmId) => state.projekcije.filter(p => !p.prosla).filter(p => p.film.id === filmId),
+    getFilmHasProjekcijaInFuture: (state) => (filmId) => state.projekcije.filter(p => !p.prosla()).filter(p => p.film.id === filmId).length > 0,
+    getProjekcijeForFilmInFuture: (state) => (filmId) => state.projekcije.filter(p => !p.prosla()).filter(p => p.film.id === filmId),
     getProjekcijaHasFreeSeats: (state) => (projekcijaId) => {
         var brZauzetih = state.zauzetost.get(projekcijaId).filter(s => s.zauzeto).length
         return brZauzetih < state.zauzetost.get(projekcijaId).length
