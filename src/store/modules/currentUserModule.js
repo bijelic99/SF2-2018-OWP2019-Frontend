@@ -37,15 +37,16 @@ const actions = {
         }
         else return false
     },
-    logout({commit}){
+    async logout({commit}){
+        await axios.get(`${store.getters.getFullServerAddress}/Logout`)
         VueCookies.remove('korisnik')
-        axios.get(`${store.getters.getFullServerAddress}/Logout`)
         commit('SET_CURRENT_USER', {uloga:'Neprijavljen'})
         commit('SET_LOGGEDIN', false)
     },
     fetchLoggedInUser({commit}){
         if(VueCookies.isKey('korisnik')){
             var korisnik = VueCookies.get('korisnik')
+            VueCookies.set('korisnik', korisnik, '8h', [`${store.getters.getServerAddress}:${store.getters.serverPort}`])
             commit('SET_CURRENT_USER', korisnik)
             commit('SET_LOGGEDIN', true)
         }

@@ -264,6 +264,7 @@
                             tip: 'success'
                         }
                         this.formData.dialogVisible = true
+                        await this.fetchZauzetost()
                     }
                     else{
             

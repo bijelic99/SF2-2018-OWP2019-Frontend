@@ -46,7 +46,7 @@
             await this.fetchFilmovi()
             await this.fetchProjekcije()
             await this.fetchZauzetost()
-            this.fetchLoggedInUser()
+            await this.fetchLoggedInUser()
         }
     }
 </script>

@@ -19,7 +19,7 @@
                     </v-list-item-content>
                   </v-list-item-content>
                 </v-list-item>
-                <v-list-item v-if="getIsLoggedIn && getCurrentUserUloga === 'Admin'">
+                <v-list-item v-if="getIsLoggedIn && getCurrentUserUloga === 'Admin' && getCurrentUserId !== user.id">
                   <v-list-item-content>
                     <v-list-item-title>Uloga:</v-list-item-title><v-list-item-content>
                       <v-form width="100%">
@@ -117,7 +117,7 @@
                 this.user.datumRegistracije = new Date(this.user.datumRegistracije)
             }
             else{
-                axios.get(`${this.getFullServerAddress}/Korisnik?id=${this.id}`).then(res=>{
+                await axios.get(`${this.getFullServerAddress}/Korisnik?id=${this.id}`).then(res=>{
                     this.user = res.data
                     this.user.datumRegistracije = new Date(this.user.datumRegistracije)
                 }).catch(()=>{

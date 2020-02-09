@@ -265,7 +265,7 @@
             },
             datumVremeProjekcijeComputed(){
                 if(this.componentData.time !== null && this.componentData.date !== null)
-                {
+                {   
                     return moment(`${this.componentData.date} ${this.componentData.time}`).toDate()
                 }
                 else return null
