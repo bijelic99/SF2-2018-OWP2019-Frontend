@@ -1,5 +1,5 @@
 <template>
-  <v-container class="elevation-2">
+  <v-container class="elevation-2" v-if="getIsLoggedIn && getCurrentUserUloga === 'Obican'">
     <v-row class="elevation-2">
       <v-col>
         <h1 class="title font-weight-bold">Rezervacija Karte</h1>
@@ -369,6 +369,7 @@
                 "getZauzetostForProjekcija",
                 "getFilmHasFreeProjekcijeInFuture",
                 "getCurrentUser",
+                "getCurrentUserUloga",
                 "getIsLoggedIn"
             ]),
             filmovi: function() {

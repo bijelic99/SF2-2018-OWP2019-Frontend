@@ -2,6 +2,7 @@ import axios from 'axios'
 import store from '../index'
 import VueCookies from 'vue-cookies'
 
+
 const state = {
 
     currentUser: { 
@@ -38,7 +39,7 @@ const actions = {
         else return false
     },
     async logout({commit}){
-        await axios.get(`${store.getters.getFullServerAddress}/Logout`)
+        await axios.get(`${store.getters.getFullServerAddress}/Logout`, {headers: {"logging-out" : 'true'}})
         VueCookies.remove('korisnik')
         commit('SET_CURRENT_USER', {uloga:'Neprijavljen'})
         commit('SET_LOGGEDIN', false)

@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container  v-if="getIsLoggedIn && getCurrentUserUloga === 'Admin'">
     <v-card>
       <v-card-title>
         Korisnici
@@ -70,7 +70,7 @@
             }
         },
         computed: {
-            ...mapGetters(['getAllUsers'])
+            ...mapGetters(['getAllUsers', 'getIsLoggedIn', 'getCurrentUserUloga'])
         },
         methods:{
             ...mapActions(['fetchUsers']),

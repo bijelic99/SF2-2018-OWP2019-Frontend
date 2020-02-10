@@ -13,15 +13,15 @@
         data: () => {
             return{
                 quote: '',
-                author: '',
+                author: 'Ron Swanson',
                 repeatFunc: null
             }
         },
         methods:{
             getQuote(){
-                axios.get('https://programming-quotes-api.herokuapp.com/quotes/random', { withCredentials: false}).then(res=>{
-                    this.quote = res.data.en
-                    this.author = res.data.author
+                // potencionalno sam potrosio resurse kreatoru api-ja, to mi nije bila namera
+                axios.get('http://ron-swanson-quotes.herokuapp.com/v2/quotes', { withCredentials: false}).then(res=>{
+                    this.quote = res.data[0]
                 })
             }
         },

@@ -36,6 +36,21 @@ axios.interceptors.response.use(
     return Promise.reject(error);
   }
 )
+
+axios.interceptors.request.use(function (config) {
+  if(config.withCredentials && store.getters.getIsLoggedIn){
+    config.headers['logged-in'] = 'true'
+    //isto tako sto ovde pise samo username i sifra mogu da zamenim sa hashom te dve vr i da poredim sa hashom tih vr na serveru i tako sakrijem od svih ostalih 
+    var cu = store.getters.getCurrentUser
+    config.headers['logged-in-user'] = `${cu.username}|${cu.password}`
+  }
+  else if(config.withCredentials) config.headers['logged-in'] = 'false'
+  return config;
+}, function (error) {
+  // Do something with request error
+  return Promise.reject(error);
+})
+
 Vue.use(AsyncComputed)
 Vue.use(VueCookies)
 Vue.config.productionTip = false

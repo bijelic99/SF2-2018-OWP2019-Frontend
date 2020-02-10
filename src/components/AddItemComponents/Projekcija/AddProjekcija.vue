@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container v-if="getIsLoggedIn && getCurrentUserUloga === 'Admin'">
     <v-row>
       <h1 class="ml-2 title">Dodavanje projekcije:</h1>
     </v-row>
@@ -256,7 +256,7 @@
             }
         },
         computed: {
-            ...mapGetters(['allFilmovi', 'allTipoviProjekcije', 'getSlobodneSaleForTipProjekcije']),
+            ...mapGetters(['allFilmovi', 'allTipoviProjekcije', 'getSlobodneSaleForTipProjekcije', 'getCurrentUserUloga', 'getIsLoggedIn']),
             allFilmoviFormated(){
                 return this.allFilmovi.map(f=>{return {text: f.naziv, value: f}})
             },

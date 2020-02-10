@@ -77,6 +77,7 @@
                             { title: "Dodaj film", icon: "mdi-plus", link: "/AddFilm", visibleForCurrentUser: ()=>this.getCurrentUserUloga === 'Admin'},
                             { title: "Dodaj projekciju", icon: "mdi-plus", link: "/AddProjekcija", visibleForCurrentUser: ()=>this.getCurrentUserUloga === 'Admin'},
                             { title: "Korisnici", icon: "mdi-account-multiple", link: "/Korisnici", visibleForCurrentUser: ()=>this.getCurrentUserUloga === 'Admin' },
+                            { title: "Izvestavanje", icon: "mdi-file-chart", link: "/Izvestavanje", visibleForCurrentUser: ()=>this.getCurrentUserUloga === 'Admin' },
                     ]
                 }
             };
