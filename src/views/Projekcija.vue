@@ -88,8 +88,8 @@
             zauzetost:
                 {
                     async get(){
-                        if(this.projekcija !== null){return await axios.get(`${this.getFullServerAddress}/ZauzetaSedistaZaProjekciju?projekcijaId=${this.projekcija.id}`).then(res=>res.data).catch(err=>{
-                            console.log(err)
+                        if(this.projekcija !== null){return await axios.get(`${this.getFullServerAddress}/ZauzetaSedistaZaProjekciju?projekcijaId=${this.projekcija.id}`).then(res=>res.data).catch(()=>{
+                            //console.log(err)
                             return 'Not Available'
                         })} else return []
                     },
@@ -116,7 +116,7 @@
                 await this.fetchKarte()
         
             } catch (err){
-                console.log(err)
+                //console.log(err)
             }
       
         }

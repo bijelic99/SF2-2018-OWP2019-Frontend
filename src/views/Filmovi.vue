@@ -116,7 +116,7 @@
                             value: "zanrovi",
                             sortable: true,
                             sort: (a1, a2)=> {
-                                console.log(a1)
+                                //console.log(a1)
                                 if(a1.length > 0 && a2.length > 0) {
                                     return a1[0].naziv.localeCompare(a2[0].naziv) < 0 ? -1 : a1[0].naziv.localeCompare(a2[0].naziv) > 0 ? 1 : a1.length > a2.length ? -1 : a2.length > a1.length ? 1 : 0
                                 }
@@ -229,13 +229,13 @@
         }, true);*/
             },
             /*customSortFunction: function(items, sortBy, sortDesc){
-        console.log(sortBy)
-        console.log(sortDesc)
+        //console.log(sortBy)
+        //console.log(sortDesc)
         if(sortBy === 'zanrovi') {
           var compareFunction = (first, second) => {
             var s1 = `${ first.zanrovi.reduce((zanroviStr, value)=> zanroviStr+" "+value.naziv, '') }`
             var s2 = `${ second.zanrovi.reduce((zanroviStr, value)=> zanroviStr+" "+value.naziv, '') }`
-            console.log(s1 > s2 ? -1 : s1 === s2 ? 0 : 1)
+            //console.log(s1 > s2 ? -1 : s1 === s2 ? 0 : 1)
             return s1 > s2 ? -1 : s1 < s2 ? 1 : 0
           }
           return sortDesc === true ? items.sort(compareFunction).reverse() : items.sort(compareFunction)

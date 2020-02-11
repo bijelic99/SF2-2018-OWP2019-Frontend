@@ -143,9 +143,9 @@
                         await this.setColors();
                     }
                     else{
-                        console.log(`${this.getFullServerAddress}/Film?id=${this.id}`)
-                        axios.get(`${this.getFullServerAddress}/Film?id=${this.id}`).then(res => this.film = res.data).catch((err)=>{
-                            console.log(err)
+                        //console.log(`${this.getFullServerAddress}/Film?id=${this.id}`)
+                        axios.get(`${this.getFullServerAddress}/Film?id=${this.id}`).then(res => this.film = res.data).catch(()=>{
+                            //console.log(err)
                             this.componentData.errorMassage =
                                 "Id nije pravilno unet, ili film ne postoji";
                             this.componentData.errorSnackbarVisible = true;
@@ -162,14 +162,14 @@
                     var palette = await Vibrant.from(this.film.pathDoSlike)
                         .getPalette()
                         .then(r => r);
-                    //console.log(palette)
+                    ////console.log(palette)
                     this.componentData.backgroundColor = palette.DarkVibrant.hex;
                     this.componentData.textColor = palette.DarkVibrant.bodyTextColor;
-                    //console.log(palette)
+                    ////console.log(palette)
                     var theme = this.getCurrentTheme;
                     theme.primary = palette.DarkVibrant.hex;
                     theme.secondary = palette.Muted.hex;
-                    //console.log(theme.primary + " " + theme.secondary)
+                    ////console.log(theme.primary + " " + theme.secondary)
                     this.setCurrentTheme(theme);
                 } catch {
                     this.setCurrentThemeToBase();
@@ -186,7 +186,7 @@
         },
         async mounted() {
             await this.filmLoad();
-            //console.log(JSON.stringify(this.film))
+            ////console.log(JSON.stringify(this.film))
         }
     };
 </script>

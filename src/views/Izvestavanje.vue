@@ -86,8 +86,8 @@
                     this.listaFilmova = await axios.get(`${this.getFullServerAddress}/Izvestavanje?od=${this.dateTimeFrom.getTime()}&do=${this.dateTimeTo.getTime()}`).then(res=>{
                         
                         return res.data
-                    }).catch(err=>{
-                        console.log(err)
+                    }).catch(()=>{
+                        //console.log(err)
                         return []
                     })
                     this.loading = false
