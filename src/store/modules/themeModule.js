@@ -28,7 +28,7 @@ const getters={
 
 const actions={
     setCurrentTheme({ commit }, theme){
-        //console.log(vuetify)
+        ////console.log(vuetify)
         vuetify.framework.theme.themes.light = theme
         commit('SET_CURRENT_THEME', theme)
     },

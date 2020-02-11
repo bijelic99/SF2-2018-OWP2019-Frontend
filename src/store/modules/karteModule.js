@@ -21,8 +21,8 @@ const actions = {
         return await axios.post(`${store.getters.getFullServerAddress}/Karta`, karte).then(res=>{
             commit('REZERVISI_KARTE', res.data.karte)
             return true
-        }).catch(err=> {
-            console.log(err)
+        }).catch(()=> {
+            //console.log(err)
             return false    
         })
         
@@ -31,8 +31,8 @@ const actions = {
         return await axios.get(`${store.getters.getFullServerAddress}/Karta`).then(res=>{
             commit('SET_KARTE', res.data)
             return true
-        }).catch(err=>{
-            console.log(err)
+        }).catch(()=>{
+            //console.log(err)
             return false
         })
     },
@@ -43,8 +43,8 @@ const actions = {
                 return true
             }
             else return false
-        }).catch(err=>{
-            console.log(err)
+        }).catch(()=>{
+            //console.log(err)
             return false
         })
     }

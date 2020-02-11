@@ -62,7 +62,7 @@ const getters = {
 
 const actions = {
     async fetchFilmovi({ commit }) {
-        await axios.get(`${store.getters.getFullServerAddress}/Filmovi`).then(res => commit('SET_FILMS', res.data)).catch(res => console.log(res))
+        await axios.get(`${store.getters.getFullServerAddress}/Filmovi`).then(res => commit('SET_FILMS', res.data))
 
     },
     async addFilm({ commit }, film) {
@@ -73,8 +73,8 @@ const actions = {
                 return true
             }
             else return false
-        }).catch(err => {
-            console.log(err)
+        }).catch(() => {
+            //console.log(err)
             return false
         })
 
@@ -86,14 +86,14 @@ const actions = {
                 
             }
             return res.successful
-        }).catch(err=> {
-            console.log(err)
+        }).catch(()=> {
+            //console.log(err)
             return false
         })
     },
     async deleteFilm({ commit }, filmId){
-        if (await axios.delete(`${store.getters.getFullServerAddress}/Film?id=${filmId}`).then(res=> res.data.successful).catch((err)=>{
-            console.log(err)
+        if (await axios.delete(`${store.getters.getFullServerAddress}/Film?id=${filmId}`).then(res=> res.data.successful).catch(()=>{
+            //console.log(err)
             return false
         })) {
             commit('DELETE_FILM', filmId)

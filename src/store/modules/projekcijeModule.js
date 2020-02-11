@@ -39,8 +39,8 @@ const getters = {
             p.datumVremePrikazivanja = new Date(p.datumVremePrikazivanja)
             p['prosla'] = () => moment(p.datumVremePrikazivanja).isBefore(new Date(Date.now()))
             return p
-        }).catch(res => {
-            console.log(res)
+        }).catch(() => {
+            //console.log(res)
             return null
         })
         else return filtered[0]
@@ -80,15 +80,15 @@ const actions = {
             p.datumVremePrikazivanja = new Date(p.datumVremePrikazivanja)
             p['prosla'] = () => moment(p.datumVremePrikazivanja).isBefore(new Date(Date.now()))
             return p
-        }))).catch(err => console.log(err))
+        })))
     },
     fetchZauzetost: async function ({ commit }) {
         var zauzetostProjekcija = new Map()
         await store.getters.allProjekcije.forEach(async p => {
             await axios.get(`${store.getters.getFullServerAddress}/ZauzetaSedistaZaProjekciju?projekcijaId=${p.id}`).then(res => {
                 zauzetostProjekcija.set(p.id, res.data)
-            }).catch(err => {
-                console.log(err)
+            }).catch(() => {
+                //console.log(err)
                 zauzetostProjekcija.set(p.id, null)
             })
         })
@@ -96,10 +96,10 @@ const actions = {
 
     },
     async fetchSale({ commit }) {
-        await axios.get(`${store.getters.getFullServerAddress}/Sala`).then(res => commit('SET_SALE', res.data)).catch(err => console.log(err))
+        await axios.get(`${store.getters.getFullServerAddress}/Sala`).then(res => commit('SET_SALE', res.data))
     },
     async fetchTipoviProjekcije({ commit }) {
-        await axios.get(`${store.getters.getFullServerAddress}/TipProjekcije`).then(res => commit('SET_TIP_PROJEKCIJE', res.data)).catch(err => console.log(err))
+        await axios.get(`${store.getters.getFullServerAddress}/TipProjekcije`).then(res => commit('SET_TIP_PROJEKCIJE', res.data))
     },
     async addProjekcija({ commit }, projekcija) {
         return await axios.post(`${store.getters.getFullServerAddress}/Projekcija`, projekcija).then(res => {
@@ -110,8 +110,8 @@ const actions = {
                 return true
             }
             else return false
-        }).catch(err => {
-            console.log(err)
+        }).catch(() => {
+            //console.log(err)
             return false
         })
     },
@@ -122,8 +122,8 @@ const actions = {
                 return true
             }
             else return false
-        }).catch(err => {
-            console.log(err)
+        }).catch(() => {
+            //console.log(err)
             return false
         })
     }

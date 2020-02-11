@@ -17,8 +17,8 @@ const actions = {
                 return k
             }))
             return true
-        }).catch(err => {
-             console.log(err)
+        }).catch(() => {
+             //console.log(err)
              commit('SET_USERS', [])
              return false
         })
@@ -30,8 +30,8 @@ const actions = {
                 return true
             }
             else return false
-        }).catch(err => {
-            console.log(err)
+        }).catch(() => {
+            //console.log(err)
             return false
         })
     },
@@ -42,8 +42,8 @@ const actions = {
                 return true
             }
             else return false
-        }).catch(err => {
-            console.log(err)
+        }).catch(() => {
+            //console.log(err)
             return false
         })
     }

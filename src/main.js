@@ -18,7 +18,7 @@ axios.interceptors.response.use(
       }
     }
     catch{
-      console.log(response)
+      //console.log(response)
     }
     return response;
   }, function (error) {
@@ -30,7 +30,7 @@ axios.interceptors.response.use(
       }
     }
     catch{
-      console.log(error)
+      //console.log(error)
     }
 
     return Promise.reject(error);
