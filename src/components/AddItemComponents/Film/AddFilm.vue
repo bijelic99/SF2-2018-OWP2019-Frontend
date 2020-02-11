@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container v-if="getIsLoggedIn && getCurrentUserUloga === 'Admin'">
     <v-row>
       <h1 class="ml-2 title">{{tipAkcije}} filma:</h1>
     </v-row>
@@ -281,7 +281,7 @@
             }
         },
         computed: {
-            ...mapGetters(["getFilm", "getFullServerAddress"])
+            ...mapGetters(["getFilm", "getFullServerAddress", "getIsLoggedIn", "getCurrentUserUloga"])
         },
         watch: {
             filmId: function() {

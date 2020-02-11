@@ -156,7 +156,7 @@
             };
         },
         methods: {
-            ...mapActions(['fetchProjekcije', 'fetchTipoviProjekcije', 'fetchSale']),
+            ...mapActions(['fetchProjekcije', 'fetchTipoviProjekcije', 'fetchSale', 'fetchZauzetost']),
             customFilterFunction: function(value, search, item) {
 			
                 var isGood = true
@@ -181,6 +181,7 @@
             async refresh(){
                 this.tableData.loading = true
                 await this.fetchProjekcije()
+                await this.fetchZauzetost()
                 await this.fetchTipoviProjekcije()
                 await this.fetchSale()
                 this.tableData.loading = false
