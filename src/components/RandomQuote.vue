@@ -20,7 +20,7 @@
         methods:{
             getQuote(){
                 // potencionalno sam potrosio resurse kreatoru api-ja, to mi nije bila namera
-                axios.get('http://ron-swanson-quotes.herokuapp.com/v2/quotes', { withCredentials: false}).then(res=>{
+                axios.get('https://ron-swanson-quotes.herokuapp.com/v2/quotes', { withCredentials: false}).then(res=>{
                     this.quote = res.data[0]
                 })
             }
